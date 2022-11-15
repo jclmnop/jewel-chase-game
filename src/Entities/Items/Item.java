@@ -7,4 +7,15 @@ public abstract class Item extends Entity {
     public Item(CollisionType collisionType, boolean isBlocking) {
         super(collisionType, isBlocking);
     }
+
+    /**
+     * Serialises the Object into a String.
+     *
+     * @return Serialised string for `this` Object.
+     */
+    @Override
+    public String serialise() {
+        // TODO
+        return null;
+    }
 }

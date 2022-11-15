@@ -1,11 +1,8 @@
-package Entities.Items;
+package Game;
 
-import DataTypes.CollisionType;
+import Interfaces.Serialisable;
 
-public class Lever extends Item {
-    public Lever() {
-        super(CollisionType.LEVER, false);
-    }
+public class Tile implements Serialisable {
 
     /**
      * Serialises the Object into a String.
