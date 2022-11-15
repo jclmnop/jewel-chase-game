@@ -20,10 +20,12 @@ After it's all loaded up, click `Build -> Build Project` to make sure it all com
 
 ## Project Structure
 
-I've organised everything into packages, which are just fancy Java folders. Game and Tile are currently just at the top level,
-but I'll probably make a Utils package for Game, GameFileHandler (loading/saving) and any other static classes we need.
+I've organised everything into packages, which are just fancy Java folders. Game and Tile were at the top level,
+but I've moved them into a Game package. GameFileHandler (loading/saving), Deserialiser (to turn text into objects) and any other static classes we need
+will go in Utils.
 
-Fuck knows where JavaFX stuff will go. Probably all in its own package.
+Fuck knows where JavaFX stuff will go. Probably all in its own package. Any assets (images etc)
+will most likely go in a directory above src bc src is just for code. 
 
 At the moment most Classes are just empty templates, except for the DataTypes, which are simple custom datatypes/enums etc which we need for other stuff.
 
@@ -49,8 +51,13 @@ At the moment most Classes are just empty templates, except for the DataTypes, w
     │       ├── Item.java
     │       ├── Lever.java
     │       └── Loot.java
-    ├── Game.java
-    └── Tile.java
+    ├── Game
+    │   ├── Game.java
+    │   └── Tile.java
+    ├── Interfaces
+    │   └── Serialisable.java
+    └── Utils
+        └── Deserialiser.java
 ```
 
 ## Contributing

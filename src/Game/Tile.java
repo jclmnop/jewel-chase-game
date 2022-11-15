@@ -1,3 +1,5 @@
+package Game;
+
 import Interfaces.Serialisable;
 
 public class Tile implements Serialisable {
