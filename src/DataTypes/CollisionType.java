@@ -5,6 +5,7 @@ package DataTypes;
  * Entity.
  */
 public enum CollisionType {
+    BOMB,
     LOOT,
     CLOCK,
     LEVER,
