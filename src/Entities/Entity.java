@@ -8,7 +8,6 @@ import Interfaces.Serialisable;
 
 import java.util.ArrayDeque;
 
-
 public abstract class Entity implements Serialisable {
     private static final ArrayDeque<Collision> collisions = new ArrayDeque<>();
     protected final CollisionType collisionType;
@@ -76,7 +75,6 @@ public abstract class Entity implements Serialisable {
                 }
             }
         }
-
     }
 
     public CollisionType getCollisionType() {

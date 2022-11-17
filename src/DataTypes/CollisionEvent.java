@@ -4,6 +4,7 @@ public enum CollisionEvent {
     // I don't like this, but Java doesn't allow us to
     // pattern match (enum, enum) in switch statements.
     NOTHING,
+    DETONATE,
     LOOT_STOLEN,
     LOOT_COLLECTED,
     CLOCK_STOLEN,
@@ -37,6 +38,11 @@ public enum CollisionEvent {
                 case THIEF  -> LOSE;
                 case PLAYER -> WIN;
                 default     -> NOTHING;
+            };
+            case BOMB -> switch (collisionTwo) {
+                case THIEF, PLAYER -> DETONATE;
+                // TODO: explosion chain reaction
+                default            -> NOTHING;
             };
             case ASSASSIN -> switch (collisionTwo) {
                 case THIEF, PLAYER -> ASSASSINATION;
