@@ -1,5 +1,7 @@
 package Utils;
 
+import DataTypes.Colour;
+import DataTypes.Colours;
 import Entities.Characters.FloorFollowingThief;
 import Entities.Characters.FlyingAssassin;
 import Entities.Characters.Player;
@@ -10,14 +12,19 @@ import Entities.Items.Lever;
 import Entities.Items.Loot;
 import Game.Tile;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+
 public class Deserialiser {
     public static Object deserialiseObject(String serialisedString) throws ClassNotFoundException {
         var args = serialisedString.split(" ");
-        var objectTypeName = args[0];
+        var objectTypeName = (args.length > 1) ? args[0] : "Tile";
 
         switch (objectTypeName) {
             case "Tile" -> { 
-                return Deserialiser.deserialiseTile(args);
+                return Deserialiser.deserialiseTile(args[0]);
             }
             case "Clock" -> { 
                 return Deserialiser.deserialiseClock(args);
@@ -86,7 +93,27 @@ public class Deserialiser {
         return new Clock();
     }
 
-    private static Tile deserialiseTile(String[] args) {
-        return new Tile();
+    private static Tile deserialiseTile(String arg) {
+        // TODO: can either throw exception in switch statement, or check length
+        //       of result from map and check for nulls then throw exception if either
+        List<Colour> colours = arg.chars().mapToObj(
+            c -> switch (c) {
+                case 'R' -> Colour.RED;
+                case 'G' -> Colour.GREEN;
+                case 'B' -> Colour.BLUE;
+                case 'Y' -> Colour.YELLOW;
+                case 'C' -> Colour.CYAN;
+                case 'M' -> Colour.MAGENTA;
+                default  -> null; // TODO: figure out how to throw exception here
+            }
+        ).toList();
+        return new Tile(
+            new Colours(
+                colours.get(0),
+                colours.get(1),
+                colours.get(2),
+                colours.get(3)
+            )
+        );
     }
 }
