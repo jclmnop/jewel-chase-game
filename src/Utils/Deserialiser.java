@@ -97,15 +97,7 @@ public class Deserialiser {
         // TODO: can either throw exception in switch statement, or check length
         //       of result from map and check for nulls then throw exception if either
         List<Colour> colours = arg.chars().mapToObj(
-            c -> switch (c) {
-                case 'R' -> Colour.RED;
-                case 'G' -> Colour.GREEN;
-                case 'B' -> Colour.BLUE;
-                case 'Y' -> Colour.YELLOW;
-                case 'C' -> Colour.CYAN;
-                case 'M' -> Colour.MAGENTA;
-                default  -> null; // TODO: figure out how to throw exception here
-            }
+            c -> Colour.fromChar((char) c)
         ).toList();
         return new Tile(
             new Colours(
