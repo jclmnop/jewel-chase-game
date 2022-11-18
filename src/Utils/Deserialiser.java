@@ -94,7 +94,7 @@ public class Deserialiser {
     }
 
     private static Tile deserialiseTile(String arg) {
-        // TODO: can either throw exception in switch statement, or check length
+        // TODO: can either throw exception in fromChar(), or check length
         //       of result from map and check for nulls then throw exception if either
         List<Colour> colours = arg.chars().mapToObj(
             c -> Colour.fromChar((char) c)
