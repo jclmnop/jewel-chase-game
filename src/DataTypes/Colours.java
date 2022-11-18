@@ -31,4 +31,9 @@ public class Colours {
     public Colour getC4() {
         return c4;
     }
+
+    @Override
+    public String toString() {
+        return "" + c1 + c2 + c3 + c4;
+    }
 }
