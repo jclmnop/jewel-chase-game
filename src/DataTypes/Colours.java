@@ -34,6 +34,6 @@ public class Colours {
 
     @Override
     public String toString() {
-        return "" + c1 + c2 + c3 + c4;
+        return "" + c1.toChar() + c2.toChar() + c3.toChar() + c4.toChar();
     }
 }
