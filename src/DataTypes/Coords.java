@@ -1,29 +1,11 @@
 package DataTypes;
 
-import java.util.Objects;
-
 /**
  * Represents position of an Entity in the level. Immutable once constructed
  * to ensure an instance is not modified accidentally. If new Coords are
  * required then a new instance must be instantiated.
  */
-public class Coords {
-    private final int x;
-    private final int y;
-
-    public Coords(int x, int y) {
-        this.x = x;
-        this.y = y;
-    }
-
-    public int getX() {
-        return this.x;
-    }
-
-    public int getY() {
-        return this.y;
-    }
-
+public record Coords(int x, int y) {
     // TODO: throw errors for movement or not? Probably don't need to bc
     //       we'll only be moving to valid Tiles.
     public Coords moveUp() {
