@@ -23,11 +23,11 @@ public enum Colour {
 
     public char toChar() {
         return switch (this) {
-            case RED -> 'R';
-            case GREEN -> 'G';
-            case BLUE -> 'B';
-            case YELLOW -> 'Y';
-            case CYAN -> 'C';
+            case RED     -> 'R';
+            case GREEN   -> 'G';
+            case BLUE    -> 'B';
+            case YELLOW  -> 'Y';
+            case CYAN    -> 'C';
             case MAGENTA -> 'M';
         };
     }
