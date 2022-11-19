@@ -6,6 +6,7 @@
 
     <target name="init">
         <mkdir dir="${output.dir}"/>
+        <mkdir dir="${build.classes.dir}"/>
     </target>
 
     <path id="build.classpath">
