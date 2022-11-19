@@ -1,5 +1,7 @@
 package DataTypes;
 
+import DataTypes.Exception.ParseTileColourException;
+
 public enum Colour {
     RED,
     GREEN,
@@ -8,7 +10,7 @@ public enum Colour {
     CYAN,
     MAGENTA;
 
-    public static Colour fromChar(char c) {
+    public static Colour fromChar(char c) throws ParseTileColourException {
         //TODO: replace null with error
         return switch (c) {
             case 'R' -> RED;
@@ -17,7 +19,7 @@ public enum Colour {
             case 'Y' -> YELLOW;
             case 'C' -> CYAN;
             case 'M' -> MAGENTA;
-            default  -> null;
+            default  -> {throw new ParseTileColourException(c);}
         };
     }
 
