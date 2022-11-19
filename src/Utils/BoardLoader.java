@@ -9,7 +9,7 @@ public class BoardLoader {
         var lines = boardString.lines().toList();
         var it = lines.iterator();
         var dimensionsStrings = it.next().split(" ");
-        it.remove();
+        lines = lines.subList(1, lines.size());
         var width = Integer.parseInt(dimensionsStrings[0]);
         var height = Integer.parseInt(dimensionsStrings[1]);
         var board = new Tile[height][width];
