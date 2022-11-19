@@ -41,5 +41,6 @@
                 <listener type="legacy-xml" sendSysErr="true" sendSysOut="true"/>
             </testclasses>
         </junitlauncher>
+        <echo>tests complete!</echo>
     </target>
 </project>
