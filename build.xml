@@ -23,7 +23,7 @@
         <echo>compilation complete!</echo>
     </target>
 
-    <target name="compile-test" depends="init">
+    <target name="compile-test" depends="compile">
         <mkdir dir="${build.classes.dir}"/>
         <javac srcdir="${src.test.dir}"
            destdir="${build.classes.dir}">
