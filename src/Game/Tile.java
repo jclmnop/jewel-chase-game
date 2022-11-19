@@ -18,7 +18,7 @@ public class Tile implements Serialisable {
     // Adjacency map for SmartThief and Player
     private static HashMap<Coords, AdjacentTiles> multiColourAdjacencyMap;
     // Adjacency map for FlyingAssassin
-    private static HashMap<Coords, AdjacentTiles> NoColourAdjacencyMap;
+    private static HashMap<Coords, AdjacentTiles> noColourAdjacencyMap;
 
     // Instance attributes //
     private final Colours colours;
@@ -29,14 +29,44 @@ public class Tile implements Serialisable {
     }
 
     // Static methods //
-    // TODO: getSingleColourAdjacentTiles(coords)
-    // TODO: getMultiColourAdjacentTiles(coords)
-    // TODO: getNoColourAdjacentTiles(coords)
-    // TODO: move(entity, from, to)
-    // TODO: getTile(coords)
-    // TODO: getEntityCoordinates(entity)
-    // TODO: newBoard(board: Tile[][])
-    // TODO: clearBoard()
+    public static AdjacentTiles getSingleColourAdjacentTiles(Coords coords) {
+        return singleColourAdjacencyMap.get(coords);
+    }
+
+    public static AdjacentTiles getMultiColourAdjacentTiles(Coords coords) {
+        return multiColourAdjacencyMap.get(coords);
+    }
+
+    public static AdjacentTiles getNoColourAdjacentTiles(Coords coords) {
+        return noColourAdjacencyMap.get(coords);
+    }
+
+    public static Tile getTile(Coords coords) {
+        return board[coords.y()][coords.x()];
+    }
+
+    public static void move(Entity entity, Coords from, Coords to) {
+        var fromTile = Tile.getTile(from);
+        var toTile = Tile.getTile(to);
+        fromTile.removeEntity(entity);
+        toTile.addEntity(entity);
+        entity.setCoords(to);
+    }
+
+    public static void newBoard(Tile[][] board) {
+        Tile.board = board;
+    }
+
+    public static void clearBoard() {
+        Tile.board = new Tile[][]{};
+    }
+
+    public static void removeEntityFromBoard(Entity entity) {
+        var entityTile = Tile.getTile(entity.getCoords());
+        entityTile.removeEntity(entity);
+        entity.setCoords(null);
+        // TODO: remove from entities static list in Entity class
+    }
 
     // Instance Methods //
     public Colours getColours() {
