@@ -2,6 +2,7 @@ package Utils;
 
 import DataTypes.Colour;
 import DataTypes.Colours;
+import DataTypes.Exception.ParseTileColourException;
 import Entities.Characters.FloorFollowingThief;
 import Entities.Characters.FlyingAssassin;
 import Entities.Characters.Player;
@@ -18,7 +19,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class Deserialiser {
-    public static Object deserialiseObject(String serialisedString) throws ClassNotFoundException {
+    public static Object deserialiseObject(String serialisedString) throws ClassNotFoundException, ParseTileColourException {
         var args = serialisedString.split(" ");
         var objectTypeName = (args.length > 1) ? args[0] : "Tile";
 
@@ -51,6 +52,7 @@ public class Deserialiser {
                 return Deserialiser.deserialiseSmartThief(args);
             }
             default -> {
+                // TODO: custom exception
                 throw new ClassNotFoundException(
                     "Deserialisation of " + objectTypeName + " failed, class name not recognised"
                 );
@@ -93,12 +95,17 @@ public class Deserialiser {
         return new Clock();
     }
 
-    private static Tile deserialiseTile(String arg) {
+    private static Tile deserialiseTile(String arg) throws ParseTileColourException {
         // TODO: can either throw exception in fromChar(), or check length
         //       of result from map and check for nulls then throw exception if either
-        List<Colour> colours = arg.chars().mapToObj(
-            c -> Colour.fromChar((char) c)
-        ).toList();
+        ArrayList<Colour> colours = new ArrayList<>();
+        var chars = arg.toCharArray();
+
+        for (char c: chars) {
+            var colour = Colour.fromChar(c);
+            colours.add(colour);
+        }
+
         return new Tile(
             new Colours(
                 colours.get(0),
