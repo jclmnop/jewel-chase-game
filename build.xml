@@ -17,20 +17,20 @@
     </path>
 
     <target name="compile" depends="init">
-        <javac srcdir="./src" destdir="${build.classes.dir}">
+        <javac srcdir="." destdir="${build.classes.dir}">
             <classpath refid="build.classpath"/>
         </javac>
         <echo>compilation complete!</echo>
     </target>
 
-    <target name="compile-test" depends="compile">
-        <javac srcdir="${src.test.dir}"
-           destdir="${build.classes.dir}">
-           <classpath refid="build.classpath"/>
-        </javac>
-    </target>
+<!--    <target name="compile-test" depends="compile">-->
+<!--        <javac srcdir="${src.test.dir}"-->
+<!--           destdir="${build.classes.dir}">-->
+<!--           <classpath refid="build.classpath"/>-->
+<!--        </javac>-->
+<!--    </target>-->
 
-    <target name="test" depends="compile-test">
+    <target name="test" depends="compile">
         <junitlauncher>
             <classpath refid="build.classpath"/>
             <classpath>
