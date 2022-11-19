@@ -16,7 +16,7 @@
         </fileset>
     </path>
 
-    <target name="compile">
+    <target name="compile" depends="init">
         <javac srcdir="./src" destdir="${build.classes.dir}">
             <classpath refid="build.classpath"/>
         </javac>
