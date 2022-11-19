@@ -1,24 +1,25 @@
 <?xml version="1.0"?>
 <project name="JewelThief" default="compile" >
+    <property name="output.dir" value="./build"/>
+    <property name="src.test.dir" value="./test"/>
+    <property name="build.classes.dir" value="${output.dir}/classes"/>
+
+    <target name="init">
+        <mkdir dir="${output.dir}"/>
+    </target>
+
     <path id="build.classpath">
         <fileset dir="lib">
             <include name="**/*.jar"/>
             <include name="**/*.zip"/>
         </fileset>
     </path>
+
     <target name="compile">
-        <javac srcdir="./src">
+        <javac srcdir="./src" destdir="${build.classes.dir}">
             <classpath refid="build.classpath"/>
         </javac>
         <echo>compilation complete!</echo>
-    </target>
-
-   <property name="output.dir" value="./build"/>
-    <property name="src.test.dir" value="./test"/>
-    <property name="build.classes.dir" value="${output.dir}/classes"/>
-
-    <target name="init">
-        <mkdir dir="${output.dir}"/>
     </target>
 
     <target name="compile-test" depends="init">
