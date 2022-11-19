@@ -34,3 +34,10 @@ jobs:
 
     - name: Build with Ant
       run: ant -noinput -buildfile build.xml
+
+    # This works but I can't figure out a way to do it for ALL packages, so have to run it once for each package lol
+    - name: Test with JUnit
+      run: |
+        java -jar lib/junit-platform-console-standalone-1.9.1.jar --class-path ./build/classes -p Utils
+#        java -jar lib/junit-platform-console-standalone-1.9.1.jar --class-path ./build/classes -p Game
+#        java -jar lib/junit-platform-console-standalone-1.9.1.jar --class-path ./build/classes -p Entities

@@ -1,5 +1,8 @@
 package Utils;
 
+import DataTypes.Colour;
+import DataTypes.Colours;
+import DataTypes.Exception.ParseTileColourException;
 import Entities.Characters.FloorFollowingThief;
 import Entities.Characters.FlyingAssassin;
 import Entities.Characters.Player;
@@ -10,14 +13,19 @@ import Entities.Items.Lever;
 import Entities.Items.Loot;
 import Game.Tile;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+
 public class Deserialiser {
-    public static Object deserialiseObject(String serialisedString) throws ClassNotFoundException {
+    public static Object deserialiseObject(String serialisedString) throws ClassNotFoundException, ParseTileColourException {
         var args = serialisedString.split(" ");
-        var objectTypeName = args[0];
+        var objectTypeName = (args.length > 1) ? args[0] : "Tile";
 
         switch (objectTypeName) {
             case "Tile" -> { 
-                return Deserialiser.deserialiseTile(args);
+                return Deserialiser.deserialiseTile(args[0]);
             }
             case "Clock" -> { 
                 return Deserialiser.deserialiseClock(args);
@@ -44,6 +52,7 @@ public class Deserialiser {
                 return Deserialiser.deserialiseSmartThief(args);
             }
             default -> {
+                // TODO: custom exception
                 throw new ClassNotFoundException(
                     "Deserialisation of " + objectTypeName + " failed, class name not recognised"
                 );
@@ -86,7 +95,24 @@ public class Deserialiser {
         return new Clock();
     }
 
-    private static Tile deserialiseTile(String[] args) {
-        return new Tile();
+    private static Tile deserialiseTile(String arg) throws ParseTileColourException {
+        // TODO: can either throw exception in fromChar(), or check length
+        //       of result from map and check for nulls then throw exception if either
+        ArrayList<Colour> colours = new ArrayList<>();
+        var chars = arg.toCharArray();
+
+        for (char c: chars) {
+            var colour = Colour.fromChar(c);
+            colours.add(colour);
+        }
+
+        return new Tile(
+            new Colours(
+                colours.get(0),
+                colours.get(1),
+                colours.get(2),
+                colours.get(3)
+            )
+        );
     }
 }
