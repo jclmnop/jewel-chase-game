@@ -7,9 +7,11 @@ import DataTypes.Coords;
 import Interfaces.Serialisable;
 
 import java.util.ArrayDeque;
+import java.util.ArrayList;
 
 public abstract class Entity implements Serialisable {
     private static final ArrayDeque<Collision> collisions = new ArrayDeque<>();
+    private static ArrayList<Entity> entities = new ArrayList<>();
     protected final CollisionType collisionType;
     protected final boolean blocking;
     protected Coords coords;
@@ -17,6 +19,7 @@ public abstract class Entity implements Serialisable {
     protected Entity(CollisionType collisionType, boolean blocking) {
         this.collisionType = collisionType;
         this.blocking = blocking;
+        entities.add(this);
     }
 
     public static void enqueCollision(Coords coords, Entity entityOne, Entity entityTwo) {
@@ -31,10 +34,21 @@ public abstract class Entity implements Serialisable {
         return collisions.peekFirst();
     }
 
+    // TODO: static method for each subclass that filters entities for instances of subclass
+    //       e.g. Player.getPlayers() -> ArrayList<Player>,
+    //            Character.getCharacters() -> ArrayList<Character> etc.
+    public static ArrayList<Entity> getEntities() {
+        return entities;
+    }
+
     public static void processCollisions() {
         while (!Entity.collisions.isEmpty()) {
             Entity.processCollision();
         }
+    }
+
+    public static void removeEntity(Entity entity) {
+        entities.remove(entity);
     }
 
     private static void processCollision() {
@@ -83,6 +97,10 @@ public abstract class Entity implements Serialisable {
 
     public Coords getCoords() {
         return this.coords;
+    }
+
+    public void setCoords(Coords coords) {
+        this.coords = coords;
     }
 
     public boolean isBlocking() {
