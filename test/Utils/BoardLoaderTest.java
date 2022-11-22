@@ -8,7 +8,6 @@ import TestCases.Boards;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Assertions;
 
-import java.sql.Array;
 
 public class BoardLoaderTest {
     @Test
