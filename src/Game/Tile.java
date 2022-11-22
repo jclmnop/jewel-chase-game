@@ -111,6 +111,8 @@ public class Tile implements Serialisable {
 
     public static void clearBoard() {
         Tile.board = new Tile[][]{};
+        Tile.multiColourAdjacencyMap = new HashMap<>();
+        Tile.noColourAdjacencyMap = new HashMap<>();
     }
 
     public static void removeEntityFromBoard(Entity entity) {
