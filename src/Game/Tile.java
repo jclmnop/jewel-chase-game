@@ -56,57 +56,13 @@ public class Tile implements Serialisable {
         entity.setCoords(to);
     }
 
-    public static void buildMultiColourAdjacencyMap() {
-        for (int row = 0; row < height; row++) {
-            for (int col = 0; col < width; col++) {
-                Coords currentCoords = new Coords(col, row);
-                AdjacentTiles adjacentTiles = Tile.findMultiColourAdjacentTiles(currentCoords);
-                Tile.multiColourAdjacencyMap.put(currentCoords, adjacentTiles);
-            }
-        }
-    }
-
-    public static void buildNoColourAdjacencyMap() {
-        for (int row = 0; row < height; row++) {
-            for (int col = 0; col < width; col++) {
-                Tile up = null;
-                Tile down = null;
-                Tile left = null;
-                Tile right = null;
-
-                Coords currentCoords = new Coords(col, row);
-                Coords upCoords = new Coords(col, row - 1);
-                Coords downCoords = new Coords(col, row + 1);
-                Coords leftCoords = new Coords(col - 1, row);
-                Coords rightCoords = new Coords(col + 1, row);
-
-                // Leave tile as null if coords are invalid
-                if (Tile.isValidCoords(upCoords)) {
-                    up = Tile.getTile(upCoords);
-                }
-
-                if (Tile.isValidCoords(downCoords)) {
-                    down = Tile.getTile(downCoords);
-                }
-
-                if (Tile.isValidCoords(leftCoords)) {
-                    left = Tile.getTile(leftCoords);
-                }
-
-                if (Tile.isValidCoords(rightCoords)) {
-                    right = Tile.getTile(rightCoords);
-                }
-
-                AdjacentTiles adjacentTiles = new AdjacentTiles(up, down, left, right);
-                Tile.noColourAdjacencyMap.put(currentCoords, adjacentTiles);
-            }
-        }
-    }
 
     public static void newBoard(Tile[][] board, int width, int height) {
         Tile.height = height;
         Tile.width = width;
         Tile.board = board;
+        Tile.buildMultiColourAdjacencyMap();
+        Tile.buildNoColourAdjacencyMap();
     }
 
     public static void clearBoard() {
@@ -172,6 +128,53 @@ public class Tile implements Serialisable {
 
     private static boolean isValidY(int y) {
         return y >= 0 && y < height;
+    }
+
+    private static void buildMultiColourAdjacencyMap() {
+        for (int row = 0; row < height; row++) {
+            for (int col = 0; col < width; col++) {
+                Coords currentCoords = new Coords(col, row);
+                AdjacentTiles adjacentTiles = Tile.findMultiColourAdjacentTiles(currentCoords);
+                Tile.multiColourAdjacencyMap.put(currentCoords, adjacentTiles);
+            }
+        }
+    }
+
+    private static void buildNoColourAdjacencyMap() {
+        for (int row = 0; row < height; row++) {
+            for (int col = 0; col < width; col++) {
+                Tile up = null;
+                Tile down = null;
+                Tile left = null;
+                Tile right = null;
+
+                Coords currentCoords = new Coords(col, row);
+                Coords upCoords = new Coords(col, row - 1);
+                Coords downCoords = new Coords(col, row + 1);
+                Coords leftCoords = new Coords(col - 1, row);
+                Coords rightCoords = new Coords(col + 1, row);
+
+                // Leave tile as null if coords are invalid
+                if (Tile.isValidCoords(upCoords)) {
+                    up = Tile.getTile(upCoords);
+                }
+
+                if (Tile.isValidCoords(downCoords)) {
+                    down = Tile.getTile(downCoords);
+                }
+
+                if (Tile.isValidCoords(leftCoords)) {
+                    left = Tile.getTile(leftCoords);
+                }
+
+                if (Tile.isValidCoords(rightCoords)) {
+                    right = Tile.getTile(rightCoords);
+                }
+
+                AdjacentTiles adjacentTiles = new AdjacentTiles(up, down, left, right);
+                Tile.noColourAdjacencyMap.put(currentCoords, adjacentTiles);
+            }
+        }
     }
 
     private static AdjacentTiles findMultiColourAdjacentTiles(Coords tileCoords) {
