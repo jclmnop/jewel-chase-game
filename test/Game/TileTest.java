@@ -2,9 +2,14 @@ package Game;
 
 import DataTypes.AdjacentTiles;
 import DataTypes.Coords;
+import Entities.Characters.Player;
+import Entities.Entity;
+import Entities.Items.Loot;
 import TestCases.Boards;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+
+import java.util.ArrayList;
 
 public class TileTest {
     // TODO: test all public methods
@@ -30,5 +35,17 @@ public class TileTest {
         var adjacent = Tile.getMultiColourAdjacentTiles(coords);
         Assertions.assertEquals(Tile.getTile(new Coords(0, 2)), adjacent.down());
         Tile.clearBoard();
+    }
+
+    @Test
+    public void testGetEntitiesOfType() {
+        Tile tile = new Tile(Boards.YYYY);
+        Loot loot = new Loot();
+        tile.addEntity(loot);
+        tile.addEntity(new Player());
+
+        ArrayList<Entity> lootOnly = tile.getEntitiesOfType(Loot.class);
+        Assertions.assertEquals(1, lootOnly.size());
+        Assertions.assertEquals(loot, lootOnly.get(0));
     }
 }
