@@ -17,6 +17,15 @@ public record AdjacentTiles(Tile up, Tile down, Tile left, Tile right) {
         return new AdjacentTiles(up, down, left, right);
     }
 
+    public Tile getTileInDirection(Direction direction) {
+        return switch (direction) {
+            case UP -> this.up;
+            case DOWN -> this.down;
+            case LEFT -> this.left;
+            case RIGHT -> this.right;
+        };
+    }
+
     @Override
     public String toString() {
         String upStr = (up != null) ? up.serialise() : "null";
