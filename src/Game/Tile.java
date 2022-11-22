@@ -1,6 +1,9 @@
 package Game;
 
-import DataTypes.*;
+import DataTypes.AdjacentTiles;
+import DataTypes.Colour;
+import DataTypes.Colours;
+import DataTypes.Coords;
 import Entities.Entity;
 import Interfaces.Serialisable;
 
@@ -10,10 +13,12 @@ import java.util.HashMap;
 public class Tile implements Serialisable {
     // Static attributes //
     private static Tile[][] board;
-    private static HashMap<Coords, AdjacentTiles> multiColourAdjacencyMap = new HashMap<>();
-    private static HashMap<Coords, AdjacentTiles> noColourAdjacencyMap = new HashMap<>();
-    private static int height;
-    private static int width;
+    // Adjacency map for FloorFollowingThief
+    private static HashMap<Coords, AdjacentTiles> singleColourAdjacencyMap;
+    // Adjacency map for SmartThief and Player
+    private static HashMap<Coords, AdjacentTiles> multiColourAdjacencyMap;
+    // Adjacency map for FlyingAssassin
+    private static HashMap<Coords, AdjacentTiles> noColourAdjacencyMap;
 
     // Instance attributes //
     private final Colours colours;
@@ -24,12 +29,8 @@ public class Tile implements Serialisable {
     }
 
     // Static methods //
-    public static AdjacentTiles getSingleColourAdjacentTiles(Coords coords,
-                                                             Colour colour) {
-        return AdjacentTiles.singleColourAdjacentTiles(
-            noColourAdjacencyMap.get(coords),
-            colour
-        );
+    public static AdjacentTiles getSingleColourAdjacentTiles(Coords coords) {
+        return singleColourAdjacencyMap.get(coords);
     }
 
     public static AdjacentTiles getMultiColourAdjacentTiles(Coords coords) {
@@ -44,10 +45,6 @@ public class Tile implements Serialisable {
         return board[coords.y()][coords.x()];
     }
 
-    public static boolean isValidCoords(Coords coords) {
-        return Tile.isValidX(coords.x()) && Tile.isValidY(coords.y());
-    }
-
     public static void move(Entity entity, Coords from, Coords to) {
         var fromTile = Tile.getTile(from);
         var toTile = Tile.getTile(to);
@@ -56,19 +53,12 @@ public class Tile implements Serialisable {
         entity.setCoords(to);
     }
 
-
-    public static void newBoard(Tile[][] board, int width, int height) {
-        Tile.height = height;
-        Tile.width = width;
+    public static void newBoard(Tile[][] board) {
         Tile.board = board;
-        Tile.buildMultiColourAdjacencyMap();
-        Tile.buildNoColourAdjacencyMap();
     }
 
     public static void clearBoard() {
         Tile.board = new Tile[][]{};
-        Tile.multiColourAdjacencyMap = new HashMap<>();
-        Tile.noColourAdjacencyMap = new HashMap<>();
     }
 
     public static void removeEntityFromBoard(Entity entity) {
@@ -120,96 +110,5 @@ public class Tile implements Serialisable {
     @Override
     public String serialise() {
         return this.colours.toString();
-    }
-
-    private static boolean isValidX(int x) {
-        return x >= 0 && x < width;
-    }
-
-    private static boolean isValidY(int y) {
-        return y >= 0 && y < height;
-    }
-
-    private static void buildMultiColourAdjacencyMap() {
-        for (int row = 0; row < height; row++) {
-            for (int col = 0; col < width; col++) {
-                Coords currentCoords = new Coords(col, row);
-                AdjacentTiles adjacentTiles = Tile.findMultiColourAdjacentTiles(currentCoords);
-                Tile.multiColourAdjacencyMap.put(currentCoords, adjacentTiles);
-            }
-        }
-    }
-
-    private static void buildNoColourAdjacencyMap() {
-        for (int row = 0; row < height; row++) {
-            for (int col = 0; col < width; col++) {
-                Tile up = null;
-                Tile down = null;
-                Tile left = null;
-                Tile right = null;
-
-                Coords currentCoords = new Coords(col, row);
-                Coords upCoords = new Coords(col, row - 1);
-                Coords downCoords = new Coords(col, row + 1);
-                Coords leftCoords = new Coords(col - 1, row);
-                Coords rightCoords = new Coords(col + 1, row);
-
-                // Leave tile as null if coords are invalid
-                if (Tile.isValidCoords(upCoords)) {
-                    up = Tile.getTile(upCoords);
-                }
-
-                if (Tile.isValidCoords(downCoords)) {
-                    down = Tile.getTile(downCoords);
-                }
-
-                if (Tile.isValidCoords(leftCoords)) {
-                    left = Tile.getTile(leftCoords);
-                }
-
-                if (Tile.isValidCoords(rightCoords)) {
-                    right = Tile.getTile(rightCoords);
-                }
-
-                AdjacentTiles adjacentTiles = new AdjacentTiles(up, down, left, right);
-                Tile.noColourAdjacencyMap.put(currentCoords, adjacentTiles);
-            }
-        }
-    }
-
-    private static AdjacentTiles findMultiColourAdjacentTiles(Coords tileCoords) {
-        var tile = Tile.getTile(tileCoords);
-
-        HashMap<Direction, Tile> adjacentTiles = new HashMap<>();
-        adjacentTiles.put(Direction.UP, null);
-        adjacentTiles.put(Direction.DOWN, null);
-        adjacentTiles.put(Direction.LEFT, null);
-        adjacentTiles.put(Direction.RIGHT, null);
-
-        for (Direction direction : adjacentTiles.keySet()) {
-            Coords currentCoords = Coords.move(tileCoords, direction);
-            while (adjacentTiles.get(direction) == null && Tile.isValidCoords(currentCoords)) {
-                var currentTile = Tile.getTile(currentCoords);
-                if (Tile.tilesShareColour(tile, currentTile)) {
-                    adjacentTiles.put(direction, currentTile);
-                }
-                currentCoords = Coords.move(currentCoords, direction);
-            }
-        }
-
-        return new AdjacentTiles(
-            adjacentTiles.get(Direction.UP),
-            adjacentTiles.get(Direction.DOWN),
-            adjacentTiles.get(Direction.LEFT),
-            adjacentTiles.get(Direction.RIGHT)
-        );
-    }
-
-    private static boolean tilesShareColour(Tile tile, Tile otherTile) {
-        var colours = tile.getColours();
-        return otherTile.hasColour(colours.c1())
-            || otherTile.hasColour(colours.c2())
-            || otherTile.hasColour(colours.c3())
-            || otherTile.hasColour(colours.c4());
     }
 }
