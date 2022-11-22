@@ -6,22 +6,29 @@ package DataTypes;
  * required then a new instance must be instantiated.
  */
 public record Coords(int x, int y) {
-    // TODO: throw errors for movement or not? Probably don't need to bc
-    //       we'll only be moving to valid Tiles.
-    public Coords moveUp() {
-        return new Coords(this.x, this.y + 1);
+    public static Coords move(Coords coords, Direction direction) {
+        return switch (direction) {
+            case UP    -> moveUp(coords);
+            case DOWN  -> moveDown(coords);
+            case LEFT  -> moveLeft(coords);
+            case RIGHT -> moveRight(coords);
+        };
     }
 
-    public Coords moveDown() {
-        return new Coords(this.x, this.y - 1);
+    private static Coords moveUp(Coords coords) {
+        return new Coords(coords.x, coords.y - 1);
     }
 
-    public Coords moveLeft() {
-        return new Coords(this.x - 1, this.y);
+    private static Coords moveDown(Coords coords) {
+        return new Coords(coords.x, coords.y + 1);
     }
 
-    public Coords moveRight() {
-        return new Coords(this.x + 1, this.y);
+    private static Coords moveLeft(Coords coords) {
+        return new Coords(coords.x - 1, coords.y);
+    }
+
+    private static Coords moveRight(Coords coords) {
+        return new Coords(coords.x + 1, coords.y);
     }
 
     @Override
