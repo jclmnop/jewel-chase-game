@@ -11,8 +11,8 @@ import java.util.stream.Collectors;
 public class Tile implements Serialisable {
     // Static attributes //
     private static Tile[][] board;
-    private static HashMap<Coords, AdjacentTiles> multiColourAdjacencyMap = new HashMap<>();
-    private static HashMap<Coords, AdjacentTiles> noColourAdjacencyMap = new HashMap<>();
+    private static HashMap<Coords, AdjacentCoords> multiColourAdjacencyMap = new HashMap<>();
+    private static HashMap<Coords, AdjacentCoords> noColourAdjacencyMap = new HashMap<>();
     private static int height;
     private static int width;
 
@@ -26,19 +26,19 @@ public class Tile implements Serialisable {
     }
 
     // Static methods //
-    public static AdjacentTiles getSingleColourAdjacentTiles(Coords coords,
-                                                             Colour colour) {
-        return AdjacentTiles.singleColourAdjacentTiles(
+    public static AdjacentCoords getSingleColourAdjacentTiles(Coords coords,
+                                                              Colour colour) {
+        return AdjacentCoords.singleColourAdjacentTiles(
             noColourAdjacencyMap.get(coords),
             colour
         );
     }
 
-    public static AdjacentTiles getMultiColourAdjacentTiles(Coords coords) {
+    public static AdjacentCoords getMultiColourAdjacentTiles(Coords coords) {
         return multiColourAdjacencyMap.get(coords);
     }
 
-    public static AdjacentTiles getNoColourAdjacentTiles(Coords coords) {
+    public static AdjacentCoords getNoColourAdjacentTiles(Coords coords) {
         return noColourAdjacencyMap.get(coords);
     }
 
@@ -47,7 +47,11 @@ public class Tile implements Serialisable {
     }
 
     public static boolean isValidCoords(Coords coords) {
-        return Tile.isValidX(coords.x()) && Tile.isValidY(coords.y());
+        if (coords == null) {
+            return false;
+        } else {
+            return Tile.isValidX(coords.x()) && Tile.isValidY(coords.y());
+        }
     }
 
     public static void move(Entity entity, Coords from, Coords to) {
@@ -149,8 +153,8 @@ public class Tile implements Serialisable {
         for (int row = 0; row < height; row++) {
             for (int col = 0; col < width; col++) {
                 Coords currentCoords = new Coords(col, row);
-                AdjacentTiles adjacentTiles = Tile.findMultiColourAdjacentTiles(currentCoords);
-                Tile.multiColourAdjacencyMap.put(currentCoords, adjacentTiles);
+                AdjacentCoords adjacentCoords = Tile.findMultiColourAdjacentTiles(currentCoords);
+                Tile.multiColourAdjacencyMap.put(currentCoords, adjacentCoords);
             }
         }
     }
@@ -158,65 +162,60 @@ public class Tile implements Serialisable {
     private static void buildNoColourAdjacencyMap() {
         for (int row = 0; row < height; row++) {
             for (int col = 0; col < width; col++) {
-                Tile up = null;
-                Tile down = null;
-                Tile left = null;
-                Tile right = null;
-
                 Coords currentCoords = new Coords(col, row);
-                Coords upCoords = new Coords(col, row - 1);
-                Coords downCoords = new Coords(col, row + 1);
-                Coords leftCoords = new Coords(col - 1, row);
-                Coords rightCoords = new Coords(col + 1, row);
+                Coords up = new Coords(col, row - 1);
+                Coords down = new Coords(col, row + 1);
+                Coords left = new Coords(col - 1, row);
+                Coords right = new Coords(col + 1, row);
 
                 // Leave tile as null if coords are invalid
-                if (Tile.isValidCoords(upCoords)) {
-                    up = Tile.getTile(upCoords);
+                if (!Tile.isValidCoords(up)) {
+                    up = null;
                 }
 
-                if (Tile.isValidCoords(downCoords)) {
-                    down = Tile.getTile(downCoords);
+                if (!Tile.isValidCoords(down)) {
+                    down = null;
                 }
 
-                if (Tile.isValidCoords(leftCoords)) {
-                    left = Tile.getTile(leftCoords);
+                if (!Tile.isValidCoords(left)) {
+                    left = null;
                 }
 
-                if (Tile.isValidCoords(rightCoords)) {
-                    right = Tile.getTile(rightCoords);
+                if (!Tile.isValidCoords(right)) {
+                    right = null;
                 }
 
-                AdjacentTiles adjacentTiles = new AdjacentTiles(up, down, left, right);
-                Tile.noColourAdjacencyMap.put(currentCoords, adjacentTiles);
+                AdjacentCoords adjacentCoords = new AdjacentCoords(up, down, left, right);
+                Tile.noColourAdjacencyMap.put(currentCoords, adjacentCoords);
             }
         }
     }
 
-    private static AdjacentTiles findMultiColourAdjacentTiles(Coords tileCoords) {
+    private static AdjacentCoords findMultiColourAdjacentTiles(Coords tileCoords) {
         var tile = Tile.getTile(tileCoords);
 
-        HashMap<Direction, Tile> adjacentTiles = new HashMap<>();
-        adjacentTiles.put(Direction.UP, null);
-        adjacentTiles.put(Direction.DOWN, null);
-        adjacentTiles.put(Direction.LEFT, null);
-        adjacentTiles.put(Direction.RIGHT, null);
+        HashMap<Direction, Coords> adjacentCoords = new HashMap<>();
+        adjacentCoords.put(Direction.UP, null);
+        adjacentCoords.put(Direction.DOWN, null);
+        adjacentCoords.put(Direction.LEFT, null);
+        adjacentCoords.put(Direction.RIGHT, null);
 
-        for (Direction direction : adjacentTiles.keySet()) {
+        for (Direction direction : adjacentCoords.keySet()) {
             Coords currentCoords = Coords.move(tileCoords, direction);
-            while (adjacentTiles.get(direction) == null && Tile.isValidCoords(currentCoords)) {
+            while (adjacentCoords.get(direction) == null && Tile.isValidCoords(currentCoords)) {
                 var currentTile = Tile.getTile(currentCoords);
                 if (Tile.tilesShareColour(tile, currentTile)) {
-                    adjacentTiles.put(direction, currentTile);
+                    adjacentCoords.put(direction, currentCoords);
                 }
                 currentCoords = Coords.move(currentCoords, direction);
             }
         }
 
-        return new AdjacentTiles(
-            adjacentTiles.get(Direction.UP),
-            adjacentTiles.get(Direction.DOWN),
-            adjacentTiles.get(Direction.LEFT),
-            adjacentTiles.get(Direction.RIGHT)
+        return new AdjacentCoords(
+            adjacentCoords.get(Direction.UP),
+            adjacentCoords.get(Direction.DOWN),
+            adjacentCoords.get(Direction.LEFT),
+            adjacentCoords.get(Direction.RIGHT)
         );
     }
 
