@@ -1,12 +1,8 @@
 package TestCases;
 
-import DataTypes.AdjacentTiles;
 import DataTypes.Colour;
 import DataTypes.Colours;
-import DataTypes.Coords;
 import Game.Tile;
-
-import java.util.HashMap;
 
 public class Boards {
     public static final class CASE_1 {
