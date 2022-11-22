@@ -6,6 +6,7 @@ import Interfaces.Serialisable;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.stream.Collectors;
 
 public class Tile implements Serialisable {
     // Static attributes //
@@ -17,10 +18,11 @@ public class Tile implements Serialisable {
 
     // Instance attributes //
     private final Colours colours;
-    private ArrayList<Entity> entities;
+    private final ArrayList<Entity> entities;
 
     public Tile(Colours colours) {
         this.colours = colours;
+        this.entities = new ArrayList<>();
     }
 
     // Static methods //
@@ -85,6 +87,19 @@ public class Tile implements Serialisable {
 
     public ArrayList<Entity> getEntities() {
         return entities;
+    }
+
+    /**
+     * Used to filter Entities on Tile by type.
+     * e.g. `tile.getEntitiesOfType(Loot.class)`
+     * @param c Class to filter by
+     * @param <T> Type of Class c, must extend Entity
+     * @return Entities currently on Tile which belong to Class c
+     */
+    public <T extends Entity> ArrayList<Entity> getEntitiesOfType(Class<T> c) {
+        return this.entities.stream().filter(c::isInstance).collect(
+            Collectors.toCollection(ArrayList::new)
+        );
     }
 
     public boolean isBlocked() {
