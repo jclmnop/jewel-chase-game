@@ -10,9 +10,7 @@ import java.util.HashMap;
 public class Tile implements Serialisable {
     // Static attributes //
     private static Tile[][] board;
-    // Adjacency map for SmartThief and Player
     private static HashMap<Coords, AdjacentTiles> multiColourAdjacencyMap;
-    // Adjacency map for FlyingAssassin
     private static HashMap<Coords, AdjacentTiles> noColourAdjacencyMap;
     private static int height;
     private static int width;
@@ -66,7 +64,6 @@ public class Tile implements Serialisable {
                 Tile.multiColourAdjacencyMap.put(currentCoords, adjacentTiles);
             }
         }
-
     }
 
     public static void buildNoColourAdjacencyMap() {
@@ -106,7 +103,7 @@ public class Tile implements Serialisable {
         }
     }
 
-    public static void newBoard(Tile[][] board, int height, int width) {
+    public static void newBoard(Tile[][] board, int width, int height) {
         Tile.height = height;
         Tile.width = width;
         Tile.board = board;
