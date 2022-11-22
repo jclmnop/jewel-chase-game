@@ -10,8 +10,8 @@ import java.util.HashMap;
 public class Tile implements Serialisable {
     // Static attributes //
     private static Tile[][] board;
-    private static HashMap<Coords, AdjacentTiles> multiColourAdjacencyMap;
-    private static HashMap<Coords, AdjacentTiles> noColourAdjacencyMap;
+    private static HashMap<Coords, AdjacentTiles> multiColourAdjacencyMap = new HashMap<>();
+    private static HashMap<Coords, AdjacentTiles> noColourAdjacencyMap = new HashMap<>();
     private static int height;
     private static int width;
 
@@ -193,6 +193,7 @@ public class Tile implements Serialisable {
                 if (Tile.tilesShareColour(tile, currentTile)) {
                     adjacentTiles.put(direction, currentTile);
                 }
+                currentCoords = Coords.move(currentCoords, direction);
             }
         }
 

@@ -16,4 +16,18 @@ public record AdjacentTiles(Tile up, Tile down, Tile left, Tile right) {
 
         return new AdjacentTiles(up, down, left, right);
     }
+
+    @Override
+    public String toString() {
+        String upStr = (up != null) ? up.serialise() : "null";
+        String downStr = (down != null) ? down.serialise() : "null";
+        String leftStr = (left != null) ? left.serialise() : "null";
+        String rightStr = (right != null) ? right.serialise() : "null";
+        return "AdjacentTiles{" +
+            "up=" + upStr +
+            ", down=" + downStr +
+            ", left=" + leftStr +
+            ", right=" + rightStr +
+            '}';
+    }
 }
