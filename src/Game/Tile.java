@@ -1,9 +1,6 @@
 package Game;
 
-import DataTypes.AdjacentTiles;
-import DataTypes.Colour;
-import DataTypes.Colours;
-import DataTypes.Coords;
+import DataTypes.*;
 import Entities.Entity;
 import Interfaces.Serialisable;
 
@@ -61,7 +58,16 @@ public class Tile implements Serialisable {
         entity.setCoords(to);
     }
 
-    // TODO: buildMultiColourAdjacencyMap
+    public static void buildMultiColourAdjacencyMap() {
+        for (int row = 0; row < height; row++) {
+            for (int col = 0; col < width; col++) {
+                Coords currentCoords = new Coords(col, row);
+                AdjacentTiles adjacentTiles = Tile.findMultiColourAdjacentTiles(currentCoords);
+                Tile.multiColourAdjacencyMap.put(currentCoords, adjacentTiles);
+            }
+        }
+
+    }
 
     public static void buildNoColourAdjacencyMap() {
         for (int row = 0; row < height; row++) {
@@ -167,5 +173,40 @@ public class Tile implements Serialisable {
 
     private static boolean isValidY(int y) {
         return y >= 0 && y < height;
+    }
+
+    private static AdjacentTiles findMultiColourAdjacentTiles(Coords tileCoords) {
+        var tile = Tile.getTile(tileCoords);
+
+        HashMap<Direction, Tile> adjacentTiles = new HashMap<>();
+        adjacentTiles.put(Direction.UP, null);
+        adjacentTiles.put(Direction.DOWN, null);
+        adjacentTiles.put(Direction.LEFT, null);
+        adjacentTiles.put(Direction.RIGHT, null);
+
+        for (Direction direction : adjacentTiles.keySet()) {
+            Coords currentCoords = Coords.move(tileCoords, direction);
+            while (adjacentTiles.get(direction) == null && Tile.isValidCoords(currentCoords)) {
+                var currentTile = Tile.getTile(currentCoords);
+                if (Tile.tilesShareColour(tile, currentTile)) {
+                    adjacentTiles.put(direction, currentTile);
+                }
+            }
+        }
+
+        return new AdjacentTiles(
+            adjacentTiles.get(Direction.UP),
+            adjacentTiles.get(Direction.DOWN),
+            adjacentTiles.get(Direction.LEFT),
+            adjacentTiles.get(Direction.RIGHT)
+        );
+    }
+
+    private static boolean tilesShareColour(Tile tile, Tile otherTile) {
+        var colours = tile.getColours();
+        return otherTile.hasColour(colours.c1())
+            || otherTile.hasColour(colours.c2())
+            || otherTile.hasColour(colours.c3())
+            || otherTile.hasColour(colours.c4());
     }
 }
