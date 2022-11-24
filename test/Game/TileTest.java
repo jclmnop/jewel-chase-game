@@ -48,7 +48,7 @@ public class TileTest {
         tile.addEntity(loot);
         tile.addEntity(new Player());
 
-        ArrayList<Entity> lootOnly = tile.getEntitiesOfType(Loot.class);
+        ArrayList<Loot> lootOnly = tile.getEntitiesOfType(Loot.class);
         Assertions.assertEquals(1, lootOnly.size());
         Assertions.assertEquals(loot, lootOnly.get(0));
     }

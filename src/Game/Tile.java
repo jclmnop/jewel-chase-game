@@ -100,10 +100,8 @@ public class Tile implements Serialisable {
      * @param <T> Type of Class c, must extend Entity
      * @return Entities currently on Tile which belong to Class c
      */
-    public <T extends Entity> ArrayList<Entity> getEntitiesOfType(Class<T> c) {
-        return this.entities.stream().filter(c::isInstance).collect(
-            Collectors.toCollection(ArrayList::new)
-        );
+    public <T extends Entity> ArrayList<T> getEntitiesOfType(Class<T> c) {
+        return Entity.filterEntitiesByType(c, this.entities);
     }
 
     public boolean isBlocked() {
