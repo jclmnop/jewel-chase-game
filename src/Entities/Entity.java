@@ -8,6 +8,7 @@ import Interfaces.Serialisable;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.stream.Collectors;
 
 public abstract class Entity implements Serialisable {
     private static final ArrayDeque<Collision> collisions = new ArrayDeque<>();
@@ -34,11 +35,26 @@ public abstract class Entity implements Serialisable {
         return collisions.peekFirst();
     }
 
-    // TODO: static method for each subclass that filters entities for instances of subclass
-    //       e.g. Player.getPlayers() -> ArrayList<Player>,
-    //            Character.getCharacters() -> ArrayList<Character> etc.
     public static ArrayList<Entity> getEntities() {
         return entities;
+    }
+
+    public static <T extends Entity> ArrayList<T> getEntitiesOfType(Class<T> c) {
+        return Entity.filterEntitiesByType(c, Entity.entities);
+    }
+
+    public static <T extends Entity> ArrayList<T> filterEntitiesByType(
+        Class<T> c,
+        ArrayList<Entity> entityArrayList
+    ) {
+        // The IDE/compiler thinks the cast to T is unchecked, but we check
+        // by filtering the ArrayList for only objects that are instanceof T,
+        // so really it's fine.
+        return entityArrayList
+            .stream()
+            .filter(c::isInstance)
+            .map(e -> (T) e)
+            .collect(Collectors.toCollection(ArrayList::new));
     }
 
     public static void processCollisions() {
