@@ -7,16 +7,13 @@ import Entities.Characters.FloorFollowingThief;
 import Entities.Characters.FlyingAssassin;
 import Entities.Characters.Player;
 import Entities.Characters.SmartThief;
-import Entities.Items.Clock;
+import Entities.Items.Collectable.Clock;
 import Entities.Items.Gate;
-import Entities.Items.Lever;
-import Entities.Items.Loot;
+import Entities.Items.Collectable.Lever;
+import Entities.Items.Collectable.Loot;
 import Game.Tile;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
 
 public class Deserialiser {
     public static Object deserialiseObject(String serialisedString) throws ClassNotFoundException, ParseTileColourException {

@@ -6,6 +6,9 @@ import Entities.Characters.Player;
 import Entities.Characters.SmartThief;
 import Entities.Entity;
 import Entities.Items.*;
+import Entities.Items.Collectable.Clock;
+import Entities.Items.Collectable.Lever;
+import Entities.Items.Collectable.Loot;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
