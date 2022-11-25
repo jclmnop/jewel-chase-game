@@ -71,8 +71,7 @@ public abstract class Entity implements Serialisable {
         Collision collision = Entity.dequeCollision();
         if (collision.isValid()) {
             CollisionEvent collisionEvent = CollisionEvent.calculateCollisionEvent(
-                    collision.getEntityOne().collisionType,
-                    collision.getEntityTwo().getCollisionType()
+                collision
             );
             switch (collisionEvent) {
                 case NOTHING -> {}
