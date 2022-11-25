@@ -1,10 +1,11 @@
-package Entities.Items;
+package Entities.Items.Collectable;
 
 import DataTypes.CollisionType;
+import Entities.Items.Item;
 
-public class Clock extends Item {
-    public Clock() {
-        super(CollisionType.CLOCK, false);
+public class Lever extends Item {
+    public Lever() {
+        super(CollisionType.LEVER, false);
     }
 
     /**

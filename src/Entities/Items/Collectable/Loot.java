@@ -1,10 +1,11 @@
-package Entities.Items;
+package Entities.Items.Collectable;
 
 import DataTypes.CollisionType;
+import Entities.Items.Item;
 
-public class Lever extends Item {
-    public Lever() {
-        super(CollisionType.LEVER, false);
+public class Loot extends Item {
+    public Loot() {
+        super(CollisionType.LOOT, false);
     }
 
     /**
