@@ -1,6 +1,12 @@
 package Game;
 
+import DataTypes.Direction;
+import Entities.Characters.Player;
 import Entities.Entity;
+import Entities.Characters.Character;
+
+import java.util.ArrayList;
+import java.util.stream.Collectors;
 
 public class Game {
     public static final int TICKS_PER_SECOND = 100; //TODO: figure out reasonable value
@@ -53,8 +59,21 @@ public class Game {
 
     //TODO: -- private --
     //TODO: tick()
-    //TODO: movePlayer()
-    //TODO: moveNpcs()
+    private static void moveNpcs() {
+        ArrayList<Character> characters = Entity.filterEntitiesByType(
+            Character.class,
+            Entity.getEntities()
+        );
+        ArrayList<Character> npcs = characters.stream().filter(
+            c -> !(c instanceof Player)
+        ).collect(Collectors.toCollection(ArrayList::new));
+        //TODO: implement .tryMove() for NPCs (might need to create Npc subclass)
+        //TODO: iterate NPCs and call .tryMove()
+    }
+
+    private static void movePlayer(Player player, Direction direction) {
+        //TODO: implement player.tryMove(direction)
+    }
 
     private static void resetGame() {
         Game.timeRemaining = 0;
