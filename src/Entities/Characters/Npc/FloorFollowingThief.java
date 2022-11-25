@@ -1,10 +1,16 @@
-package Entities.Characters;
+package Entities.Characters.Npc;
 
 import DataTypes.CollisionType;
+import Entities.Characters.Character;
 
-public class FloorFollowingThief extends Character {
+public class FloorFollowingThief extends Npc {
     public FloorFollowingThief() {
         super(CollisionType.THIEF, true);
+    }
+
+    @Override
+    public void tryMove() {
+        //TODO: implement
     }
 
     /**
@@ -17,4 +23,5 @@ public class FloorFollowingThief extends Character {
         // TODO
         return null;
     }
+
 }

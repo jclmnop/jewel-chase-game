@@ -1,9 +1,9 @@
 package DataTypes;
 
-import Entities.Characters.FloorFollowingThief;
-import Entities.Characters.FlyingAssassin;
+import Entities.Characters.Npc.FloorFollowingThief;
+import Entities.Characters.Npc.FlyingAssassin;
 import Entities.Characters.Player;
-import Entities.Characters.SmartThief;
+import Entities.Characters.Npc.SmartThief;
 import Entities.Entity;
 import Entities.Items.*;
 import Entities.Items.Collectable.Clock;
