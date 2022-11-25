@@ -1,27 +1,66 @@
 package Game;
 
+import Entities.Entity;
+
 public class Game {
-    //TODO: -- variables --
-    //TODO: score
-    //TODO: timeRemaining
-    //TODO: TICKS_PER_SECOND
-    //TODO: running (bool)
+    public static final int TICKS_PER_SECOND = 100; //TODO: figure out reasonable value
+    private static int score = 0;
+    private static int timeRemaining = 0;
+    private static boolean running = false;
+
+    private Game() {};
+
+    public static int getScore() {
+        return Game.score;
+    }
+
+    public static int getTimeRemaining() {
+        return Game.timeRemaining;
+    }
+
+    public static boolean isRunning() {
+        return Game.running;
+    }
+
+    /**
+     * Adjusts the current score
+     * @param scoreChange Positive int to increase score, negative int to reduce
+     *                    score.
+     */
+    public static void adjustScore(int scoreChange) {
+        Game.score += scoreChange;
+    }
+
+    /**
+     * Adjusts timeRemaining
+     * @param timeChange Positive int to increase time, negative int to reduce
+     *                   timeRemaining.
+     */
+    public static void adjustTime(int timeChange) {
+        Game.timeRemaining += timeChange;
+    }
 
     //TODO: -- public --
-    //TODO: getScore()
-    //TODO: adjustScore()
     //TODO: startGame()
     //TODO: endGame()
     //TODO: quit()
-    //TODO: getTimeRemaining()
-    //TODO: adjustTime()
+    //TODO: win()
+    //TODO: lose()
+
+    //TODO: -- maybe private idk --
     //TODO: loadGame()
     //TODO: saveGame()
-    //TODO: isRunning()
 
     //TODO: -- private --
     //TODO: tick()
     //TODO: movePlayer()
     //TODO: moveNpcs()
-    //TODO: resetGame()
+
+    private static void resetGame() {
+        Game.timeRemaining = 0;
+        Game.score = 0;
+        Game.running = false;
+        Entity.clearEntities();
+        Tile.clearBoard();
+    }
 }

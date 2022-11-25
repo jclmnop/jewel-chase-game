@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.stream.Collectors;
 
 public abstract class Entity implements Serialisable {
-    private static final ArrayDeque<Collision> collisions = new ArrayDeque<>();
+    private static ArrayDeque<Collision> collisions = new ArrayDeque<>();
     private static ArrayList<Entity> entities = new ArrayList<>();
     protected final CollisionType collisionType;
     protected final boolean blocking;
@@ -65,6 +65,11 @@ public abstract class Entity implements Serialisable {
 
     public static void removeEntity(Entity entity) {
         entities.remove(entity);
+    }
+
+    public static void clearEntities() {
+        Entity.entities = new ArrayList<>();
+        Entity.collisions = new ArrayDeque<>();
     }
 
     private static void processCollision() {
