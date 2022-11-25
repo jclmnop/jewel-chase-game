@@ -1,12 +1,16 @@
 package Entities.Characters;
 
 import DataTypes.CollisionType;
+import DataTypes.Direction;
 
 public class Player extends Character {
     public Player() {
         super(CollisionType.PLAYER, true);
     }
 
+    public void tryMove(Direction direction) {
+        //TODO: implement
+    }
     /**
      * Serialises the Object into a String.
      *

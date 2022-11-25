@@ -1,12 +1,18 @@
-package Entities.Characters;
+package Entities.Characters.Npc;
 
 import DataTypes.CollisionType;
+import Entities.Characters.Character;
 
-public class FlyingAssassin extends Character {
+public class FlyingAssassin extends Npc {
     public FlyingAssassin() {
         super(CollisionType.ASSASSIN, false);
     }
-    
+
+    @Override
+    public void tryMove() {
+        //TODO: implement
+    }
+
     /**
      * Serialises the Object into a String.
      *
@@ -17,4 +23,5 @@ public class FlyingAssassin extends Character {
         // TODO
         return null;
     }
+
 }
