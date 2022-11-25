@@ -15,10 +15,9 @@ public enum CollisionEvent {
     WIN,
     LOSE;
 
-    public static CollisionEvent calculateCollisionEvent(
-        CollisionType collisionOne,
-        CollisionType collisionTwo
-    ) {
+    public static CollisionEvent calculateCollisionEvent(Collision collision) {
+        CollisionType collisionOne = collision.getEntityOne().getCollisionType();
+        CollisionType collisionTwo = collision.getEntityTwo().getCollisionType();
         return switch (collisionOne) {
             case LOOT -> switch (collisionTwo) {
                 case THIEF  -> LOOT_STOLEN;
@@ -56,7 +55,11 @@ public enum CollisionEvent {
                 // others, but this case swaps them round if they're somehow unsorted.
                 default ->
                     CollisionEvent.calculateCollisionEvent(
-                        collisionTwo, collisionOne
+                        new Collision(
+                            collision.getCoords(),
+                            collision.getEntityTwo(),
+                            collision.getEntityOne()
+                        )
                     );
             };
             default -> NOTHING;
