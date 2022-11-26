@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import java.time.Instant;
+import java.util.Timer;
 
 
 public class Game {
@@ -61,13 +62,21 @@ public class Game {
         }
     }
 
-    public static void startGame(GameParams gameParams) {
+    /**
+     * Runs initialises the game loop and runs it on a separate thread, this
+     * allows us to monitor for player inputs on other threads.
+     * @param gameParams Parameters to initialise the Game with
+     * @return Handle for game loop thread
+     */
+    public static Thread startGame(GameParams gameParams) {
         // TODO: This should take path to level/save file instead,
         //       then call load method and get GameParams from that
         //       (load method will also ensure board etc is all set up)
         Game.score = gameParams.startScore();
         Game.timeRemaining = gameParams.startTime();
-        Game.gameLoop();
+        Thread gameLoopThread = new Thread(Game::gameLoop);
+        gameLoopThread.start();
+        return gameLoopThread;
     }
 
     public static void win() {
@@ -90,12 +99,17 @@ public class Game {
     }
 
     private static void gameLoop() {
+        Game.running = true;
+        long now = Instant.now().toEpochMilli();
+        Game.lastCountdownTime = now;
+        Game.lastTickTime = now;
         while (Game.isRunning()) {
             //TODO: check for menu inputs (save, quit, etc.)
             HashMap<Player, Direction> playerInputs = new HashMap<>();
             //TODO: check for player movement inputs, add to playerInputs
             Game.tick(playerInputs);
         }
+        Game.resetGame();
     }
 
     private static void tick(HashMap<Player, Direction> playerInputs) {
@@ -141,7 +155,6 @@ public class Game {
         try {
             Thread.sleep(timeUntilNextTick);
         } catch (InterruptedException e) {
-            // This shouldn't happen because we only have one thread
             System.out.println(e.getMessage());
         }
     }
@@ -183,7 +196,6 @@ public class Game {
     private static void resetGame() {
         Game.timeRemaining = 0;
         Game.score = 0;
-        Game.running = false;
         Entity.clearEntities();
         Tile.clearBoard();
     }
