@@ -49,14 +49,30 @@ public class Game {
         Game.timeRemaining += timeChange;
     }
 
+    public static void win() {
+        Game.endGame();
+        // TODO: save highscore
+        // TODO: update playerProfile
+        // TODO: victory screen
+    }
+
+    public static void lose() {
+        Game.endGame();
+        // TODO: lose screen
+    }
+
     //TODO: -- public --
     //TODO: startGame()
-    //TODO: endGame()
+    //TODO: endGame()?
     //TODO: quit()
     //TODO: win()
     //TODO: lose()
     //TODO: loadGame()
     //TODO: saveGame()
+
+    private static void endGame() {
+        Game.running = false;
+    }
 
     private static void gameLoop() {
         while (Game.running) {
