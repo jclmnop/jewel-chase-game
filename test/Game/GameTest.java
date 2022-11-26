@@ -18,7 +18,7 @@ public class GameTest {
         // Run for 1 second
         int runTimeSeconds = 1;
         GameParams gameParams = new GameParams(runTimeSeconds, 0);
-
+        Entity.clearEntities();
         // At least one player required to stop game from ending prematurely
         Player player = new Player();
         Assertions.assertEquals(1, Entity.getEntities().size());
