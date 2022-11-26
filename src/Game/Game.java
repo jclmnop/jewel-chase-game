@@ -11,6 +11,11 @@ import java.util.HashMap;
 import java.time.Instant;
 
 public class Game {
+    //TODO: public static startGame()
+    //TODO: public/private static quit()
+    //TODO: public/private static loadGame()
+    //TODO: public/private static saveGame()
+
     public static final long MILLI_PER_TICK = 100; //TODO: figure out reasonable value
     private static int score = 0;
     private static int timeRemaining = 0;
@@ -52,30 +57,25 @@ public class Game {
     public static void win() {
         Game.endGame();
         // TODO: save highscore
-        // TODO: update playerProfile
+        // TODO: update playerProfile?
         // TODO: victory screen
     }
 
     public static void lose() {
         Game.endGame();
         // TODO: lose screen
+        // TODO: i think the spec says to save highscore when player loses but
+        //       that makes no sense to me? if we confirm it's in the spec though
+        //       probably best to implement it anyway
     }
 
-    //TODO: -- public --
-    //TODO: startGame()
-    //TODO: endGame()?
-    //TODO: quit()
-    //TODO: win()
-    //TODO: lose()
-    //TODO: loadGame()
-    //TODO: saveGame()
 
     private static void endGame() {
         Game.running = false;
     }
 
     private static void gameLoop() {
-        while (Game.running) {
+        while (Game.isRunning()) {
             //TODO: check for menu inputs (save, quit, etc.)
             HashMap<Player, Direction> playerInputs = new HashMap<>();
             //TODO: check for player movement inputs, add to playerInputs
@@ -90,15 +90,20 @@ public class Game {
         // TODO: figure out how to get keyboard inputs passed to this function
         //          - will also need a way to make sure player can't move *every* tick
         //              - probably best to implement movement speed etc in player.tryMove()
-        //                then this function can just blindly pass keyboards inputs etc
-        //          - maybe parseInput() function?
-        // TODO: if we do co-op mode, need to differentiate between player1&2 keyboard inputs
+        //                then this function can just blindly player inputs etc
+        //          - maybe getInputs() and/or parseInput() methods?
+        // TODO: for co-op power-up item, need to differentiate between player1&2 keyboard inputs
+        Game.processPlayerInputs(playerInputs);
+        // Collisions must be processed *after* movements
+        Entity.processCollisions();
+
+        Game.updateLastTickTime();
+    }
+
+    private static void processPlayerInputs(HashMap<Player, Direction> playerInputs) {
         for (Player player : playerInputs.keySet()) {
             Game.movePlayer(player, playerInputs.get(player));
         }
-        Entity.processCollisions(); // Collisions must be processed after movements
-
-        Game.updateLastTickTime();
     }
 
     private static void updateLastTickTime() {
