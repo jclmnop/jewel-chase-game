@@ -4,7 +4,10 @@ import DataTypes.Collision;
 import DataTypes.CollisionEvent;
 import DataTypes.CollisionType;
 import DataTypes.Coords;
+import Entities.Characters.Character;
 import Interfaces.Serialisable;
+import Game.Game;
+import Game.Tile;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -64,6 +67,7 @@ public abstract class Entity implements Serialisable {
     }
 
     public static void removeEntity(Entity entity) {
+        Tile.removeEntityFromBoard(entity);
         entities.remove(entity);
     }
 
@@ -81,31 +85,50 @@ public abstract class Entity implements Serialisable {
             switch (collisionEvent) {
                 case NOTHING -> {}
                 case LOOT_STOLEN -> {
-                    //TODO: reduce score
+                    //TODO: get value of loot
+                    int lootValue = 10;
+                    Game.adjustScore(-lootValue);
+                    Entity.removeEntity(collision.getEntityOne());
                 }
                 case LOOT_COLLECTED -> {
-                    //TODO: increase score
+                    //TODO: get value of loot
+                    int lootValue = 10;
+                    Game.adjustScore(lootValue);
+                    Entity.removeEntity(collision.getEntityOne());
                 }
                 case CLOCK_STOLEN -> {
-                    //TODO: reduce timeLeft
+                    //TODO: decide seconds per clock
+                    int timeAdjustment = 10;
+                    Game.adjustTime(-timeAdjustment);
+                    Entity.removeEntity(collision.getEntityOne());
                 }
                 case CLOCK_COLLECTED -> {
-                    //TODO: increase timeLeft
+                    //TODO: decide seconds per clock
+                    int timeAdjustment = 10;
+                    Game.adjustTime(timeAdjustment);
+                    Entity.removeEntity(collision.getEntityOne());
                 }
                 case LEVER_TRIGGERED -> {
                     //TODO: remove gate of same colour
                 }
                 case DOUBLE_ASSASSINATION -> {
                     //TODO: this means two assassins collided, kill them both
+                    Character entityOne = (Character) collision.getEntityOne();
+                    Character entityTwo = (Character) collision.getEntityOne();
+                    entityOne.kill();
+                    entityTwo.kill();
                 }
                 case ASSASSINATION -> {
-                    //TODO: kill entityTwo
+                    Character entityTwo = (Character) collision.getEntityOne();
+                    entityTwo.kill();
                 }
                 case LOSE -> {
-                    //TODO: end game; show defeat screen; don't save highscore;
+                    //TODO: finish implementing Game.lose()
+                    Game.lose();
                 }
                 case WIN -> {
-                    //TODO: end game; show victory screen; save highscore;
+                    //TODO: finish implementing Game.win()
+                    Game.win();
                 }
             }
         }
