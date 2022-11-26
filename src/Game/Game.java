@@ -15,7 +15,7 @@ public class Game {
     private static int score = 0;
     private static int timeRemaining = 0;
     private static boolean running = false;
-    private static Instant lastTickTime;
+    private static long lastTickTime;
 
     private Game() {};
 
@@ -58,8 +58,15 @@ public class Game {
     //TODO: loadGame()
     //TODO: saveGame()
 
-    //TODO: -- private --
-    //TODO: tick()
+    private static void gameLoop() {
+        while (Game.running) {
+            //TODO: check for menu inputs (save, quit, etc.)
+            HashMap<Player, Direction> playerInputs = new HashMap<>();
+            //TODO: check for player movement inputs, add to playerInputs
+            Game.tick(playerInputs);
+            Game.delayNextTick();
+        }
+    }
 
     private static void tick(HashMap<Player, Direction> playerInputs) {
         // TODO: call every function that needs to be called per tick
@@ -75,15 +82,23 @@ public class Game {
         }
         Entity.processCollisions(); // Collisions must be processed after movements
 
-        // TODO: time management (increment time after X ticks)
-        // TODO: measure time (delay of Y seconds at end of tick)
-        //                      Y: depends on how long tick takes to execute
-        Game.timeTick();
+        Game.updateLastTickTime();
     }
 
-    private static void timeTick() {
-        var now = Instant.now();
-        //TODO: what
+    private static void updateLastTickTime() {
+        Game.lastTickTime = Instant.now().toEpochMilli();
+    }
+
+    private static void delayNextTick() {
+        var now = Instant.now().toEpochMilli();
+        var timeSinceLastTick = now - Game.lastTickTime;
+        var timeUntilNextTick = Game.MILLI_PER_TICK - timeSinceLastTick;
+        try {
+            Thread.sleep(timeUntilNextTick);
+        } catch (InterruptedException e) {
+            // This shouldn't happen because we only have one thread
+            System.out.println(e.getMessage());
+        }
     }
 
     private static void moveNpcs() {
