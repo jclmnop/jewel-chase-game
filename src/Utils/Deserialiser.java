@@ -3,6 +3,7 @@ package Utils;
 import DataTypes.Colour;
 import DataTypes.Colours;
 import DataTypes.Exception.ParseTileColourException;
+import DataTypes.GameParams;
 import Entities.Characters.Npc.FloorFollowingThief;
 import Entities.Characters.Npc.FlyingAssassin;
 import Entities.Characters.Player;
@@ -15,6 +16,9 @@ import Game.Tile;
 
 import java.util.ArrayList;
 
+/**
+ * Utility meant to be used by GameFileHandler when loading a level/save file.
+ */
 public class Deserialiser {
     public static Object deserialiseObject(String serialisedString) throws ClassNotFoundException, ParseTileColourException {
         var args = serialisedString.split(" ");
@@ -57,8 +61,16 @@ public class Deserialiser {
         }
     }
 
-    //TODO: implement these methods once constructors for each class have
-    //      been implemented.
+    // TODO: deserialiseGameParams
+    public static GameParams deserialiseGameParams(String gameParamString) {
+        String[] args = gameParamString.split(" ");
+        int time = Integer.parseInt(args[0]);
+        int score = (args.length > 1) ? Integer.parseInt(args[1]) : 0;
+        return new GameParams(time, score);
+    }
+
+    // TODO: implement these methods once constructors for each class have
+    //       been implemented.
 
     private static SmartThief deserialiseSmartThief(String[] splitString) {
         return new SmartThief();

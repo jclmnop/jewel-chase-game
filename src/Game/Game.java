@@ -1,6 +1,7 @@
 package Game;
 
 import DataTypes.Direction;
+import DataTypes.GameParams;
 import Entities.Characters.Npc.Npc;
 import Entities.Characters.Player;
 import Entities.Entity;
@@ -11,7 +12,7 @@ import java.util.HashMap;
 import java.time.Instant;
 
 public class Game {
-    //TODO: public static startGame()
+    //TODO: public static startGame(GameParams gameParams)
     //TODO: public/private static quit()
     //TODO: public/private static loadGame()
     //TODO: public/private static saveGame()
@@ -57,6 +58,15 @@ public class Game {
         if (Game.timeRemaining < 0) {
             Game.timeRemaining = 0;
         }
+    }
+
+    public static void startGame(GameParams gameParams) {
+        // TODO: This should take path to level/save file instead,
+        //       then call load method and get GameParams from that
+        //       (load method will also ensure board etc is all set up)
+        Game.score = gameParams.startScore();
+        Game.timeRemaining = gameParams.startTime();
+        Game.gameLoop();
     }
 
     public static void win() {
