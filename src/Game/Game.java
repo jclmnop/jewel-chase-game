@@ -17,10 +17,12 @@ public class Game {
     //TODO: public/private static saveGame()
 
     public static final long MILLI_PER_TICK = 100; //TODO: figure out reasonable value
+    public static final long MILLI_PER_SECOND = 1000;
     private static int score = 0;
     private static int timeRemaining = 0;
     private static boolean running = false;
-    private static long lastTickTime;
+    private static long lastTickTime = 0;
+    private static long lastCountdownTime = 0;
 
     private Game() {};
 
@@ -52,6 +54,9 @@ public class Game {
      */
     public static void adjustTime(int timeChange) {
         Game.timeRemaining += timeChange;
+        if (Game.timeRemaining < 0) {
+            Game.timeRemaining = 0;
+        }
     }
 
     public static void win() {
@@ -80,7 +85,9 @@ public class Game {
             HashMap<Player, Direction> playerInputs = new HashMap<>();
             //TODO: check for player movement inputs, add to playerInputs
             Game.tick(playerInputs);
-            Game.delayNextTick();
+            if (Game.getTimeRemaining() <= 0) {
+                Game.lose();
+            }
         }
     }
 
@@ -94,10 +101,17 @@ public class Game {
         //          - maybe getInputs() and/or parseInput() methods?
         // TODO: for co-op power-up item, need to differentiate between player1&2 keyboard inputs
         Game.processPlayerInputs(playerInputs);
+
         // Collisions must be processed *after* movements
         Entity.processCollisions();
 
+        // Update lastTickTime, so we can delay until MILLI_PER_TICK has passed
         Game.updateLastTickTime();
+        Game.delayNextTick();
+
+        // Countdown the timer if MILLI_PER_SECOND has passed since last timer
+        // decrement
+        Game.timerCountdown();
     }
 
     private static void processPlayerInputs(HashMap<Player, Direction> playerInputs) {
@@ -113,12 +127,21 @@ public class Game {
     private static void delayNextTick() {
         var now = Instant.now().toEpochMilli();
         var timeSinceLastTick = now - Game.lastTickTime;
-        var timeUntilNextTick = Game.MILLI_PER_TICK - timeSinceLastTick;
+        var timeUntilNextTick = MILLI_PER_TICK - timeSinceLastTick;
         try {
             Thread.sleep(timeUntilNextTick);
         } catch (InterruptedException e) {
             // This shouldn't happen because we only have one thread
             System.out.println(e.getMessage());
+        }
+    }
+
+    private static void timerCountdown() {
+        long now = Instant.now().toEpochMilli();
+        long millisSinceLastCountdown = now - Game.lastCountdownTime;
+        if (millisSinceLastCountdown >= MILLI_PER_SECOND) {
+            Game.adjustTime(-1);
+            Game.lastCountdownTime = now;
         }
     }
 
