@@ -3,9 +3,12 @@ package Game;
 import DataTypes.AdjacentCoords;
 import DataTypes.Coords;
 import DataTypes.Direction;
+import DataTypes.Exception.ParseBoardException;
+import DataTypes.Exception.ParseTileColourException;
 import Entities.Characters.Player;
 import Entities.Items.Collectable.Loot;
 import TestCases.Boards;
+import Utils.BoardLoader;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -50,5 +53,20 @@ public class TileTest {
         ArrayList<Loot> lootOnly = tile.getEntitiesOfType(Loot.class);
         Assertions.assertEquals(1, lootOnly.size());
         Assertions.assertEquals(loot, lootOnly.get(0));
+    }
+
+    @Test
+    public void testSerialiseBoard() throws ParseBoardException, ParseTileColourException, ClassNotFoundException {
+        var startBoard = Boards.CASE_1.TARGET_BOARD;
+        Tile.newBoard(startBoard, 5, 3);
+        var serialisedBoard = Tile.serialiseBoard();
+        for (int row = 0; row < 3; row++) {
+            for (int col = 0; col < 5; col++) {
+                Assertions.assertEquals(
+                    startBoard[row][col].serialise(),
+                    Tile.getTile(new Coords(col, row)).serialise()
+                );
+            }
+        }
     }
 }
