@@ -11,6 +11,7 @@ import java.util.HashMap;
 
 import java.time.Instant;
 
+
 public class Game {
     //TODO: public static startGame(GameParams gameParams)
     //TODO: public/private static quit()
@@ -84,7 +85,6 @@ public class Game {
         //       probably best to implement it anyway
     }
 
-
     private static void endGame() {
         Game.running = false;
     }
@@ -95,9 +95,6 @@ public class Game {
             HashMap<Player, Direction> playerInputs = new HashMap<>();
             //TODO: check for player movement inputs, add to playerInputs
             Game.tick(playerInputs);
-            if (Game.getTimeRemaining() <= 0) {
-                Game.lose();
-            }
         }
     }
 
@@ -122,6 +119,9 @@ public class Game {
         // Countdown the timer if MILLI_PER_SECOND has passed since last timer
         // decrement
         Game.timerCountdown();
+
+        // Check if time has reached zero or all players are dead
+        Game.checkForLoss();
     }
 
     private static void processPlayerInputs(HashMap<Player, Direction> playerInputs) {
@@ -152,6 +152,16 @@ public class Game {
         if (millisSinceLastCountdown >= MILLI_PER_SECOND) {
             Game.adjustTime(-1);
             Game.lastCountdownTime = now;
+        }
+    }
+
+    private static void checkForLoss() {
+        boolean noPlayersLeft = Entity.filterEntitiesByType(
+            Player.class,
+            Entity.getEntities()
+        ).isEmpty();
+        if (Game.getTimeRemaining() <= 0 || noPlayersLeft) {
+            Game.lose();
         }
     }
 
