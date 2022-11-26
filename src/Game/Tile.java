@@ -5,6 +5,7 @@ import Entities.Entity;
 import Interfaces.Serialisable;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.stream.Collectors;
 
@@ -82,6 +83,21 @@ public class Tile implements Serialisable {
         entityTile.removeEntity(entity);
         entity.setCoords(null);
         // TODO: remove from entities static list in Entity class
+    }
+
+    public static String serialiseBoard() {
+        StringBuilder output = new StringBuilder();
+        output.append(String.format("%s %s\n", Tile.width, Tile.height));
+        for (Tile[] row : Tile.board) {
+            String[] rowStrs = new String[row.length];
+            for (int i = 0; i < row.length; i++) {
+                rowStrs[i] = row[i].serialise();
+            }
+            String rowStr = String.join(" ", rowStrs);
+            output.append(rowStr);
+            output.append("\n");
+        }
+        return output.toString();
     }
 
     // Instance Methods //
