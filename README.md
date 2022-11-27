@@ -2,6 +2,34 @@
 
 We're using [Java 17.0.5](https://www.oracle.com/java/technologies/downloads/#java17) (link to download) because it's supposed to have a few quality of life improvements compared to 8.
 
+## JavaFx Version
+
+We're using the one Liam recommended because it's free to download: [JavaFx 19](https://gluonhq.com/products/javafx/)
+(download the SDK for your machine)
+
+The VM args you need to add to your IDE are:
+
+```bash
+--module-path /path/to/javafx/javafx-sdk-19/lib 
+--add-modules javafx.controls,javafx.fxml,javafx.base,javafx.graphics,javafx.media
+```
+
+Replace `/path/to/javafx/javafx-sdk-19/lib` with the path to the lib folder in your javafx installation.
+
+I had to do a bit of manual setup as well to be able to run the JavaFx app straight from my IDE which 
+I'll cover below in IDE Setup.
+
+### SceneBuilder
+
+I've been using [SceneBuilder](https://gluonhq.com/products/scene-builder/) to generate and modify the FXML files, it's much easier than trying
+to do it all with code. 
+
+If you want to improve the general look and feel of the JavaFX shit I've done so far you can do 
+it in SceneBuilder and as long as you don't touch anything in the `code` section it shouldn't affect functionality. 
+
+You can also add CSS ids to elements in scene builder and then have a .CSS file to style everything so if anyone 
+is any good with CSS they could have a go at that. 
+
 ## IDE Setup
 
 I only really use IntelliJ for Java so if people have advice for setup in other IDEs they can put it here.
@@ -18,46 +46,108 @@ When it asks you what kind of project it is, just select Java without selecting 
 
 After it's all loaded up, click `Build -> Build Project` to make sure it all compiles fine.
 
+### JavaFx
+
+Steps will probably be a bit different for other IDEs
+
+I had to do the following to set up JavaFx in IntelliJ, but it's not always this much hassle, 
+so you might be lucky: 
+1. Go to `Run -> Edit Configurations...`
+2. Add a new configuration (click the `+` button)
+3. Pick the "Application" type
+4. Enter "App" in the main class name section
+5. Click "modify options"
+6. Paste all the arguments from above into the VM Options field that pops up 
+```bash
+--module-path /path/to/javafx/javafx-sdk-19/lib 
+--add-modules javafx.controls,javafx.fxml,javafx.base,javafx.graphics,javafx.media
+```
+After doing all this, you should be able to right click the `src/App/App.java` file and a 
+`Run 'App'` option will be there. 
+
+Use this to Run the app and make sure it actually starts up. 
+
 ## Project Structure
 
 I've organised everything into packages, which are just fancy Java folders. Game and Tile were at the top level,
 but I've moved them into a Game package. GameFileHandler (loading/saving), Deserialiser (to turn text into objects) and any other static classes we need
 will go in Utils.
 
-Fuck knows where JavaFX stuff will go. Probably all in its own package. Any assets (images etc)
-will most likely go in a directory above src bc src is just for code. 
+JavaFX stuff is all in `src/App`. I should probably move the `src/App/resources` folder into the top level at some point.
 
-At the moment most Classes are just empty templates, except for the DataTypes, which are simple custom datatypes/enums etc which we need for other stuff.
+The current JavaFX App is nowhere near finished, it's currently just a semi-working
+proof of concept which shows the game loop etc all works properly. 
 
 ```
-└── src
+├── lib
+│       ... (just stuff for junit)
+├── src
+│   ├── App
+│   │   ├── App.java
+│   │   ├── GameRenderer.java
+│   │   ├── fxml
+│   │   │   ├── game.fxml
+│   │   │   └── menu.fxml
+│   │   └── resources
+│   │       ├── anaconda.mp3
+│   │       ├── brodyquest.mp3
+│   │       └── volume.png
+│   ├── DataTypes
+│   │   ├── AdjacentCoords.java
+│   │   ├── Collision.java
+│   │   ├── CollisionEvent.java
+│   │   ├── CollisionType.java
+│   │   ├── Colour.java
+│   │   ├── Colours.java
+│   │   ├── Coords.java
+│   │   ├── Direction.java
+│   │   ├── Exception
+│   │   │   ├── ParseBoardException.java
+│   │   │   └── ParseTileColourException.java
+│   │   └── GameParams.java
+│   ├── Entities
+│   │   ├── Characters
+│   │   │   ├── Character.java
+│   │   │   ├── Npc
+│   │   │   │   ├── FloorFollowingThief.java
+│   │   │   │   ├── FlyingAssassin.java
+│   │   │   │   ├── Npc.java
+│   │   │   │   └── SmartThief.java
+│   │   │   └── Player.java
+│   │   ├── Entity.java
+│   │   └── Items
+│   │       ├── Bomb.java
+│   │       ├── Collectable
+│   │       │   ├── Clock.java
+│   │       │   ├── Collectable.java
+│   │       │   ├── Lever.java
+│   │       │   └── Loot.java
+│   │       ├── Door.java
+│   │       ├── Gate.java
+│   │       └── Item.java
+│   ├── Game
+│   │   ├── Game.java
+│   │   └── Tile.java
+│   ├── Interfaces
+│   │   └── Serialisable.java
+│   └── Utils
+│       ├── BoardLoader.java
+│       └── Deserialiser.java
+└── test
     ├── DataTypes
-    │   ├── Collision.java
-    │   ├── CollisionEvent.java
-    │   ├── CollisionType.java
-    │   ├── Coords.java
-    │   └── Direction.java
+    │   ├── CollisionEventTest.java
+    │   └── DirectionTest.java
     ├── Entities
-    │   ├── Characters
-    │   │   ├── Character.java
-    │   │   ├── FloorFollowingThief.java
-    │   │   ├── FlyingAssassin.java
-    │   │   ├── Player.java
-    │   │   └── SmartThief.java
-    │   ├── Entity.java
-    │   └── Items
-    │       ├── Clock.java
-    │       ├── Gate.java
-    │       ├── Item.java
-    │       ├── Lever.java
-    │       └── Loot.java
+    │   └── EntityTest.java
     ├── Game
-    │   ├── Game.java
-    │   └── Tile.java
-    ├── Interfaces
-    │   └── Serialisable.java
+    │   ├── GameTest.java
+    │   └── TileTest.java
+    ├── TestCases
+    │   └── Boards.java
     └── Utils
-        └── Deserialiser.java
+        └── BoardLoaderTest.java
+
+
 ```
 
 ## Contributing
@@ -75,7 +165,7 @@ git checkout -b new-branch-name
 The above command creates a new branch (that's what the `-b` is for) and checks out to it (which just means it switches you over to that new branch). By default it
 makes this branch from your current branch, but you can add another name after `new-branch-name` to specify a different branch to make it from.
 
-VCS + IntelliJ both have nice GUI integrations for this, so you don't have to use command line if you don't want to.
+VS Code + IntelliJ both have nice GUI integrations for this, so you don't have to use command line if you don't want to.
 
 Using the `checkout` command without the `-b` flag will switch you to the branch-name you pass if it exists:
 
