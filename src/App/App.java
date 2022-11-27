@@ -2,6 +2,7 @@ package App;
 
 import DataTypes.GameParams;
 import javafx.application.Application;
+import javafx.event.ActionEvent;
 import javafx.event.EventType;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -30,4 +31,9 @@ public class App extends Application{
         App.stage.setScene(menuScene);
         App.stage.show();
     }
+
+    public void newGame(ActionEvent actionEvent) {
+        System.out.println("newGame button pressed");
+    }
+
 }
