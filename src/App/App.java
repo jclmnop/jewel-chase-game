@@ -5,21 +5,31 @@ import Entities.Characters.Player;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventType;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import Game.Game;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.Objects;
 
-public class App extends Application{
+public class App extends Application {
     public static final int WINDOW_WIDTH = 1000;
     public static final int WINDOW_HEIGHT = 800;
     public static final String MENU_FXML_PATH = "fxml/menu.fxml";
     public static final String GAME_FXML_PATH = "fxml/game.fxml";
+    public static final String BRODYQUEST_MP3_PATH = "src/App/resources/brodyquest.mp3";
+    public static final String ANACONDA_MP3_PATH = "src/App/resources/anaconda.mp3";
+    public static final String[] TRACKS = {BRODYQUEST_MP3_PATH, ANACONDA_MP3_PATH};
+    public static final double DEFAULT_VOLUME = 0.3; // 50%
+    private static int currentTrack = 0;
     private static Stage stage;
+    private static MediaPlayer musicPlayer;
 
     public App() {
         Game.setApp(this);
@@ -33,7 +43,38 @@ public class App extends Application{
     public void start(Stage primaryStage) throws IOException {
         App.stage = primaryStage;
         App.stage.setResizable(false);
+        App.playMusic();
         this.changeScene(MENU_FXML_PATH);
+    }
+
+    /**
+     * Volume can only be increased. Working as intended.
+     */
+    public void increaseVolume() {
+        App.volume();
+    }
+
+    private static void volume() {
+        App.musicPlayer.setVolume(App.musicPlayer.getVolume() + 0.1);
+        System.out.println(App.musicPlayer.getVolume());
+    }
+
+    private static void playMusic() {
+        App.musicPlayer = new MediaPlayer(App.loadNextTrack());
+        App.musicPlayer.setVolume(DEFAULT_VOLUME);
+        musicPlayer.setOnEndOfMedia(() -> {
+            App.musicPlayer.dispose();
+            App.musicPlayer = new MediaPlayer(App.loadNextTrack());
+            App.musicPlayer.setVolume(DEFAULT_VOLUME);
+            App.musicPlayer.play();
+        });
+        App.musicPlayer.play();
+    }
+
+    private static Media loadNextTrack() {
+        Media music = new Media(new File(TRACKS[currentTrack]).toURI().toString());
+        currentTrack = currentTrack + 1 % TRACKS.length;
+        return music;
     }
 
     /**
