@@ -30,13 +30,22 @@ public class App extends Application {
     private static int currentTrack = 0;
     private static Stage stage;
     private static MediaPlayer musicPlayer;
+    private static App app;
 
     public App() {
-        Game.setApp(this);
+        App.app = this;
     }
 
     public static void main(String[] args) {
         launch(args);
+    }
+
+    public static App getApp() {
+        return App.app;
+    }
+
+    public static void returnToMainMenu() throws IOException {
+        App.app.changeScene(MENU_FXML_PATH);
     }
 
     @Override

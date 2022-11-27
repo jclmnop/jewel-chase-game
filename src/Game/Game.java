@@ -30,9 +30,6 @@ public class Game {
     private static boolean running = false;
     private static long lastTickTime = 0;
     private static long lastCountdownTime = 0;
-    private static GameRenderer gameRenderer;
-
-    private static App app;
 
     private Game() {};
 
@@ -46,14 +43,6 @@ public class Game {
 
     public static boolean isRunning() {
         return Game.running;
-    }
-
-    public static void setApp(App app) {
-        Game.app = app;
-    }
-
-    public static void setGameRenderer(GameRenderer gameRenderer) {
-        Game.gameRenderer = gameRenderer;
     }
 
     /**
@@ -96,15 +85,14 @@ public class Game {
 
     public static void win() {
         Game.endGame();
-        Game.gameRenderer.renderWin();
+        GameRenderer.renderWin();
         // TODO: save highscore
         // TODO: update playerProfile?
-        // TODO: victory screen
     }
 
     public static void lose() {
         Game.endGame();
-        Game.gameRenderer.renderLose();
+        GameRenderer.renderLose();
         // TODO: i think the spec says to save highscore when player loses but
         //       that makes no sense to me? if we confirm it's in the spec though
         //       probably best to implement it anyway
@@ -112,7 +100,7 @@ public class Game {
 
     public static void quitGame() throws IOException {
         Game.endGame();
-        Game.app.changeScene(App.MENU_FXML_PATH);
+        App.returnToMainMenu();
     }
 
     private static void endGame() {
@@ -129,7 +117,7 @@ public class Game {
             HashMap<Player, Direction> playerInputs = new HashMap<>();
             //TODO: check for player movement inputs, add to playerInputs
             Game.tick(playerInputs);
-            Game.gameRenderer.render();
+            GameRenderer.render();
         }
         System.out.println("gameLoop ended.");
         Game.resetGame();

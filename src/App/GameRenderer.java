@@ -10,6 +10,7 @@ import Game.Game;
 import java.io.IOException;
 
 public class GameRenderer {
+    private static GameRenderer gameRenderer;
     @FXML
     private Text score;
     @FXML
@@ -22,22 +23,26 @@ public class GameRenderer {
     private StackPane victoryScreen;
 
     public GameRenderer() {
-        Game.setGameRenderer(this);
+        GameRenderer.gameRenderer = this;
     }
 
-    public void render() {
-        this.renderBoard();
-        this.renderEntities();
-        this.updateText();
+    public static GameRenderer getGameRenderer() {
+        return GameRenderer.gameRenderer;
+    }
+
+    public static void render() {
+        gameRenderer.renderBoard();
+        gameRenderer.renderEntities();
+        gameRenderer.updateText();
         System.out.println("Rendered.");
     }
 
-    public void renderLose() {
-        this.loseScreen.visibleProperty().set(true);
+    public static void renderLose() {
+        gameRenderer.loseScreen.visibleProperty().set(true);
     }
 
-    public void renderWin() {
-        this.victoryScreen.visibleProperty().set(true);
+    public static void renderWin() {
+        gameRenderer.victoryScreen.visibleProperty().set(true);
     }
 
     public void saveGameButton(ActionEvent actionEvent) {};
