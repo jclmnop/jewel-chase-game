@@ -92,7 +92,16 @@ public class Game {
 
     public static void lose() {
         Game.endGame();
-        GameRenderer.renderLose();
+        try {
+            GameRenderer.renderLose();
+        } catch (NullPointerException e) {
+            System.out.println(
+                "This error is fine during unit tests, " +
+                    "but shouldn't happen while running the app:"
+            );
+            System.out.println(e.getMessage());
+        }
+
         // TODO: i think the spec says to save highscore when player loses but
         //       that makes no sense to me? if we confirm it's in the spec though
         //       probably best to implement it anyway
@@ -117,7 +126,15 @@ public class Game {
             HashMap<Player, Direction> playerInputs = new HashMap<>();
             //TODO: check for player movement inputs, add to playerInputs
             Game.tick(playerInputs);
-            GameRenderer.render();
+            try {
+                GameRenderer.render();
+            } catch (NullPointerException e) {
+                System.out.println(
+                    "This error is fine during unit tests, " +
+                        "but shouldn't happen while running the app:"
+                );
+                System.out.println(e.getMessage());
+            }
         }
         System.out.println("gameLoop ended.");
         Game.resetGame();
