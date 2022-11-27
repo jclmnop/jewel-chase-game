@@ -1,50 +1,101 @@
 package Entities.Characters.Npc;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.PriorityQueue;
+import java.util.HashSet;
+import java.util.LinkedList;
 
-import DataTypes.CollisionType;
+import DataTypes.*;
 import Entities.Characters.Character;
+import Entities.Items.*;
+import Entities.Items.Collectable.Collectable;
+import Game.Tile;
 
 public class SmartThief extends Npc {
+
+    // Current desired item.
+    private Item item;
+
+    // Current path to item
+    private LinkedList<Coords> path;
+
     public SmartThief() {
         super(CollisionType.THIEF, true);
     }
-
-    @Override
+    
+    /**
+     * Moves the smart thief by setting its coordinates to the head of the path queue.
+     * If path queue is empty or desired item is no longer available, the findPath method is called to construct a new path.
+     */
     public void tryMove() {
-        //TODO: implement
+        /* 
+            TODO - write static methods in Item class to return lists of available items.
+                 - examples here are default getItems and getCollectables which just includes loot and levers.
+                 - loot and levers can be subclasses of a new class Collectable.
+        */
+        if (path.isEmpty() || !Item.getItems().contains(item)) {
+            // If no collectables are available, smart thief will move to the nearest.
+            if (Collectable.getCollectables().isEmpty()) {
+                findPath(Door.class);
+            } else {
+                findPath(Collectable.class);
+            }
+        }
+        Tile.move(this, this.coords, path.poll());
     }
 
     /**
-     * Calculates the shortest path to an item using A*.
-     * @param hm The graph of tiles.
-     * @param start The tile the smart thief is currently on.
-     * @param goal The tile containing the desired item.
+     * Finds shortest path to nearest item with BFS.
+     * @param itemType item type to search for.
      */
-    private void findShortestPath(HashMap<Object, ArrayList<Object>> hm, Object start, Object goal) {
+    private void findPath(Class itemType) {
 
-        // Queues nodes to be examined.
-        PriorityQueue frontier = new PriorityQueue<Object>();
-        frontier.add(start);
+        // Instance represents a node in a BFS tree.
+        class Node {
+            public Coords coords;
+            public Node parent;
 
-        // Loop terminates when the goal is reached and therefore the shortest path has been found.
-        while (frontier.peek() != goal) {
-            Object current = frontier.poll();
-            for (Object neighbour : hm.get(current)) {
-                int cost = current.distance + 1; // Movement to the next node is always 1.
-                // Checks if shorter path to neighbouring node has been found.
-                if (cost < neighbour.distance) {
-                    neighbour.distance = cost;
-                    neighbour.parent = current;
-                    if (!frontier.contains(neighbour)) {
-                        frontier.add(neighbour);
-                    }
+            public Node (Coords c) {
+                coords = c;
+            }
+        }
+
+        // Implementation of queue in BFS algorithm.
+        LinkedList<Node> queue = new LinkedList<Node>();
+        queue.add(new Node(coords));
+
+        // Stores coords that of nodes that have been examined, so that don't get added to the queue again.
+        HashSet<Coords> foundCoords = new HashSet<Coords>();
+
+        // TODO: add some checks to prevent null pointer exceptions with queue.peek()
+        // Run BFS until the node with a required item is found.
+        while (Tile.getTile(queue.peek().coords).getEntitiesOfType(itemType).isEmpty()) {
+            Node currNode = queue.poll();
+            foundCoords.add(currNode.coords);
+            AdjacentCoords adjCoords = Tile.getMultiColourAdjacentTiles(currNode.coords);
+            Coords[] coordsArr = {
+                                    adjCoords.getCoordsInDirection(Direction.UP),
+                                    adjCoords.getCoordsInDirection(Direction.DOWN),
+                                    adjCoords.getCoordsInDirection(Direction.LEFT),
+                                    adjCoords.getCoordsInDirection(Direction.RIGHT)
+                                };
+
+            // Add adjacent nodes to the queue and set parent pointers.
+            for (Coords c : coordsArr) {
+                if (c != null && !foundCoords.contains(c)) {
+                    Node n = new Node(c);
+                    n.parent = currNode;
+                    queue.add(n);
                 }
             }
         }
+
+        // Backtrack using parent pointers to construct the SmartThief's path.
+        Node n = queue.poll();
+        while (n.parent != null) {
+            path.addFirst(n.coords);
+            n = n.parent;
+        }
     }
+
     /**
      * Serialises the Object into a String.
      *
