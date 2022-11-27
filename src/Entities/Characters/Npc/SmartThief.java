@@ -10,6 +10,8 @@ import Entities.Items.Collectable.Collectable;
 import Game.Tile;
 
 public class SmartThief extends Npc {
+    // TODO: method to check if current path is blocked at any point
+    // TODO: method to check that final tile in path still contains a collectable item
 
     // Current desired item.
     private Item item;
