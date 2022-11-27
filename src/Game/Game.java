@@ -1,11 +1,15 @@
 package Game;
 
+import App.App;
+import App.GameRenderer;
 import DataTypes.Direction;
 import DataTypes.GameParams;
 import Entities.Characters.Npc.Npc;
 import Entities.Characters.Player;
 import Entities.Entity;
+import javafx.application.Platform;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -81,17 +85,31 @@ public class Game {
 
     public static void win() {
         Game.endGame();
+        GameRenderer.renderWin();
         // TODO: save highscore
         // TODO: update playerProfile?
-        // TODO: victory screen
     }
 
     public static void lose() {
         Game.endGame();
-        // TODO: lose screen
+        try {
+            GameRenderer.renderLose();
+        } catch (NullPointerException e) {
+            System.out.println(
+                "This error is fine during unit tests, " +
+                    "but shouldn't happen while running the app:"
+            );
+            System.out.println(e.getMessage());
+        }
+
         // TODO: i think the spec says to save highscore when player loses but
         //       that makes no sense to me? if we confirm it's in the spec though
         //       probably best to implement it anyway
+    }
+
+    public static void quitGame() throws IOException {
+        Game.endGame();
+        App.returnToMainMenu();
     }
 
     private static void endGame() {
@@ -108,7 +126,17 @@ public class Game {
             HashMap<Player, Direction> playerInputs = new HashMap<>();
             //TODO: check for player movement inputs, add to playerInputs
             Game.tick(playerInputs);
+            try {
+                GameRenderer.render();
+            } catch (NullPointerException e) {
+                System.out.println(
+                    "This error is fine during unit tests, " +
+                        "but shouldn't happen while running the app:"
+                );
+                System.out.println(e.getMessage());
+            }
         }
+        System.out.println("gameLoop ended.");
         Game.resetGame();
     }
 
@@ -136,6 +164,8 @@ public class Game {
 
         // Check if time has reached zero or all players are dead
         Game.checkForLoss();
+
+        System.out.println("Ticked.");
     }
 
     private static void processPlayerInputs(HashMap<Player, Direction> playerInputs) {
