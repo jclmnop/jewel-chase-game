@@ -20,8 +20,8 @@ jobs:
       uses: actions/setup-java@v2
       with:
         distribution: 'oracle'
-        java-version: 17
-        java-package: jdk+fx
+        java-version: '17'
+        java-package: 'jdk+fx'
     #- run: |
     #    DOWNLOAD_URL="https://download.oracle.com/java/17/latest/jdk-17_linux-x64_bin.tar.gz"
     #    wget -O $RUNNER_TEMP/java_package.tar.gz $DOWNLOAD_URL
