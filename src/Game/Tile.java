@@ -59,6 +59,14 @@ public class Tile implements Serialisable {
         }
     }
 
+    public static <T extends Entity> ArrayList<T> getEntitiesOfTypeByCoords(
+        Class<T> c,
+        Coords coords
+    ) {
+        Tile tile = Tile.getTile(coords);
+        return tile.getEntitiesOfType(c);
+    }
+
     public static void move(Entity entity, Coords from, Coords to) {
         var fromTile = Tile.getTile(from);
         var toTile = Tile.getTile(to);
