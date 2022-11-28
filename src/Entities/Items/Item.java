@@ -3,9 +3,15 @@ package Entities.Items;
 import DataTypes.CollisionType;
 import Entities.Entity;
 
+import java.util.ArrayList;
+
 public abstract class Item extends Entity {
     public Item(CollisionType collisionType, boolean isBlocking) {
         super(collisionType, isBlocking);
+    }
+
+    public static ArrayList<Item> getItems() {
+        return Entity.getEntitiesOfType(Item.class);
     }
 
     /**
