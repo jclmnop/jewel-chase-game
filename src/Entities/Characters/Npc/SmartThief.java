@@ -38,13 +38,15 @@ public class SmartThief extends Npc {
                 findPath(Collectable.class);
             }
         }
-        Coords nextCoords = path.poll();
-        if (nextCoords != null) {
+
+        try {
+            Coords nextCoords = path.poll();
             this.move(nextCoords);
-        } else {
+        } catch (NullPointerException e) {
             // A new path could not be calculated
             this.moveRandomly();
         }
+
         this.ticksSinceLastMove++;
     }
 
@@ -70,16 +72,18 @@ public class SmartThief extends Npc {
     }
 
     private boolean needNewPath() {
-        boolean isPathComplete = this.path.isEmpty();
+        boolean isPathComplete = this.path == null || this.path.isEmpty();
         boolean isTargetItemGone = !Item.getItems().contains(this.item);
         boolean isPathBlocked = this.isPathBlocked();
         return isPathComplete || isTargetItemGone || isPathBlocked;
     }
 
     private boolean isPathBlocked() {
-        for (Coords tileCoords : this.path) {
-            if (Tile.isBlockedCoords(tileCoords)) {
-                return true;
+        if (this.path != null) {
+            for (Coords tileCoords : this.path) {
+                if (Tile.isBlockedCoords(tileCoords)) {
+                    return true;
+                }
             }
         }
         return false;
