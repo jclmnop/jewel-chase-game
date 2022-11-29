@@ -19,6 +19,7 @@ public class SmartThief extends Npc {
 
     public SmartThief(Coords coords, int speed) {
         super(CollisionType.THIEF, true, coords, speed);
+        this.path = new LinkedList<>();
     }
     
     /**
@@ -31,20 +32,22 @@ public class SmartThief extends Npc {
      */
     public void tryMove() {
         if (this.needNewPath()) {
-            // If no collectables are available, smart thief will move to the nearest.
+            // If no collectables are available, smart thief will move to the nearest door.
             if (Collectable.getCollectables().isEmpty()) {
                 findPath(Door.class);
             } else {
                 findPath(Collectable.class);
             }
         }
-        Coords nextCoords = path.poll();
-        if (nextCoords != null) {
+
+        try {
+            Coords nextCoords = path.poll();
             this.move(nextCoords);
-        } else {
+        } catch (NullPointerException e) {
             // A new path could not be calculated
             this.moveRandomly();
         }
+
         this.ticksSinceLastMove++;
     }
 
@@ -70,16 +73,18 @@ public class SmartThief extends Npc {
     }
 
     private boolean needNewPath() {
-        boolean isPathComplete = this.path.isEmpty();
+        boolean isPathComplete = this.path == null || this.path.isEmpty();
         boolean isTargetItemGone = !Item.getItems().contains(this.item);
         boolean isPathBlocked = this.isPathBlocked();
         return isPathComplete || isTargetItemGone || isPathBlocked;
     }
 
     private boolean isPathBlocked() {
-        for (Coords tileCoords : this.path) {
-            if (Tile.isBlockedCoords(tileCoords)) {
-                return true;
+        if (this.path != null) {
+            for (Coords tileCoords : this.path) {
+                if (Tile.isBlockedCoords(tileCoords)) {
+                    return true;
+                }
             }
         }
         return false;
@@ -134,7 +139,13 @@ public class SmartThief extends Npc {
     }
 
     private <T extends Item> boolean isSearchFinished(Class<T> itemType, Coords nextCoords) {
-        return !Tile.getEntitiesOfTypeByCoords(itemType, nextCoords).isEmpty();
+        ArrayList<T> tileItems = Tile.getEntitiesOfTypeByCoords(itemType, nextCoords);
+        if (!tileItems.isEmpty()) {
+            this.item = tileItems.get(0);
+            return true;
+        } else {
+            return false;
+        }
     }
 
     /**

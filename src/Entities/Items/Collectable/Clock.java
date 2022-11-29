@@ -4,7 +4,7 @@ import DataTypes.CollisionType;
 import DataTypes.Coords;
 import Entities.Items.Item;
 
-public class Clock extends Item {
+public class Clock extends Collectable {
     public Clock(Coords coords) {
         super(CollisionType.CLOCK, false, coords);
     }

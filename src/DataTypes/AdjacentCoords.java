@@ -40,7 +40,7 @@ public record AdjacentCoords(Coords up, Coords down, Coords left, Coords right) 
     }
 
     public Coords[] toArray() {
-        return new Coords[]{this.up, this.down, this.left, this.left};
+        return new Coords[]{this.up, this.down, this.left, this.right};
     }
 
     @Override

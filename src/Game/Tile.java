@@ -76,10 +76,17 @@ public class Tile implements Serialisable {
     }
 
 
-    public static void newBoard(Tile[][] board, int width, int height) {
+    public static void newBoard(Tile[][] newBoard, int width, int height) {
+        Tile.clearBoard();
         Tile.height = height;
         Tile.width = width;
-        Tile.board = board;
+        Tile.board = new Tile[height][width];
+        // Copy Tiles to prevent any side effects
+        for (int i = 0; i < height; i++) {
+            for (int k = 0; k < width; k++) {
+                Tile.board[i][k] = new Tile(newBoard[i][k].getColours());
+            }
+        }
         Tile.buildMultiColourAdjacencyMap();
         Tile.buildNoColourAdjacencyMap();
     }

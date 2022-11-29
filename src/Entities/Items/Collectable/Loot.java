@@ -4,7 +4,7 @@ import DataTypes.CollisionType;
 import DataTypes.Coords;
 import Entities.Items.Item;
 
-public class Loot extends Item {
+public class Loot extends Collectable {
     public Loot(Coords coords) {
         super(CollisionType.LOOT, false, coords);
     }
