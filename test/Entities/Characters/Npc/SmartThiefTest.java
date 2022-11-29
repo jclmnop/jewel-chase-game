@@ -5,6 +5,7 @@ import Entities.Characters.Player;
 import Entities.Entity;
 import Entities.Items.Collectable.Collectable;
 import Entities.Items.Collectable.Loot;
+import Entities.Items.Door;
 import Game.Tile;
 import TestCases.Boards;
 import org.junit.jupiter.api.Assertions;
@@ -46,6 +47,7 @@ public class SmartThiefTest {
         final Coords TARGET_ITEM_COORDS = new Coords(1, 2);
         Loot target = new Loot(TARGET_ITEM_COORDS);
         Loot distraction = new Loot(new Coords(3, 0));
+        Door door = new Door(new Coords(1, 0));
         Assertions.assertFalse(Collectable.getCollectables().isEmpty());
         SmartThief thief = new SmartThief(new Coords(0, 0), 1);
         int expectedTicks = 2;
@@ -86,6 +88,18 @@ public class SmartThiefTest {
 
         int expectedTicks = 6;
         simulateTicks(thief, alternateItem.getCoords(), expectedTicks);
+    }
+
+    @Test
+    public void testGoForDoor() {
+        Tile.newBoard(Boards.CASE_2.TARGET_BOARD, 5, 3);
+        final Coords TARGET_ITEM_COORDS = new Coords(1, 2);
+        Door target = new Door(TARGET_ITEM_COORDS);
+        Assertions.assertTrue(Collectable.getCollectables().isEmpty());
+        SmartThief thief = new SmartThief(new Coords(0, 0), 1);
+        int expectedTicks = 2;
+        simulateTicks(thief, target.getCoords(), expectedTicks);
+
     }
 
     private static void simulateTicks(SmartThief thief, Coords targetCoords, int expectedTicks) {
