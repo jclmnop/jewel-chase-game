@@ -1,11 +1,12 @@
 package Entities.Characters;
 
 import DataTypes.CollisionType;
+import DataTypes.Coords;
 import DataTypes.Direction;
 
 public class Player extends Character {
-    public Player() {
-        super(CollisionType.PLAYER, true);
+    public Player(Coords coords, int speed) {
+        super(CollisionType.PLAYER, true, coords, speed);
     }
 
     public void tryMove(Direction direction) {

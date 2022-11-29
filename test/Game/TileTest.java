@@ -6,6 +6,7 @@ import DataTypes.Direction;
 import DataTypes.Exception.ParseBoardException;
 import DataTypes.Exception.ParseTileColourException;
 import Entities.Characters.Player;
+import Entities.Items.Collectable.Lever;
 import Entities.Items.Collectable.Loot;
 import TestCases.Boards;
 import Utils.BoardLoader;
@@ -45,10 +46,10 @@ public class TileTest {
 
     @Test
     public void testGetEntitiesOfType() {
-        Tile tile = new Tile(Boards.YYYY);
-        Loot loot = new Loot();
-        tile.addEntity(loot);
-        tile.addEntity(new Player());
+        Tile.newBoard(Boards.CASE_2.TARGET_BOARD, 5, 3);
+        Tile tile = Tile.getTile(new Coords(0, 0));
+        Loot loot = new Loot(new Coords(0, 0));
+        new Lever(new Coords(0, 0));
 
         ArrayList<Loot> lootOnly = tile.getEntitiesOfType(Loot.class);
         Assertions.assertEquals(1, lootOnly.size());

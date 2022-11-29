@@ -1,11 +1,12 @@
 package Entities.Items.Collectable;
 
 import DataTypes.CollisionType;
+import DataTypes.Coords;
 import Entities.Items.Item;
 
 public class Loot extends Item {
-    public Loot() {
-        super(CollisionType.LOOT, false);
+    public Loot(Coords coords) {
+        super(CollisionType.LOOT, false, coords);
     }
 
     /**

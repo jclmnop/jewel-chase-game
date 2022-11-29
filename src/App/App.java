@@ -1,5 +1,6 @@
 package App;
 
+import DataTypes.Coords;
 import DataTypes.GameParams;
 import Entities.Characters.Player;
 import javafx.application.Application;
@@ -105,7 +106,7 @@ public class App extends Application {
         //TODO: change scene to level select, then load selected level from there
         this.changeScene(GAME_FXML_PATH);
         Thread.sleep(100);
-        Player player = new Player(); // TODO: this is just here for testing
+        Player player = new Player(new Coords(0, 0), 1); // TODO: this is just here for testing
         Thread gameThread = Game.startGame(new GameParams(10, 0));
 //        gameThread.join();
     }

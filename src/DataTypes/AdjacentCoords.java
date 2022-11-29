@@ -39,6 +39,10 @@ public record AdjacentCoords(Coords up, Coords down, Coords left, Coords right) 
         }
     }
 
+    public Coords[] toArray() {
+        return new Coords[]{this.up, this.down, this.left, this.left};
+    }
+
     @Override
     public String toString() {
         String upStr = (up != null) ? up.toString() : "null";

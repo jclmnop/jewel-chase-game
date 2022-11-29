@@ -1,10 +1,11 @@
 package Entities.Items;
 
 import DataTypes.CollisionType;
+import DataTypes.Coords;
 
 public class Door extends Item{
-    public Door() {
-        super(CollisionType.DOOR, false);
+    public Door(Coords coords) {
+        super(CollisionType.DOOR, false, coords);
     }
 
     /**

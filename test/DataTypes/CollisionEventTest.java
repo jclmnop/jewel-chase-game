@@ -9,6 +9,8 @@ import Entities.Items.*;
 import Entities.Items.Collectable.Clock;
 import Entities.Items.Collectable.Lever;
 import Entities.Items.Collectable.Loot;
+import Game.Tile;
+import TestCases.Boards;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -17,16 +19,17 @@ public class CollisionEventTest {
     public void testCollisionEvents() {
         // TODO: these tests will break when new constructor parameters are added
         //       to the classes, so keep an eye on them.
-        var player = new Player();
-        var smartThief = new SmartThief();
-        var floorThief = new FloorFollowingThief();
-        var flyingAss = new FlyingAssassin();
-        var gate = new Gate();
-        var clock = new Clock();
-        var lever = new Lever();
-        var loot = new Loot();
-        var door = new Door();
-        var bomb = new Bomb();
+        Tile.newBoard(Boards.CASE_2.TARGET_BOARD, 5, 3);
+        var player = new Player(new Coords(0, 0), 1);
+        var smartThief = new SmartThief(new Coords(0, 0), 1);
+        var floorThief = new FloorFollowingThief(new Coords(0, 0), 1);
+        var flyingAss = new FlyingAssassin(new Coords(0, 0), 1);
+        var gate = new Gate(new Coords(0, 0));
+        var clock = new Clock(new Coords(0, 0));
+        var lever = new Lever(new Coords(0, 0));
+        var loot = new Loot(new Coords(0, 0));
+        var door = new Door(new Coords(0, 0));
+        var bomb = new Bomb(new Coords(0, 0));
 
         Assertions.assertEquals(
             CollisionEvent.LOOT_STOLEN,

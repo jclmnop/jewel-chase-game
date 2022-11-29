@@ -47,12 +47,24 @@ public class Tile implements Serialisable {
         return board[coords.y()][coords.x()];
     }
 
+    public static boolean isBlockedCoords(Coords coords) {
+        return Tile.getTile(coords).isBlocked();
+    }
+
     public static boolean isValidCoords(Coords coords) {
         if (coords == null) {
             return false;
         } else {
             return Tile.isValidX(coords.x()) && Tile.isValidY(coords.y());
         }
+    }
+
+    public static <T extends Entity> ArrayList<T> getEntitiesOfTypeByCoords(
+        Class<T> c,
+        Coords coords
+    ) {
+        Tile tile = Tile.getTile(coords);
+        return tile.getEntitiesOfType(c);
     }
 
     public static void move(Entity entity, Coords from, Coords to) {

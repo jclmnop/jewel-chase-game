@@ -2,6 +2,7 @@ package Utils;
 
 import DataTypes.Colour;
 import DataTypes.Colours;
+import DataTypes.Coords;
 import DataTypes.Exception.ParseTileColourException;
 import DataTypes.GameParams;
 import Entities.Characters.Npc.FloorFollowingThief;
@@ -73,35 +74,35 @@ public class Deserialiser {
     //       been implemented.
 
     private static SmartThief deserialiseSmartThief(String[] splitString) {
-        return new SmartThief();
+        return new SmartThief(new Coords(0, 0), 1); // TODO
     }
 
     private static Player deserialisePlayer(String[] splitString) {
-        return new Player();
+        return new Player(new Coords(0, 0), 1); // TODO
     }
 
     private static FlyingAssassin deserialiseFlyingAssassin(String[] splitString) {
-        return new FlyingAssassin();
+        return new FlyingAssassin(new Coords(0, 0), 1); // TODO
     }
 
     private static FloorFollowingThief deserialiseFloorFollowingThief(String[] splitString) {
-        return new FloorFollowingThief();
+        return new FloorFollowingThief(new Coords(0, 0), 1); // TODO
     }
 
     private static Lever deserialiseLever(String[] splitString) {
-        return new Lever();
+        return new Lever(new Coords(0, 0)); // TODO
     }
 
     private static Loot deserialiseLoot(String[] splitString) {
-        return new Loot();
+        return new Loot(new Coords(0, 0)); // TODO
     }
 
     private static Gate deserialiseGate(String[] args) {
-        return new Gate();
+        return new Gate(new Coords(0, 0)); // TODO
     }
 
     private static Clock deserialiseClock(String[] args) {
-        return new Clock();
+        return new Clock(new Coords(0, 0)); // TODO
     }
 
     private static Tile deserialiseTile(String arg) throws ParseTileColourException {

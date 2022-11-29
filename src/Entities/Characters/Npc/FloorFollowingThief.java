@@ -1,11 +1,12 @@
 package Entities.Characters.Npc;
 
 import DataTypes.CollisionType;
+import DataTypes.Coords;
 import Entities.Characters.Character;
 
 public class FloorFollowingThief extends Npc {
-    public FloorFollowingThief() {
-        super(CollisionType.THIEF, true);
+    public FloorFollowingThief(Coords coords, int speed) {
+        super(CollisionType.THIEF, true, coords, speed);
     }
 
     @Override

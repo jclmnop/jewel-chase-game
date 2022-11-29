@@ -1,10 +1,11 @@
 package Entities.Items;
 
 import DataTypes.CollisionType;
+import DataTypes.Coords;
 
 public class Bomb extends Item {
-    public Bomb() {
-        super(CollisionType.BOMB, false);
+    public Bomb(Coords coords) {
+        super(CollisionType.BOMB, false, coords);
     }
 
     /**

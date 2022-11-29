@@ -1,11 +1,12 @@
 package Entities.Characters.Npc;
 
 import DataTypes.CollisionType;
+import DataTypes.Coords;
 import Entities.Characters.Character;
 
 public class FlyingAssassin extends Npc {
-    public FlyingAssassin() {
-        super(CollisionType.ASSASSIN, false);
+    public FlyingAssassin(Coords coords, int speed) {
+        super(CollisionType.ASSASSIN, false, coords, speed);
     }
 
     @Override

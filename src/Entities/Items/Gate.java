@@ -1,10 +1,11 @@
 package Entities.Items;
 
 import DataTypes.CollisionType;
+import DataTypes.Coords;
 
 public class Gate extends Item {
-    public Gate() {
-        super(CollisionType.GATE, true);
+    public Gate(Coords coords) {
+        super(CollisionType.GATE, true, coords);
     }
 
     /**

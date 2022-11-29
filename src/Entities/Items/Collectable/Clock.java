@@ -1,11 +1,12 @@
 package Entities.Items.Collectable;
 
 import DataTypes.CollisionType;
+import DataTypes.Coords;
 import Entities.Items.Item;
 
 public class Clock extends Item {
-    public Clock() {
-        super(CollisionType.CLOCK, false);
+    public Clock(Coords coords) {
+        super(CollisionType.CLOCK, false, coords);
     }
 
     /**
