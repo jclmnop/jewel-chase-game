@@ -49,12 +49,16 @@ public class SmartThief extends Npc {
 
     private void moveRandomly() {
         AdjacentCoords adjacentCoords = Tile.getMultiColourAdjacentTiles(this.coords);
-        ArrayList<Coords> notNullCoords = Arrays.stream(adjacentCoords.toArray())
-            .filter(Objects::nonNull)
-            .collect(Collectors.toCollection(ArrayList::new));
-        int selectedIndex = new Random().nextInt(notNullCoords.size());
-        Coords nextCoords = notNullCoords.get(selectedIndex);
-        this.move(nextCoords);
+        ArrayList<Coords> notNullCoords =
+            Arrays.stream(adjacentCoords.toArray())
+                .filter(Objects::nonNull)
+                .collect(Collectors.toCollection(ArrayList::new));
+
+        if (!notNullCoords.isEmpty()) {
+            int selectedIndex = new Random().nextInt(notNullCoords.size());
+            Coords nextCoords = notNullCoords.get(selectedIndex);
+            this.move(nextCoords);
+        }
     }
 
     private void move(Coords nextCoords) {
