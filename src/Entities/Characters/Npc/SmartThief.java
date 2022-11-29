@@ -19,6 +19,7 @@ public class SmartThief extends Npc {
 
     public SmartThief(Coords coords, int speed) {
         super(CollisionType.THIEF, true, coords, speed);
+        this.path = new LinkedList<>();
     }
     
     /**
@@ -31,7 +32,7 @@ public class SmartThief extends Npc {
      */
     public void tryMove() {
         if (this.needNewPath()) {
-            // If no collectables are available, smart thief will move to the nearest.
+            // If no collectables are available, smart thief will move to the nearest door.
             if (Collectable.getCollectables().isEmpty()) {
                 findPath(Door.class);
             } else {
@@ -138,7 +139,13 @@ public class SmartThief extends Npc {
     }
 
     private <T extends Item> boolean isSearchFinished(Class<T> itemType, Coords nextCoords) {
-        return !Tile.getEntitiesOfTypeByCoords(itemType, nextCoords).isEmpty();
+        ArrayList<T> tileItems = Tile.getEntitiesOfTypeByCoords(itemType, nextCoords);
+        if (!tileItems.isEmpty()) {
+            this.item = tileItems.get(0);
+            return true;
+        } else {
+            return false;
+        }
     }
 
     /**
