@@ -9,6 +9,8 @@ import Entities.Items.*;
 import Entities.Items.Collectable.Clock;
 import Entities.Items.Collectable.Lever;
 import Entities.Items.Collectable.Loot;
+import Game.Tile;
+import TestCases.Boards;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -17,6 +19,7 @@ public class CollisionEventTest {
     public void testCollisionEvents() {
         // TODO: these tests will break when new constructor parameters are added
         //       to the classes, so keep an eye on them.
+        Tile.newBoard(Boards.CASE_2.TARGET_BOARD, 5, 3);
         var player = new Player(new Coords(0, 0), 1);
         var smartThief = new SmartThief(new Coords(0, 0), 1);
         var floorThief = new FloorFollowingThief(new Coords(0, 0), 1);
