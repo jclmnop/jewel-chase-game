@@ -1,13 +1,14 @@
 package Entities.Items;
 
 import DataTypes.CollisionType;
+import DataTypes.Coords;
 import Entities.Entity;
 
 import java.util.ArrayList;
 
 public abstract class Item extends Entity {
-    public Item(CollisionType collisionType, boolean isBlocking) {
-        super(collisionType, isBlocking);
+    public Item(CollisionType collisionType, boolean isBlocking, Coords coords) {
+        super(collisionType, isBlocking, coords);
     }
 
     public static ArrayList<Item> getItems() {

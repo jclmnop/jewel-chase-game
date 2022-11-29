@@ -17,8 +17,8 @@ public class SmartThief extends Npc {
     // Current path to item
     private LinkedList<Coords> path;
 
-    public SmartThief() {
-        super(CollisionType.THIEF, true);
+    public SmartThief(Coords coords, int speed) {
+        super(CollisionType.THIEF, true, coords, speed);
     }
     
     /**

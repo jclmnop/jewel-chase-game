@@ -1,8 +1,10 @@
 package Game;
 
+import DataTypes.Coords;
 import DataTypes.GameParams;
 import Entities.Characters.Player;
 import Entities.Entity;
+import TestCases.Boards;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -19,8 +21,9 @@ public class GameTest {
         int runTimeSeconds = 1;
         GameParams gameParams = new GameParams(runTimeSeconds, 0);
         Entity.clearEntities();
+        Tile.newBoard(Boards.CASE_2.TARGET_BOARD, 5, 3);
         // At least one player required to stop game from ending prematurely
-        Player player = new Player();
+        Player player = new Player(new Coords(0, 0), 1);
         Assertions.assertEquals(1, Entity.getEntities().size());
 
         Instant start = Instant.now();

@@ -1,11 +1,12 @@
 package Entities.Items.Collectable;
 
 import DataTypes.CollisionType;
+import DataTypes.Coords;
 import Entities.Items.Item;
 
 public class Lever extends Item {
-    public Lever() {
-        super(CollisionType.LEVER, false);
+    public Lever(Coords coords) {
+        super(CollisionType.LEVER, false, coords);
     }
 
     /**

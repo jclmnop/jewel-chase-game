@@ -20,10 +20,12 @@ public abstract class Entity implements Serialisable {
     protected final boolean blocking;
     protected Coords coords;
 
-    protected Entity(CollisionType collisionType, boolean blocking) {
+    protected Entity(CollisionType collisionType, boolean blocking, Coords coords) {
         this.collisionType = collisionType;
         this.blocking = blocking;
+        this.coords = coords;
         entities.add(this);
+        Tile.getTile(coords).addEntity(this);
     }
 
     public static void enqueCollision(Coords coords, Entity entityOne, Entity entityTwo) {
