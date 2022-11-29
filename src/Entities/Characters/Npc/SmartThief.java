@@ -45,6 +45,7 @@ public class SmartThief extends Npc {
             // A new path could not be calculated
             this.moveRandomly();
         }
+        this.ticksSinceLastMove++;
     }
 
     private void moveRandomly() {
@@ -62,7 +63,10 @@ public class SmartThief extends Npc {
     }
 
     private void move(Coords nextCoords) {
-        Tile.move(this, this.coords, nextCoords);
+        if (this.ticksSinceLastMove >= this.speed) {
+            this.ticksSinceLastMove = 0;
+            Tile.move(this, this.coords, nextCoords);
+        }
     }
 
     private boolean needNewPath() {

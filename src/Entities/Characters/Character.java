@@ -4,12 +4,11 @@ import DataTypes.CollisionType;
 import DataTypes.Coords;
 import DataTypes.Direction;
 import Entities.Entity;
-import Game.Tile;
 
 public abstract class Character extends Entity {
     protected Direction currentDirection;
-    private int speed;
-    private int ticksSinceLastMove;
+    protected int speed;
+    protected int ticksSinceLastMove;
     //TODO: sprite/image file?
     //TODO: death animation?
 
