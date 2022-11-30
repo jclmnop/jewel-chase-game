@@ -1,8 +1,11 @@
 package App;
 
 import DataTypes.Coords;
+import DataTypes.Exception.ParseBoardException;
+import DataTypes.Exception.ParseTileColourException;
 import DataTypes.GameParams;
 import Entities.Characters.Player;
+import Utils.BoardLoader;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventType;
@@ -14,6 +17,7 @@ import javafx.stage.Stage;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import Game.Game;
+import Game.Tile;
 
 import java.io.File;
 import java.io.IOException;
@@ -32,6 +36,13 @@ public class App extends Application {
     private static Stage stage;
     private static MediaPlayer musicPlayer;
     private static App app;
+    //TODO: for testing only, remember to remove
+    public static final String BOARD_STR = """
+                                           5 3
+                                           YYYY YYYY YYYY YYYY YGRG
+                                           RRCR RRRR RRRR RRRR RRYY
+                                           RCCY CMMC MCCM CCCC CGCG
+                                           """;
 
     public App() {
         App.app = this;
@@ -102,11 +113,14 @@ public class App extends Application {
         App.stage.show();
     }
 
-    public void newGame(ActionEvent actionEvent) throws IOException, InterruptedException {
+    public void newGame(ActionEvent actionEvent) throws IOException, InterruptedException, ParseBoardException, ParseTileColourException, ClassNotFoundException {
         //TODO: change scene to level select, then load selected level from there
         this.changeScene(GAME_FXML_PATH);
+
         Thread.sleep(100);
-        Player player = new Player(new Coords(0, 0), 1); // TODO: this is just here for testing
+        // TODO: this is just here for testing
+        Tile.newBoard(BoardLoader.loadBoard(BOARD_STR), 5, 3);
+        Player player = new Player(new Coords(0, 0), 1);
         Thread gameThread = Game.startGame(new GameParams(10, 0));
 //        gameThread.join();
     }
