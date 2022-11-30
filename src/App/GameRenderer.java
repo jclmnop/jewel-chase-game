@@ -32,6 +32,7 @@ public class GameRenderer {
     private StackPane victoryScreen;
     private GridPane tileGridPane;
     private GridPane entityGridPane;
+    private boolean isBoardRendered;
 
     public GameRenderer() {
         GameRenderer.gameRenderer = this;
@@ -58,7 +59,9 @@ public class GameRenderer {
 
     public static void render() {
         if (Game.isRunning()) {
-            gameRenderer.renderBoard(); //TODO: only need to render board once
+            if (!gameRenderer.isBoardRendered) {
+                gameRenderer.renderBoard(); //TODO: only need to render board once
+            }
             gameRenderer.renderEntities();
             System.out.println("Rendered.");
         }
@@ -93,6 +96,7 @@ public class GameRenderer {
                 );
             }
         }
+        this.isBoardRendered = true;
     }
 
     private GridPane renderTile(Tile tile, double tileDimensions) {
