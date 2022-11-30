@@ -8,6 +8,8 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.StrokeType;
 import javafx.scene.text.Text;
 import Game.Game;
 import Game.Tile;
@@ -40,6 +42,8 @@ public class GameRenderer {
         this.entityGridPane = new GridPane();
         this.boardPane.getChildren().addAll(tileGridPane, entityGridPane);
         this.tileGridPane.setAlignment(Pos.CENTER);
+//        this.tileGridPane.setVgap(5);
+//        this.tileGridPane.setHgap(5);
         this.entityGridPane.setAlignment(Pos.CENTER);
     }
 
@@ -91,31 +95,42 @@ public class GameRenderer {
         }
     }
 
-    private GridPane renderTile(Tile tile, double dims) {
+    private GridPane renderTile(Tile tile, double tileDimensions) {
 //        dims = 50;
         GridPane tileGrid = new GridPane();
-        tileGrid.setLayoutX(dims);
-        tileGrid.setLayoutY(dims);
+        tileGrid.setLayoutX(tileDimensions);
+        tileGrid.setLayoutY(tileDimensions);
+        double padding = tileDimensions / 50;
+        tileDimensions -= padding * 2;
+        tileGrid.setPadding(new Insets(padding));
+        tileGrid.backgroundProperty().set(
+            new Background(new BackgroundFill(Color.BLACK, null, null))
+        );
         Colours tileColours = tile.getColours();
-        dims = dims / 2;
+        tileDimensions = tileDimensions / 2;
         ImageView t1 = new ImageView(tileColours.c1().toImage());
-        t1.setFitHeight(dims);
-        t1.setFitWidth(dims);
+        t1.setFitHeight(tileDimensions);
+        t1.setFitWidth(tileDimensions);
         ImageView t2 = new ImageView(tileColours.c2().toImage());
-        t2.setFitHeight(dims);
-        t2.setFitWidth(dims);
+        t2.setFitHeight(tileDimensions);
+        t2.setFitWidth(tileDimensions);
         ImageView t3 = new ImageView(tileColours.c3().toImage());
-        t3.setFitHeight(dims);
-        t3.setFitWidth(dims);
+        t3.setFitHeight(tileDimensions);
+        t3.setFitWidth(tileDimensions);
         ImageView t4 = new ImageView(tileColours.c4().toImage());
-        t4.setFitHeight(dims);
-        t4.setFitWidth(dims);
+        t4.setFitHeight(tileDimensions);
+        t4.setFitWidth(tileDimensions);
 
         tileGrid.addRow(0, t1, t2);
         tileGrid.addRow(1, t3, t4);
+//        double borderDims = dims / 10; //TODO: magic number
 //        BorderStroke borderStroke = new BorderStroke(
 //            Color.BLACK,
-//            new BorderStrokeStyle(StrokeType.CENTERED, null, null, 1, 1, null),
+//            new BorderStrokeStyle(
+//                StrokeType.CENTERED,
+//                null, null, borderDims,
+//                borderDims, null
+//            ),
 //            null,
 //            null
 //        );
