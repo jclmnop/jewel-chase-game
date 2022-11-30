@@ -16,7 +16,6 @@ public class SmartThiefTest {
     @BeforeEach
     public void setup() {
         Entity.clearEntities();
-
     }
 
     @Test

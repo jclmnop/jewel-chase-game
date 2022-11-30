@@ -1,6 +1,7 @@
 package DataTypes;
 
 import DataTypes.Exception.ParseTileColourException;
+import javafx.scene.paint.Color;
 
 public enum Colour {
     RED,
@@ -32,5 +33,17 @@ public enum Colour {
             case CYAN    -> 'C';
             case MAGENTA -> 'M';
         };
+    }
+
+    public Color toJfxColour() {
+        return switch (this) {
+            case RED     -> Color.RED;
+            case GREEN   -> Color.GREEN;
+            case BLUE    -> Color.BLUE;
+            case YELLOW  -> Color.YELLOW;
+            case CYAN    -> Color.CYAN;
+            case MAGENTA -> Color.MAGENTA;
+        };
+
     }
 }

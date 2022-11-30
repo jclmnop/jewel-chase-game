@@ -127,7 +127,7 @@ public class Game {
             //TODO: check for player movement inputs, add to playerInputs
             Game.tick(playerInputs);
             try {
-                GameRenderer.render();
+                Platform.runLater(GameRenderer::render);
             } catch (NullPointerException e) {
                 System.out.println(
                     "This error is fine during unit tests, " +

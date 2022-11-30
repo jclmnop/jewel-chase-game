@@ -47,6 +47,14 @@ public class Tile implements Serialisable {
         return board[coords.y()][coords.x()];
     }
 
+    public static int getHeight() {
+        return Tile.height;
+    }
+
+    public static int getWidth() {
+        return Tile.width;
+    }
+
     public static boolean isBlockedCoords(Coords coords) {
         return Tile.getTile(coords).isBlocked();
     }
