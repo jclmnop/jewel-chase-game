@@ -128,7 +128,7 @@ public class Game {
             Game.tick(playerInputs);
             try {
                 Platform.runLater(GameRenderer::render);
-            } catch (NullPointerException | IllegalStateException e) {
+            } catch (NullPointerException | IllegalStateException | NoClassDefFoundError e) {
                 System.out.println(
                     "This error is fine during unit tests, " +
                         "but shouldn't happen while running the app:"
