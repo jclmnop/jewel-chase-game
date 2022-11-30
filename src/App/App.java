@@ -28,8 +28,9 @@ public class App extends Application {
     public static final int WINDOW_HEIGHT = 800;
     public static final String MENU_FXML_PATH = "fxml/menu.fxml";
     public static final String GAME_FXML_PATH = "fxml/game.fxml";
-    public static final String BRODYQUEST_MP3_PATH = "src/App/resources/brodyquest.mp3";
-    public static final String ANACONDA_MP3_PATH = "src/App/resources/anaconda.mp3";
+    public static final String RESOURCES_PATH = "src/App/resources/";
+    public static final String BRODYQUEST_MP3_PATH = RESOURCES_PATH + "brodyquest.mp3";
+    public static final String ANACONDA_MP3_PATH = RESOURCES_PATH + "anaconda.mp3";
     public static final String[] TRACKS = {BRODYQUEST_MP3_PATH, ANACONDA_MP3_PATH};
     public static final double DEFAULT_VOLUME = 0.3; // 50%
     private static int currentTrack = 0;
