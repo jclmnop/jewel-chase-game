@@ -19,15 +19,7 @@
                   <Font name="Roboto Mono Bold" size="47.0" />
                </font>
                <VBox.margin>
-                  <Insets left="10.0" right="10.0" top="10.0" />
-               </VBox.margin>
-            </Text>
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="All your marks are belong to Liam" textAlignment="CENTER">
-               <font>
-                  <Font name="Roboto Light" size="18.0" />
-               </font>
-               <VBox.margin>
-                  <Insets bottom="50.0" left="10.0" right="10.0" />
+                  <Insets bottom="20.0" left="10.0" right="10.0" top="10.0" />
                </VBox.margin>
             </Text>
             <HBox prefHeight="100.0" prefWidth="200.0">
@@ -81,5 +73,10 @@
             </ImageView>
          </graphic>
       </Button>
+      <Text fx:id="messageOfTheDay" layoutX="14.0" layoutY="781.0" strokeType="OUTSIDE" strokeWidth="0.0" text="All your marks are belong to Liam">
+         <font>
+            <Font name="Roboto Light" size="18.0" />
+         </font>
+      </Text>
    </children>
 </Pane>
