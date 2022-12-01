@@ -13,6 +13,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
@@ -37,6 +38,9 @@ public class App extends Application {
     private static Stage stage;
     private static MediaPlayer musicPlayer;
     private static App app;
+    @FXML
+    private Text messageOfTheDay;
+
     //TODO: for testing only, remember to remove
     public static final String BOARD_STR = """
                                            5 3
@@ -67,6 +71,7 @@ public class App extends Application {
         App.stage.setResizable(false);
         App.playMusic();
         this.changeScene(MENU_FXML_PATH);
+        App.updateMessageOfTheDay();
     }
 
     /**
@@ -97,6 +102,15 @@ public class App extends Application {
         Media music = new Media(new File(TRACKS[currentTrack]).toURI().toString());
         currentTrack = currentTrack + 1 % TRACKS.length;
         return music;
+    }
+
+    private static void updateMessageOfTheDay() {
+        try {
+            App.app.messageOfTheDay.setText(MessageOfTheDay.getMessageOfTheDay());
+        } catch (IOException | InterruptedException e) {
+            System.out.println(e.getMessage());
+            App.app.messageOfTheDay.setText("There is only pain.");
+        }
     }
 
     /**
