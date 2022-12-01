@@ -15,6 +15,29 @@ public record Coords(int x, int y) {
         };
     }
 
+    /**
+     * Calculate the direction one would need to travel to reach a tile from
+     * this one. Does not work for diagonal directions.
+     * @param to Destination tile.
+     * @return Direction needed to travel in order to reach destination tile.
+     * @throws IllegalArgumentException if `to` is diagonal from current tile.
+     */
+    public Direction directionTo(Coords to) {
+        if (to.x != this.x || to.y != this.y) {
+            if (to.y > this.y) {
+                return Direction.UP;
+            } else if (to.x < this.x) {
+                return Direction.LEFT;
+            } else if (to.y < this.y) {
+                return Direction.DOWN;
+            } else {
+                return Direction.RIGHT;
+            }
+        } else {
+            throw new IllegalArgumentException("Direction cannot be diagonal");
+        }
+    }
+
     private static Coords moveUp(Coords coords) {
         return new Coords(coords.x, coords.y - 1);
     }
