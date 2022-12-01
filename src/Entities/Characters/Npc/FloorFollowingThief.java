@@ -13,9 +13,14 @@ public class FloorFollowingThief extends Npc {
 
     private final Colour colour;
 
-    public FloorFollowingThief(Coords coords, int speed, Colour col) {
+    public FloorFollowingThief(Coords coords, int speed, Colour colour, Direction direction) {
         super(CollisionType.THIEF, true, coords, speed);
-        colour = col;
+        this.colour = colour;
+        this.currentDirection = direction;
+    }
+
+    public FloorFollowingThief(Coords coords, int speed) {
+        this(coords, speed, Colour.BLUE, Direction.UP);
     }
 
     /**
