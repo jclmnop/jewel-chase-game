@@ -7,8 +7,8 @@ import DataTypes.GameParams;
 import Entities.Characters.Player;
 import Utils.BoardLoader;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
-import javafx.event.EventType;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -117,12 +117,14 @@ public class App extends Application {
     public void newGame(ActionEvent actionEvent) throws IOException, InterruptedException, ParseBoardException, ParseTileColourException, ClassNotFoundException {
         //TODO: change scene to level select, then load selected level from there
         this.changeScene(GAME_FXML_PATH);
-
-        Thread.sleep(100);
-        // TODO: this is just here for testing
+        App.stage.setOnCloseRequest(t -> {
+            Platform.exit();
+            System.exit(0);
+        });
+        // TODO: this is just here for testing without level files
         Tile.newBoard(BoardLoader.loadBoard(BOARD_STR), 5, 3);
         Player player = new Player(new Coords(0, 0), 1);
-        Thread gameThread = Game.startGame(new GameParams(10, 0));
-//        gameThread.join();
+        //
+        Thread gameThread = Game.startGame(new GameParams(10, 0)); // TODO: get gameParams from level file
     }
 }

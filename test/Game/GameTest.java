@@ -19,7 +19,7 @@ public class GameTest {
     public void testGameLoopRunsAndEndsGracefully() throws InterruptedException {
         // Run for 1 second
         int runTimeSeconds = 1;
-        GameParams gameParams = new GameParams(runTimeSeconds, 0);
+        GameParams gameParams = new GameParams(runTimeSeconds, 0, true);
         Entity.clearEntities();
         Tile.newBoard(Boards.CASE_2.TARGET_BOARD, 5, 3);
         // At least one player required to stop game from ending prematurely

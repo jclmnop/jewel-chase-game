@@ -28,6 +28,7 @@ public class Game {
     private static int score = 0;
     private static int timeRemaining = 0;
     private static boolean running = false;
+    private static boolean headless = false;
     private static long lastTickTime = 0;
     private static long lastCountdownTime = 0;
 
@@ -69,6 +70,11 @@ public class Game {
     /**
      * Runs initialises the game loop and runs it on a separate thread, this
      * allows us to monitor for player inputs on other threads.
+     *
+     * If headless mode is enabled in gameParams then no methods or classes
+     * related to JavaFx will be used. This is primarily intended for test
+     * purposes.
+     *
      * @param gameParams Parameters to initialise the Game with
      * @return Handle for game loop thread
      */
@@ -78,6 +84,7 @@ public class Game {
         //       (load method will also ensure board etc is all set up)
         Game.score = gameParams.startScore();
         Game.timeRemaining = gameParams.startTime();
+        Game.headless = gameParams.isHeadless();
         Thread gameLoopThread = new Thread(Game::gameLoop);
         gameLoopThread.start();
         return gameLoopThread;
@@ -85,21 +92,17 @@ public class Game {
 
     public static void win() {
         Game.endGame();
-        GameRenderer.renderWin();
+        if (!Game.headless) {
+            GameRenderer.renderWin();
+        }
         // TODO: save highscore
         // TODO: update playerProfile?
     }
 
     public static void lose() {
         Game.endGame();
-        try {
+        if (!Game.headless) {
             GameRenderer.renderLose();
-        } catch (NullPointerException e) {
-            System.out.println(
-                "This error is fine during unit tests, " +
-                    "but shouldn't happen while running the app:"
-            );
-            System.out.println(e.getMessage());
         }
 
         // TODO: i think the spec says to save highscore when player loses but
@@ -126,14 +129,8 @@ public class Game {
             HashMap<Player, Direction> playerInputs = new HashMap<>();
             //TODO: check for player movement inputs, add to playerInputs
             Game.tick(playerInputs);
-            try {
+            if (!Game.headless) {
                 Platform.runLater(GameRenderer::render);
-            } catch (NullPointerException | IllegalStateException | NoClassDefFoundError e) {
-                System.out.println(
-                    "This error is fine during unit tests, " +
-                        "but shouldn't happen while running the app:"
-                );
-                System.out.println(e.getMessage());
             }
         }
         System.out.println("gameLoop ended.");
@@ -192,6 +189,7 @@ public class Game {
     private static void timerCountdown() {
         long now = Instant.now().toEpochMilli();
         long millisSinceLastCountdown = now - Game.lastCountdownTime;
+
         if (millisSinceLastCountdown >= MILLI_PER_SECOND) {
             Game.adjustTime(-1);
             Game.lastCountdownTime = now;
@@ -203,6 +201,7 @@ public class Game {
             Player.class,
             Entity.getEntities()
         ).isEmpty();
+
         if (Game.getTimeRemaining() <= 0 || noPlayersLeft) {
             Game.lose();
         }
@@ -226,6 +225,7 @@ public class Game {
     private static void resetGame() {
         Game.timeRemaining = 0;
         Game.score = 0;
+        Game.headless = false;
         Entity.clearEntities();
         Tile.clearBoard();
     }
