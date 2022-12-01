@@ -11,7 +11,7 @@ public enum Colour {
     CYAN,
     MAGENTA;
 
-    public static final String IMAGE_PATH = "App/resources/tileImages/";
+    public static final String IMAGE_PATH = "App/resources/tiles/";
 
     public static Colour fromChar(char c) throws ParseTileColourException {
         return switch (c) {
@@ -40,12 +40,12 @@ public enum Colour {
 
     public Image toImage() {
         return switch (this) {
-            case RED     -> new Image(IMAGE_PATH + "redTile.png");
-            case GREEN   -> new Image(IMAGE_PATH + "greenTile.png");
-            case BLUE    -> new Image(IMAGE_PATH + "blueTile.png");
-            case YELLOW  -> new Image(IMAGE_PATH + "yellowTile.png");
-            case CYAN    -> new Image(IMAGE_PATH + "cyanTile.png");
-            case MAGENTA -> new Image(IMAGE_PATH + "magentaTile.png");
+            case RED     -> new Image(IMAGE_PATH + "red.png");
+            case GREEN   -> new Image(IMAGE_PATH + "green.png");
+            case BLUE    -> new Image(IMAGE_PATH + "blue.png");
+            case YELLOW  -> new Image(IMAGE_PATH + "yellow.png");
+            case CYAN    -> new Image(IMAGE_PATH + "cyan.png");
+            case MAGENTA -> new Image(IMAGE_PATH + "magenta.png");
         };
     }
 }
