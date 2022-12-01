@@ -43,8 +43,6 @@ public class GameRenderer {
         this.entityGridPane = new GridPane();
         this.boardPane.getChildren().addAll(tileGridPane, entityGridPane);
         this.tileGridPane.setAlignment(Pos.CENTER);
-//        this.tileGridPane.setVgap(5);
-//        this.tileGridPane.setHgap(5);
         this.entityGridPane.setAlignment(Pos.CENTER);
     }
 
@@ -100,11 +98,10 @@ public class GameRenderer {
     }
 
     private GridPane renderTile(Tile tile, double tileDimensions) {
-//        dims = 50;
         GridPane tileGrid = new GridPane();
         tileGrid.setLayoutX(tileDimensions);
         tileGrid.setLayoutY(tileDimensions);
-        double padding = tileDimensions / 50;
+        double padding = tileDimensions / 100;
         tileDimensions -= padding * 2;
         tileGrid.setPadding(new Insets(padding));
         tileGrid.backgroundProperty().set(
@@ -127,19 +124,6 @@ public class GameRenderer {
 
         tileGrid.addRow(0, t1, t2);
         tileGrid.addRow(1, t3, t4);
-//        double borderDims = dims / 10; //TODO: magic number
-//        BorderStroke borderStroke = new BorderStroke(
-//            Color.BLACK,
-//            new BorderStrokeStyle(
-//                StrokeType.CENTERED,
-//                null, null, borderDims,
-//                borderDims, null
-//            ),
-//            null,
-//            null
-//        );
-//        Border border = new Border(borderStroke);
-//        tileGrid.borderProperty().set(border);
         return tileGrid;
     }
 
