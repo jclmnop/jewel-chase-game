@@ -13,10 +13,10 @@ import Game.Tile;
 public record AdjacentCoords(Coords up, Coords down, Coords left, Coords right) {
     public static AdjacentCoords singleColourAdjacentTiles(AdjacentCoords adjacentCoords,
                                                            Colour colour) {
-        Coords up = (Tile.getTile(adjacentCoords.up).hasColour(colour)) ? adjacentCoords.up : null;
-        Coords down = (Tile.getTile(adjacentCoords.down).hasColour(colour)) ? adjacentCoords.down : null;
-        Coords left = (Tile.getTile(adjacentCoords.left).hasColour(colour)) ? adjacentCoords.left : null;
-        Coords right = (Tile.getTile(adjacentCoords.right).hasColour(colour)) ? adjacentCoords.right : null;
+        Coords up = AdjacentCoords.singleColourAdjacentTile(adjacentCoords.up, colour);
+        Coords down = AdjacentCoords.singleColourAdjacentTile(adjacentCoords.down, colour);
+        Coords left = AdjacentCoords.singleColourAdjacentTile(adjacentCoords.left, colour);
+        Coords right = AdjacentCoords.singleColourAdjacentTile(adjacentCoords.right, colour);
 
         return new AdjacentCoords(up, down, left, right);
     }
@@ -41,6 +41,17 @@ public record AdjacentCoords(Coords up, Coords down, Coords left, Coords right) 
 
     public Coords[] toArray() {
         return new Coords[]{this.up, this.down, this.left, this.right};
+    }
+
+    private static Coords singleColourAdjacentTile(Coords coords, Colour colour) {
+        Tile tile = Tile.getTile(coords);
+        if (tile == null) {
+            return null;
+        } else if (tile.hasColour(colour)) {
+            return coords;
+        } else {
+            return null;
+        }
     }
 
     @Override

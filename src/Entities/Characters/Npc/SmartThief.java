@@ -46,8 +46,10 @@ public class SmartThief extends Npc {
         }
 
         try {
-            Coords nextCoords = path.poll();
-            this.move(nextCoords);
+            Coords nextCoords = this.path.peek();
+            if (this.move(nextCoords)) {
+                this.path.poll();
+            };
         } catch (NullPointerException e) {
             // A new path could not be calculated
             this.moveRandomly();
@@ -67,14 +69,6 @@ public class SmartThief extends Npc {
             int selectedIndex = new Random().nextInt(notNullCoords.size());
             Coords nextCoords = notNullCoords.get(selectedIndex);
             this.move(nextCoords);
-        }
-    }
-
-    private void move(Coords nextCoords) {
-        if (this.ticksSinceLastMove >= this.speed) {
-            this.ticksSinceLastMove = 0;
-            this.currentDirection = this.coords.directionTo(nextCoords);
-            Tile.move(this, this.coords, nextCoords);
         }
     }
 
