@@ -44,7 +44,11 @@ public class Tile implements Serialisable {
     }
 
     public static Tile getTile(Coords coords) {
-        return board[coords.y()][coords.x()];
+        if (coords != null) {
+            return board[coords.y()][coords.x()];
+        } else {
+            return null;
+        }
     }
 
     public static int getHeight() {
