@@ -9,6 +9,8 @@ import javafx.scene.SnapshotParameters;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
+import javafx.scene.transform.Rotate;
+import javafx.scene.transform.Translate;
 
 public abstract class Character extends Entity {
     public static final String RESOURCES_PATH = Entity.RESOURCES_PATH + "characters/";
@@ -32,8 +34,15 @@ public abstract class Character extends Entity {
     @Override
     public Image toImage() {
         ImageView imageView = new ImageView(super.toImage());
-        //TODO: flip horizontal if degrees == 270
-        imageView.setRotate(this.currentDirection.toDegrees());
+        double rotation = this.currentDirection.toDegrees();
+        if (rotation == 180) {
+            // Flip image horizontally
+            Translate flipTranslation = new Translate(0, imageView.getImage().getHeight());
+            Rotate flipRotation = new Rotate(180, Rotate.Y_AXIS);
+            imageView.getTransforms().addAll(flipTranslation,flipRotation);
+        } else {
+            imageView.setRotate(this.currentDirection.toDegrees());
+        }
         SnapshotParameters params = new SnapshotParameters();
         params.setFill(Color.TRANSPARENT);
         return imageView.snapshot(params, null);
