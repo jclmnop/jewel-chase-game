@@ -5,6 +5,10 @@ import DataTypes.Coords;
 import DataTypes.Direction;
 import Entities.Entity;
 import Game.Tile;
+import javafx.scene.SnapshotParameters;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.paint.Color;
 
 public abstract class Character extends Entity {
     public static final String RESOURCES_PATH = Entity.RESOURCES_PATH + "characters/";
@@ -23,6 +27,16 @@ public abstract class Character extends Entity {
     public void kill() {
         // TODO: death animation?
         Entity.removeEntity(this);
+    }
+
+    @Override
+    public Image toImage() {
+        ImageView imageView = new ImageView(super.toImage());
+        //TODO: flip horizontal if degrees == 270
+        imageView.setRotate(this.currentDirection.toDegrees());
+        SnapshotParameters params = new SnapshotParameters();
+        params.setFill(Color.TRANSPARENT);
+        return imageView.snapshot(params, null);
     }
 
     protected boolean move(Coords nextCoords) {
