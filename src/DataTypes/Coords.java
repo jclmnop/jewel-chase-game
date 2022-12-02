@@ -24,11 +24,11 @@ public record Coords(int x, int y) {
      */
     public Direction directionTo(Coords to) {
         if (to.x != this.x || to.y != this.y) {
-            if (to.y > this.y) {
+            if (to.y < this.y) {
                 return Direction.UP;
             } else if (to.x < this.x) {
                 return Direction.LEFT;
-            } else if (to.y < this.y) {
+            } else if (to.y > this.y) {
                 return Direction.DOWN;
             } else {
                 return Direction.RIGHT;
