@@ -31,4 +31,13 @@ public enum Direction {
     public static Direction turnRight(Direction direction) {
         return turnLeft(turnAround(direction));
     }
+
+    public double toDegrees() {
+        return switch (this) {
+            case UP -> 270;
+            case DOWN -> 90;
+            case LEFT -> 180;
+            case RIGHT -> 0;
+        };
+    }
 }

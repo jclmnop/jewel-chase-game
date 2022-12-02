@@ -10,6 +10,7 @@ public class Player extends Character {
 
     public Player(Coords coords, int speed) {
         super(CollisionType.PLAYER, true, coords, speed);
+        this.currentDirection = Direction.RIGHT;
         this.imagePath = IMAGE_PATH;
     }
 
