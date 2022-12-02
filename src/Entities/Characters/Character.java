@@ -7,6 +7,7 @@ import Entities.Entity;
 import Game.Tile;
 
 public abstract class Character extends Entity {
+    public static final String RESOURCES_PATH = Entity.RESOURCES_PATH + "characters/";
     protected Direction currentDirection;
     protected int speed;
     protected int ticksSinceLastMove;

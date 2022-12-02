@@ -5,20 +5,24 @@ import DataTypes.CollisionEvent;
 import DataTypes.CollisionType;
 import DataTypes.Coords;
 import Entities.Characters.Character;
+import Interfaces.Renderable;
 import Interfaces.Serialisable;
 import Game.Game;
 import Game.Tile;
+import javafx.scene.image.Image;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 
-public abstract class Entity implements Serialisable {
+public abstract class Entity implements Serialisable, Renderable {
     private static ArrayDeque<Collision> collisions = new ArrayDeque<>();
     private static ArrayList<Entity> entities = new ArrayList<>();
     protected final CollisionType collisionType;
     protected final boolean blocking;
+    protected String imagePath;
     protected Coords coords;
+    protected Image image = null;
 
     protected Entity(CollisionType collisionType, boolean blocking, Coords coords) {
         this.collisionType = collisionType;
@@ -150,5 +154,12 @@ public abstract class Entity implements Serialisable {
 
     public boolean isBlocking() {
         return this.blocking;
+    }
+
+    public Image toImage() {
+        if (this.image == null) {
+            this.image = new Image(this.imagePath);
+        }
+        return this.image;
     }
 }
