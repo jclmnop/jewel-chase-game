@@ -11,6 +11,7 @@ import Game.Tile;
 
 // TODO: remove javadoc from private methods (can leave this until last minute)
 public class SmartThief extends Npc {
+    private static final String IMAGE_PATH = Character.RESOURCES_PATH + "liam_face.png";
     // Current desired item.
     private Item item;
 
@@ -21,6 +22,7 @@ public class SmartThief extends Npc {
         super(CollisionType.THIEF, true, coords, speed);
         this.currentDirection = direction;
         this.path = new LinkedList<>();
+        this.imagePath = IMAGE_PATH;
     }
 
     public SmartThief(Coords coords, int speed) {

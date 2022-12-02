@@ -10,13 +10,14 @@ import Entities.Characters.Character;
 import Game.Tile;
 
 public class FloorFollowingThief extends Npc {
-
+    private static final String IMAGE_PATH = Character.RESOURCES_PATH + "stuart_face.png";
     private final Colour colour;
 
     public FloorFollowingThief(Coords coords, int speed, Colour colour, Direction direction) {
         super(CollisionType.THIEF, true, coords, speed);
         this.colour = colour;
         this.currentDirection = direction;
+        this.imagePath = IMAGE_PATH;
     }
 
     public FloorFollowingThief(Coords coords, int speed) {
