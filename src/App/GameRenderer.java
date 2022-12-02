@@ -2,6 +2,7 @@ package App;
 
 import DataTypes.Colours;
 import DataTypes.Coords;
+import Entities.Entity;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
@@ -9,7 +10,6 @@ import javafx.geometry.Pos;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.StrokeType;
 import javafx.scene.text.Text;
 import Game.Game;
 import Game.Tile;
@@ -56,11 +56,14 @@ public class GameRenderer {
     }
 
     public static void render() {
+        double tileDimensions = Math.min(
+            BOARD_WIDTH / Tile.getWidth(), BOARD_WIDTH / Tile.getHeight()
+        );
         if (Game.isRunning()) {
             if (!gameRenderer.isBoardRendered) {
-                gameRenderer.renderBoard(); //TODO: only need to render board once
+                gameRenderer.renderBoard(tileDimensions); //TODO: only need to render board once
             }
-            gameRenderer.renderEntities();
+            gameRenderer.renderEntityGrid(tileDimensions);
             System.out.println("Rendered.");
         }
         gameRenderer.updateText();
@@ -80,18 +83,16 @@ public class GameRenderer {
         Game.quitGame();
     };
 
-    private void renderBoard() {
+    private void renderBoard(double tileDimensions) {
         // Calculate size of tiles
-        double tileDimensions = Math.min(
-            BOARD_WIDTH / Tile.getWidth(), BOARD_WIDTH / Tile.getHeight()
-        );
 
         for (int row = 0; row < Tile.getHeight(); row++) {
             for (int col = 0; col < Tile.getWidth(); col++) {
                 this.tileGridPane.add(
                     this.renderTile(Tile.getTile(new Coords(col, row)), tileDimensions),
-                    col, row //TODO: which way do x,y go here?
+                    col, row
                 );
+
             }
         }
         this.isBoardRendered = true;
@@ -108,27 +109,59 @@ public class GameRenderer {
             new Background(new BackgroundFill(Color.BLACK, null, null))
         );
         Colours tileColours = tile.getColours();
-        tileDimensions = tileDimensions / 2;
+        double tileSegmentDimensions = tileDimensions / 2;
         ImageView t1 = new ImageView(tileColours.c1().toImage());
-        t1.setFitHeight(tileDimensions);
-        t1.setFitWidth(tileDimensions);
+        t1.setFitHeight(tileSegmentDimensions);
+        t1.setFitWidth(tileSegmentDimensions);
         ImageView t2 = new ImageView(tileColours.c2().toImage());
-        t2.setFitHeight(tileDimensions);
-        t2.setFitWidth(tileDimensions);
+        t2.setFitHeight(tileSegmentDimensions);
+        t2.setFitWidth(tileSegmentDimensions);
         ImageView t3 = new ImageView(tileColours.c3().toImage());
-        t3.setFitHeight(tileDimensions);
-        t3.setFitWidth(tileDimensions);
+        t3.setFitHeight(tileSegmentDimensions);
+        t3.setFitWidth(tileSegmentDimensions);
         ImageView t4 = new ImageView(tileColours.c4().toImage());
-        t4.setFitHeight(tileDimensions);
-        t4.setFitWidth(tileDimensions);
+        t4.setFitHeight(tileSegmentDimensions);
+        t4.setFitWidth(tileSegmentDimensions);
 
         tileGrid.addRow(0, t1, t2);
         tileGrid.addRow(1, t3, t4);
         return tileGrid;
     }
 
-    private void renderEntities() {
-        // TODO:
+    private void renderEntityGrid(double tileDimensions) {
+        this.entityGridPane.getChildren().clear();
+
+        for (int row = 0; row < Tile.getHeight(); row++) {
+            for (int col = 0; col < Tile.getWidth(); col++) {
+                Tile currentTile = Tile.getTile(new Coords(col, row));
+                this.entityGridPane.add(
+                    this.renderEntities(currentTile, tileDimensions),
+                    col, row
+                );
+            }
+        }
+    }
+
+    private StackPane renderEntities(Tile tile, Double tileDimensions) {
+        StackPane entityGridCell = new StackPane();
+        entityGridCell.setMaxSize(tileDimensions, tileDimensions);
+        entityGridCell.setMinSize(tileDimensions, tileDimensions);
+        entityGridCell.setAlignment(Pos.CENTER);
+
+        for (Entity entity : tile.getEntities()) {
+            entityGridCell.getChildren().add(
+                this.renderEntity(entity, tileDimensions)
+            );
+        }
+
+        return entityGridCell;
+    }
+
+    private ImageView renderEntity(Entity entity, double tileDimensions) {
+        ImageView image = new ImageView(entity.toImage());
+        image.setFitWidth(tileDimensions);
+        image.setFitHeight(tileDimensions);
+        return image;
     }
 
     private void updateText() {

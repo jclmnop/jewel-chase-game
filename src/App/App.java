@@ -1,9 +1,12 @@
 package App;
 
+import DataTypes.Colour;
 import DataTypes.Coords;
+import DataTypes.Direction;
 import DataTypes.Exception.ParseBoardException;
 import DataTypes.Exception.ParseTileColourException;
 import DataTypes.GameParams;
+import Entities.Characters.Npc.FloorFollowingThief;
 import Entities.Characters.Player;
 import Utils.BoardLoader;
 import javafx.application.Application;
@@ -137,7 +140,9 @@ public class App extends Application {
         });
         // TODO: this is just here for testing without level files
         Tile.newBoard(BoardLoader.loadBoard(BOARD_STR), 5, 3);
-        Player player = new Player(new Coords(0, 0), 1);
+        new Player(new Coords(0, 0), 1);
+        new FloorFollowingThief(new Coords(1, 0), 1, Colour.YELLOW, Direction.RIGHT);
+
         //
         Thread gameThread = Game.startGame(new GameParams(10, 0)); // TODO: get gameParams from level file
     }
