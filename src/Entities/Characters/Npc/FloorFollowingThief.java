@@ -37,7 +37,7 @@ public class FloorFollowingThief extends Npc {
         */
         boolean foundTile = false;
         int i = 0;
-        while (!foundTile || i < MAXIMUM_ATTEMPTS) {
+        while (!foundTile && i < MAXIMUM_ATTEMPTS) {
             if (adjCoords.getTileInDirection(dir) != null) {
                 Coords nextCoords = adjCoords.getCoordsInDirection(dir);
                 this.move(nextCoords);
