@@ -30,16 +30,17 @@ public class FloorFollowingThief extends Npc {
     public void tryMove() {
         AdjacentCoords adjCoords = Tile.getSingleColourAdjacentTiles(coords, colour);
         Direction dir = Direction.turnLeft(currentDirection);
+        final int MAXIMUM_ATTEMPTS = 4;
 
         /* Checks all directions, starting left of FFT and going clockwise.
          * If there are no tiles to move to, FFT stays where it is.
         */
         boolean foundTile = false;
         int i = 0;
-        while (!foundTile || i < 4) {
+        while (!foundTile || i < MAXIMUM_ATTEMPTS) {
             if (adjCoords.getTileInDirection(dir) != null) {
-                coords = adjCoords.getCoordsInDirection(dir);
-                currentDirection = dir;
+                Coords nextCoords = adjCoords.getCoordsInDirection(dir);
+                this.move(nextCoords);
                 foundTile = true;
             } else {
                 dir = Direction.turnRight(dir);

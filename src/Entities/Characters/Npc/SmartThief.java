@@ -72,17 +72,6 @@ public class SmartThief extends Npc {
         }
     }
 
-    private boolean move(Coords nextCoords) {
-        if (this.ticksSinceLastMove >= this.speed) {
-            this.ticksSinceLastMove = 0;
-            this.currentDirection = this.coords.directionTo(nextCoords);
-            Tile.move(this, this.coords, nextCoords);
-            return true;
-        } else {
-            return false;
-        }
-    }
-
     private boolean needNewPath() {
         boolean isPathComplete = this.path == null || this.path.isEmpty();
         boolean isTargetItemGone = !Item.getItems().contains(this.item);
