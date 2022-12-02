@@ -25,6 +25,7 @@ public abstract class Character extends Entity {
     }
 
     protected boolean move(Coords nextCoords) {
+        this.ticksSinceLastMove++;
         if (this.ticksSinceLastMove >= this.speed) {
             this.ticksSinceLastMove = 0;
             this.currentDirection = this.coords.directionTo(nextCoords);
