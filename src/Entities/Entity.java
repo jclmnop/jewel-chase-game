@@ -2,7 +2,6 @@ package Entities;
 
 import DataTypes.Collision;
 import DataTypes.CollisionEvent;
-import DataTypes.CollisionType;
 import DataTypes.Coords;
 import Entities.Characters.Character;
 import Interfaces.Renderable;
@@ -30,6 +29,22 @@ public abstract class Entity implements Serialisable, Renderable {
         this.coords = coords;
         entities.add(this);
         Tile.getTile(coords).addEntity(this);
+    }
+
+    /**
+     * Collision type for an entity.
+     * Used to compute the outcome of a collision between two Entity objects.
+     */
+    public enum CollisionType {
+        BOMB,
+        LOOT,
+        CLOCK,
+        LEVER,
+        GATE,
+        DOOR,
+        ASSASSIN,
+        THIEF,
+        PLAYER,
     }
 
     public static void enqueCollision(Coords coords, Entity entityOne, Entity entityTwo) {

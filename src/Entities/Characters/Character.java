@@ -1,6 +1,5 @@
 package Entities.Characters;
 
-import DataTypes.CollisionType;
 import DataTypes.Coords;
 import DataTypes.Direction;
 import Entities.Entity;

@@ -2,7 +2,6 @@ package Entities.Characters.Npc;
 
 
 import DataTypes.AdjacentCoords;
-import DataTypes.CollisionType;
 import DataTypes.Colour;
 import DataTypes.Coords;
 import DataTypes.Direction;
