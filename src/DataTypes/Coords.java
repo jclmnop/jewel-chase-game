@@ -1,11 +1,20 @@
 package DataTypes;
 
 /**
- * Represents position of an Entity in the level. Immutable once constructed
- * to ensure an instance is not modified accidentally. If new Coords are
- * required then a new instance must be instantiated.
+ * Position of an Entity in the level, represented as (x, y) starting from
+ * top left of the board.
+ *
+ * e.g: (1, 0)
+ * @author Jonny
+ * @version 1.2
  */
 public record Coords(int x, int y) {
+    /**
+     * Get the coordinate in the specified direction from the starting coordinate.
+     * @param coords The starting coordinate.
+     * @param direction The direction to "travel".
+     * @return The coordinate in the given direction.
+     */
     public static Coords move(Coords coords, Direction direction) {
         return switch (direction) {
             case UP    -> moveUp(coords);
@@ -38,6 +47,28 @@ public record Coords(int x, int y) {
         }
     }
 
+    /**
+     * String representation of coords, e.g: "(1, 0)"
+     * @return String representation.
+     */
+    @Override
+    public String toString() {
+        return "(" + x + ", " + y + ")";
+    }
+
+    /**
+     * Compare this Coords object with another, checking whether their x and y
+     * values are equal to each other.
+     * @param other The other Coords object to compare with.
+     * @return true if they're equal, false otherwise.
+     */
+    public boolean equals(Coords other) {
+        if (other == null) {
+            return false;
+        }
+        return this.x == other.x && this.y == other.y;
+    }
+
     private static Coords moveUp(Coords coords) {
         return new Coords(coords.x, coords.y - 1);
     }
@@ -54,15 +85,4 @@ public record Coords(int x, int y) {
         return new Coords(coords.x + 1, coords.y);
     }
 
-    @Override
-    public String toString() {
-        return "(" + x + ", " + y + ")";
-    }
-
-    public boolean equals(Coords other) {
-        if (other == null) {
-            return false;
-        }
-        return this.x == other.x && this.y == other.y;
-    }
 }

@@ -1,6 +1,5 @@
 package Entities.Items.Collectable;
 
-import DataTypes.CollisionType;
 import DataTypes.Coords;
 import Entities.Entity;
 import Entities.Items.Item;

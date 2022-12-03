@@ -1,8 +1,6 @@
 package Entities.Characters.Npc;
 
-import DataTypes.CollisionType;
 import DataTypes.Coords;
-import Entities.Characters.Character;
 
 public class FlyingAssassin extends Npc {
     public FlyingAssassin(Coords coords, int speed) {

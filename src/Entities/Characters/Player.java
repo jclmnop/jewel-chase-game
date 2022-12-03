@@ -1,9 +1,7 @@
 package Entities.Characters;
 
-import DataTypes.CollisionType;
 import DataTypes.Coords;
 import DataTypes.Direction;
-import javafx.scene.image.Image;
 
 public class Player extends Character {
     private static final String IMAGE_PATH = Character.RESOURCES_PATH + "liam_face.png";

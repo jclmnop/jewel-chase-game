@@ -1,6 +1,5 @@
 package Entities.Items;
 
-import DataTypes.CollisionType;
 import DataTypes.Coords;
 
 public class Gate extends Item {

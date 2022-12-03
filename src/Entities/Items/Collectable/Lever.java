@@ -1,8 +1,6 @@
 package Entities.Items.Collectable;
 
-import DataTypes.CollisionType;
 import DataTypes.Coords;
-import Entities.Items.Item;
 
 public class Lever extends Collectable {
     public Lever(Coords coords) {

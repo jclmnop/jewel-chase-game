@@ -4,6 +4,11 @@ import DataTypes.Exception.ParseTileColourException;
 import Interfaces.Renderable;
 import javafx.scene.image.Image;
 
+/**
+ * Enum representing Colour of a Tile.
+ * @author Jonny
+ * @version 1.3
+ */
 public enum Colour implements Renderable {
     RED,
     GREEN,
@@ -15,6 +20,12 @@ public enum Colour implements Renderable {
     public static final String IMAGE_PATH = "App/resources/tiles/";
     private Image image = null;
 
+    /**
+     * Parse a single character into a Colour.
+     * @param c Character to parse.
+     * @return The parsed Colour value.
+     * @throws ParseTileColourException if input can't be parsed to a valid colour.
+     */
     public static Colour fromChar(char c) throws ParseTileColourException {
         return switch (c) {
             case 'R' -> RED;
@@ -29,6 +40,10 @@ public enum Colour implements Renderable {
         };
     }
 
+    /**
+     * Convert this colour to its corresponding character value.
+     * @return The character value.
+     */
     public char toChar() {
         return switch (this) {
             case RED     -> 'R';
@@ -40,6 +55,12 @@ public enum Colour implements Renderable {
         };
     }
 
+    /**
+     * Load and return the Image object for this colour. Required to render
+     * a Tile object.
+     * @return Image object for this colour.
+     */
+    @Override
     public Image toImage() {
         if (this.image == null) {
             this.image = switch (this) {
