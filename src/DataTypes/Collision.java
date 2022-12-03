@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.Comparator;
 
 import Entities.Entity;
+import Entities.Items.Bomb;
 
 /**
  * Represents a collision between to Entity objects and contains relevant
@@ -59,8 +60,12 @@ public class Collision {
      * @return true if it's valid, false if not.
      */
     public boolean isValid() {
-        return this.coords.equals(this.entityOne.getCoords())
-            && this.coords.equals(this.entityTwo.getCoords());
+        if (this.entityOne instanceof Bomb || this.entityTwo instanceof Bomb) {
+            return true;
+        } else {
+            return this.coords.equals(this.entityOne.getCoords())
+                && this.coords.equals(this.entityTwo.getCoords());
+        }
     }
 
     private Entity[] sortByCollisionType(Entity entityOne, Entity entityTwo) {
