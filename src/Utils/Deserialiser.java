@@ -105,54 +105,62 @@ public class Deserialiser {
 
     private static FlyingAssassin deserialiseFlyingAssassin(String[] splitString) {
         Iterator<String> stringIterator = Arrays.stream(splitString).iterator();
-        //TODO coords
-        //TODO speed
+        Coords coords = Coords.fromString(stringIterator.next(), stringIterator.next());
+        int speed = Integer.parseInt(stringIterator.next());
+        Direction direction = Direction.fromString(stringIterator.next());
         //TODO direction
-        return new FlyingAssassin(new Coords(0, 0), 1); // TODO
+        return new FlyingAssassin(coords, speed); // TODO
     }
 
     private static FloorFollowingThief deserialiseFloorFollowingThief(String[] splitString) {
         Iterator<String> stringIterator = Arrays.stream(splitString).iterator();
+        Coords coords = Coords.fromString(stringIterator.next(), stringIterator.next());
+        int speed = Integer.parseInt(stringIterator.next());
+        Direction direction = Direction.fromString(stringIterator.next());
+        Colour colour = Colour.fromChar(stringIterator.next().charAt(0));
         //TODO coords
         //TODO speed
         //TODO direction
         //TODO colour
-        return new FloorFollowingThief(new Coords(0, 0), 1); // TODO
+        return new FloorFollowingThief(coords, speed, colour, direction);
     }
 
     private static Lever deserialiseLever(String[] splitString) {
         Iterator<String> stringIterator = Arrays.stream(splitString).iterator();
-        //TODO coords
+        Coords coords = Coords.fromString(stringIterator.next(), stringIterator.next());
+        Colour colour = Colour.fromChar(stringIterator.next().charAt(0));
         //TODO colour
-        return new Lever(new Coords(0, 0)); // TODO
+        return new Lever(coords); // TODO
     }
 
     private static Loot deserialiseLoot(String[] splitString) {
         Iterator<String> stringIterator = Arrays.stream(splitString).iterator();
+        Coords coords = Coords.fromString(stringIterator.next(), stringIterator.next());
         //TODO coords
         //TODO lootType
-        return new Loot(new Coords(0, 0)); // TODO
+        return new Loot(coords); // TODO
     }
 
     private static Gate deserialiseGate(String[] splitString) {
         Iterator<String> stringIterator = Arrays.stream(splitString).iterator();
-        //TODO coords
+        Coords coords = Coords.fromString(stringIterator.next(), stringIterator.next());
+        Colour colour = Colour.fromChar(stringIterator.next().charAt(0));
         //TODO colour
-        return new Gate(new Coords(0, 0)); // TODO
+        return new Gate(coords); // TODO
     }
 
     private static Clock deserialiseClock(String[] splitString) {
         Iterator<String> stringIterator = Arrays.stream(splitString).iterator();
-        //TODO coords
-        return new Clock(new Coords(0, 0)); // TODO
+        Coords coords = Coords.fromString(stringIterator.next(), stringIterator.next());
+        return new Clock(coords); // TODO
     }
 
     private static Bomb deserialiseBomb(String[] splitString) {
         Iterator<String> stringIterator = Arrays.stream(splitString).iterator();
-        //TODO coords
+        Coords coords = Coords.fromString(stringIterator.next(), stringIterator.next());
         //TODO detonated boolean
         //TODO timer (in ms)
-        return new Bomb(new Coords(0, 0)); // TODO
+        return new Bomb(coords); // TODO
     }
 
     // TODO: private static BombExplosion deserialiseExplosion(String[] splitString) {}
