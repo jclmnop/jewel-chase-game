@@ -38,6 +38,7 @@ public class Game {
     private static boolean headless = false;
     private static long lastTickTime = 0;
     private static long lastCountdownTime = 0;
+    private static PlayerProfile playerProfile;
 
     static {
         Game.PLAYER1_MOVEMENT_KEYS.put(KeyCode.UP, Direction.UP);
@@ -83,6 +84,24 @@ public class Game {
         if (Game.timeRemaining < 0) {
             Game.timeRemaining = 0;
         }
+    }
+
+    /**
+     * Get the current player profile that's being used to load levels and
+     * save high scores.
+     * @return Current player profile.
+     */
+    public static PlayerProfile getPlayerProfile() {
+        return playerProfile;
+    }
+
+    /**
+     * Set the current player profile which will be used to load levels and
+     * save high scores.
+     * @param playerProfile Profile to use.
+     */
+    public static void setPlayerProfile(PlayerProfile playerProfile) {
+        Game.playerProfile = playerProfile;
     }
 
     /**
