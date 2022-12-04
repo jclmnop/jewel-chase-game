@@ -4,6 +4,7 @@ import DataTypes.Collision;
 import DataTypes.CollisionEvent;
 import DataTypes.Coords;
 import Entities.Characters.Character;
+import Entities.Characters.Player;
 import Interfaces.Renderable;
 import Interfaces.Serialisable;
 import Game.Game;
@@ -90,6 +91,10 @@ public abstract class Entity implements Serialisable, Renderable {
     public static void removeEntity(Entity entity) {
         Tile.removeEntityFromBoard(entity);
         entities.remove(entity);
+
+        if (entity instanceof Player) {
+            Game.removePlayer((Player) entity);
+        }
     }
 
     public static void clearEntities() {
