@@ -59,7 +59,7 @@ public class Deserialiser {
                 case "Bomb" -> {
                     return Deserialiser.deserialiseBomb(args);
                 }
-                // TODO: case "Explosion"
+                // TODO: case "Explosion -> {}"
                 default -> {
                     throw new DeserialiseException(
                         "Deserialisation of " + objectTypeName + " failed, class name not recognised"
@@ -96,10 +96,11 @@ public class Deserialiser {
 
     private static Player deserialisePlayer(String[] splitString) {
         Iterator<String> stringIterator = Arrays.stream(splitString).iterator();
-        //TODO coords
-        //TODO speed
+        Coords coords = Coords.fromString(stringIterator.next(), stringIterator.next());
+        int speed = Integer.parseInt(stringIterator.next());
+        Direction direction = Direction.fromString(stringIterator.next());
         //TODO direction
-        return new Player(new Coords(0, 0), 1); // TODO
+        return new Player(coords, speed); // TODO
     }
 
     private static FlyingAssassin deserialiseFlyingAssassin(String[] splitString) {

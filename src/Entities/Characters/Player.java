@@ -14,6 +14,13 @@ public class Player extends Character {
         Game.addPlayer(this);
     }
 
+    public Player(Coords coords, int speed, Direction currentDirection) {
+        super(CollisionType.PLAYER, true, coords, speed);
+        this.currentDirection = currentDirection;
+        this.imagePath = IMAGE_PATH;
+        Game.addPlayer(this);
+    }
+
     public void tryMove(Direction direction) {
         //TODO: implement
         System.out.println("Player move: " + direction);
