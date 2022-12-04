@@ -64,6 +64,10 @@ public class App extends Application {
         return App.app;
     }
 
+    public static Stage getStage() {
+        return stage;
+    }
+
     public static void returnToMainMenu() throws IOException {
         App.app.changeScene(MENU_FXML_PATH);
     }
@@ -131,7 +135,9 @@ public class App extends Application {
         App.stage.show();
     }
 
-    public void newGame(ActionEvent actionEvent) throws IOException, InterruptedException, ParseBoardException, ParseTileColourException, ClassNotFoundException {
+    public void newGame(
+        ActionEvent actionEvent
+    ) throws IOException, ParseBoardException, ParseTileColourException, ClassNotFoundException {
         //TODO: change scene to level select, then load selected level from there
         this.changeScene(GAME_FXML_PATH);
         App.stage.setOnCloseRequest(t -> {
@@ -142,6 +148,9 @@ public class App extends Application {
         Tile.newBoard(BoardLoader.loadBoard(BOARD_STR), 5, 3);
         new Player(new Coords(0, 0), 1);
         new FloorFollowingThief(new Coords(1, 0), 1, Colour.YELLOW, Direction.RIGHT);
+        App.stage.getScene().setOnKeyPressed(
+            (key) -> Game.registerNewMovementInput(key.getCode())
+        );
 
         //
         Thread gameThread = Game.startGame(new GameParams(10, 0)); // TODO: get gameParams from level file

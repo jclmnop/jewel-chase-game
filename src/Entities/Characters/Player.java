@@ -2,6 +2,7 @@ package Entities.Characters;
 
 import DataTypes.Coords;
 import DataTypes.Direction;
+import Game.Game;
 
 public class Player extends Character {
     private static final String IMAGE_PATH = Character.RESOURCES_PATH + "liam_face.png";
@@ -10,10 +11,12 @@ public class Player extends Character {
         super(CollisionType.PLAYER, true, coords, speed);
         this.currentDirection = Direction.RIGHT;
         this.imagePath = IMAGE_PATH;
+        Game.addPlayer(this);
     }
 
     public void tryMove(Direction direction) {
         //TODO: implement
+        System.out.println("Player move: " + direction);
     }
     /**
      * Serialises the Object into a String.

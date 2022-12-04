@@ -3,6 +3,7 @@ package App;
 import DataTypes.Colours;
 import DataTypes.Coords;
 import Entities.Entity;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
@@ -14,6 +15,7 @@ import javafx.scene.text.Text;
 import Game.Game;
 import Game.Tile;
 
+import java.awt.event.KeyEvent;
 import java.io.IOException;
 
 public class GameRenderer {
@@ -64,7 +66,7 @@ public class GameRenderer {
                 gameRenderer.renderBoard(tileDimensions); //TODO: only need to render board once
             }
             gameRenderer.renderEntityGrid(tileDimensions);
-            System.out.println("Rendered.");
+//            System.out.println("Rendered.");
         }
         gameRenderer.updateText();
     }

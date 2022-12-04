@@ -187,6 +187,7 @@ public class Game {
         long now = Instant.now().toEpochMilli();
         Game.lastCountdownTime = now;
         Game.lastTickTime = now;
+        System.out.println("gameLoop started.");
         while (Game.isRunning()) {
             //TODO: check for player movement inputs, add to playerInputs
             Game.tick();
@@ -223,7 +224,7 @@ public class Game {
         // Check if time has reached zero or all players are dead
         Game.checkForLoss();
 
-        System.out.println("Ticked.");
+//        System.out.println("Ticked.");
     }
 
     private static void processPlayerInputs() {
