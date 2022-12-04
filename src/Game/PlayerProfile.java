@@ -1,11 +1,13 @@
 package Game;
 
+import Interfaces.Serialisable;
+
 /**
  * Stores information about a player.
  * @author Jonny
  * @version 1.0
  */
-public class PlayerProfile {
+public class PlayerProfile implements Serialisable {
     private final String playerName;
     private int maxLevel;
 
@@ -51,5 +53,15 @@ public class PlayerProfile {
      */
     public void increaseMaxLevel() {
         this.maxLevel++;
+    }
+
+    /**
+     * Serialise player profile into string format, so it can be saved to a .txt
+     * file.
+     * @return Serialised player profile string.
+     */
+    @Override
+    public String serialise() {
+        return this.playerName + " " + this.maxLevel;
     }
 }
