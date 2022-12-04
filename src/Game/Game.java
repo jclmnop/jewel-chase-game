@@ -4,10 +4,12 @@ import App.App;
 import App.GameRenderer;
 import DataTypes.Direction;
 import DataTypes.GameParams;
+import DataTypes.PlayerInput;
 import Entities.Characters.Npc.Npc;
 import Entities.Characters.Player;
 import Entities.Entity;
 import javafx.application.Platform;
+import javafx.scene.input.KeyCode;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -25,12 +27,28 @@ public class Game {
 
     public static final long MILLI_PER_TICK = 100; //TODO: figure out reasonable value
     public static final long MILLI_PER_SECOND = 1000;
+    public static final int MAX_PLAYERS = 2;
+    private static final HashMap<KeyCode, Direction> PLAYER1_MOVEMENT_KEYS = new HashMap<>();
+    private static final HashMap<KeyCode, Direction> PLAYER2_MOVEMENT_KEYS = new HashMap<>();
+    private static final HashMap<KeyCode, PlayerInput> playerMovementKeys = new HashMap<>();
+    private static final HashMap<Player, Direction> currentMovementInputs = new HashMap<>();
     private static int score = 0;
     private static int timeRemaining = 0;
     private static boolean running = false;
     private static boolean headless = false;
     private static long lastTickTime = 0;
     private static long lastCountdownTime = 0;
+
+    static {
+        Game.PLAYER1_MOVEMENT_KEYS.put(KeyCode.UP, Direction.UP);
+        Game.PLAYER1_MOVEMENT_KEYS.put(KeyCode.DOWN, Direction.DOWN);
+        Game.PLAYER1_MOVEMENT_KEYS.put(KeyCode.LEFT, Direction.LEFT);
+        Game.PLAYER1_MOVEMENT_KEYS.put(KeyCode.RIGHT, Direction.RIGHT);
+        Game.PLAYER2_MOVEMENT_KEYS.put(KeyCode.W, Direction.UP);
+        Game.PLAYER2_MOVEMENT_KEYS.put(KeyCode.S, Direction.DOWN);
+        Game.PLAYER2_MOVEMENT_KEYS.put(KeyCode.A, Direction.LEFT);
+        Game.PLAYER2_MOVEMENT_KEYS.put(KeyCode.D, Direction.RIGHT);
+    }
 
     private Game() {};
 
@@ -64,6 +82,51 @@ public class Game {
         Game.timeRemaining += timeChange;
         if (Game.timeRemaining < 0) {
             Game.timeRemaining = 0;
+        }
+    }
+
+    /**
+     * Add a new player to the game and assign movement keys.
+     * @param player Player to be added to the game.
+     */
+    public static void addPlayer(Player player) {
+        int KEYS_PER_PLAYER = 4;
+        // Only add new player if maximum number of players hasn't been reached.
+        if (playerMovementKeys.size() < MAX_PLAYERS * KEYS_PER_PLAYER) {
+            HashMap<KeyCode, Direction> movementKeys =
+                playerMovementKeys.isEmpty()
+                    ? PLAYER1_MOVEMENT_KEYS
+                    : PLAYER2_MOVEMENT_KEYS;
+            movementKeys.forEach(
+                (k, d) -> playerMovementKeys.put(k, new PlayerInput(player, d))
+            );
+        }
+    }
+
+    /**
+     * Remove a player from the game and de-assign movement keys.
+     * @param player Player to be removed from the game.
+     */
+    public static void removePlayer(Player player) {
+        playerMovementKeys.forEach(
+            (key, playerInput) -> {
+                if (playerInput.player() == player) {
+                    playerMovementKeys.remove(key);
+                }
+            }
+        );
+    }
+
+    /**
+     * Check if a keyboard key is associated with a player, and if it is then
+     * update the most recent movement input for that player.
+     * @param keyPressed The keycode for the key which has been pressed.
+     */
+    public static void registerNewMovementInput(KeyCode keyPressed) {
+        PlayerInput playerInput = Game.playerMovementKeys.get(keyPressed);
+        if (playerInput != null) {
+            // Update the most recent movement input for this player
+            Game.currentMovementInputs.put(playerInput.player(), playerInput.direction());
         }
     }
 
@@ -124,11 +187,10 @@ public class Game {
         long now = Instant.now().toEpochMilli();
         Game.lastCountdownTime = now;
         Game.lastTickTime = now;
+        System.out.println("gameLoop started.");
         while (Game.isRunning()) {
-            //TODO: check for menu inputs (save, quit, etc.)
-            HashMap<Player, Direction> playerInputs = new HashMap<>();
             //TODO: check for player movement inputs, add to playerInputs
-            Game.tick(playerInputs);
+            Game.tick();
             if (!Game.headless) {
                 Platform.runLater(GameRenderer::render);
             }
@@ -137,7 +199,7 @@ public class Game {
         Game.resetGame();
     }
 
-    private static void tick(HashMap<Player, Direction> playerInputs) {
+    private static void tick() {
         // TODO: call every function that needs to be called per tick
         Game.moveNpcs();
         // TODO: figure out how to get keyboard inputs passed to this function
@@ -146,7 +208,7 @@ public class Game {
         //                then this function can just blindly player inputs etc
         //          - maybe getInputs() and/or parseInput() methods?
         // TODO: for co-op power-up item, need to differentiate between player1&2 keyboard inputs
-        Game.processPlayerInputs(playerInputs);
+        Game.processPlayerInputs();
 
         // Collisions must be processed *after* movements
         Entity.processCollisions();
@@ -162,12 +224,13 @@ public class Game {
         // Check if time has reached zero or all players are dead
         Game.checkForLoss();
 
-        System.out.println("Ticked.");
+//        System.out.println("Ticked.");
     }
 
-    private static void processPlayerInputs(HashMap<Player, Direction> playerInputs) {
-        for (Player player : playerInputs.keySet()) {
-            Game.movePlayer(player, playerInputs.get(player));
+    private static void processPlayerInputs() {
+        for (Player player : Game.currentMovementInputs.keySet()) {
+            Game.movePlayer(player, currentMovementInputs.get(player));
+            Game.currentMovementInputs.remove(player);
         }
     }
 
@@ -226,6 +289,8 @@ public class Game {
         Game.timeRemaining = 0;
         Game.score = 0;
         Game.headless = false;
+        Game.currentMovementInputs.clear();
+        Game.playerMovementKeys.clear();
         Entity.clearEntities();
         Tile.clearBoard();
     }
