@@ -1,5 +1,9 @@
 package DataTypes;
 
+import Interfaces.Serialisable;
+
+import java.util.Locale;
+
 /**
  * Used to represent direction on the map. Primarily for current direction a
  * Character object is facing.
@@ -7,11 +11,12 @@ package DataTypes;
  * @author Jonny
  * @version 1.1
  */
-public enum Direction {
+public enum Direction implements Serialisable {
     UP,
     DOWN,
     LEFT,
     RIGHT;
+
 
     /**
      * Turn left by 90 degrees from the given direction.
@@ -61,6 +66,35 @@ public enum Direction {
             case DOWN -> 90;
             case LEFT -> 180;
             case RIGHT -> 0;
+        };
+    }
+
+    /**
+     * Serialise Direction enum into a String.
+     *
+     * e.g. Direction.UP -> "UP"
+     * @return Serialised string
+     */
+    @Override
+    public String serialise() {
+        return this.toString();
+    }
+
+    /**
+     * Deserialise a Direction enum from a string.
+     * @param str String to deserialise.
+     * @return Deserialised direction enum.
+     * @throws IllegalArgumentException If string cannot be parsed to direction.
+     */
+    public static Direction fromString(String str) throws IllegalArgumentException {
+        return switch (str.toUpperCase()) {
+            case "UP" -> UP;
+            case "DOWN" -> DOWN;
+            case "LEFT" -> LEFT;
+            case "RIGHT" -> RIGHT;
+            default -> throw new IllegalArgumentException(
+                "Cannot deserialise '" + str + "' to direction"
+            );
         };
     }
 }
