@@ -1,5 +1,7 @@
 package DataTypes;
 
+import Interfaces.Serialisable;
+
 /**
  * Position of an Entity in the level, represented as (x, y) starting from
  * top left of the board.
@@ -8,7 +10,7 @@ package DataTypes;
  * @author Jonny
  * @version 1.2
  */
-public record Coords(int x, int y) {
+public record Coords(int x, int y) implements Serialisable {
     /**
      * Get the coordinate in the specified direction from the starting coordinate.
      * @param coords The starting coordinate.
@@ -22,6 +24,22 @@ public record Coords(int x, int y) {
             case LEFT  -> moveLeft(coords);
             case RIGHT -> moveRight(coords);
         };
+    }
+
+    /**
+     * Deserialise strings to coords object.
+     * @param xStr String for x to be deserialised.
+     * @return Deserialised coords object.
+     * @throws IllegalArgumentException if string cannot be parsed.
+     */
+    public static Coords fromString(String xStr, String yStr) throws IllegalArgumentException {
+        try {
+            return new Coords(Integer.parseInt(xStr), Integer.parseInt(yStr));
+        } catch (NumberFormatException e) {
+            throw new IllegalArgumentException(
+                "Coords string '" + xStr + " " + yStr + "' could not be parsed"
+            );
+        }
     }
 
     /**
@@ -54,6 +72,15 @@ public record Coords(int x, int y) {
     @Override
     public String toString() {
         return "(" + x + ", " + y + ")";
+    }
+
+    /**
+     * Serialise coords into a string, e.g: (1, 0) -> 1 0
+     * @return Serialised string.
+     */
+    @Override
+    public String serialise() {
+        return this.x + " " + this.y;
     }
 
     /**

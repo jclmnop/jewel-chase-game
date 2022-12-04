@@ -1,14 +1,13 @@
 package Utils;
 
-import DataTypes.Colour;
-import DataTypes.Colours;
-import DataTypes.Coords;
+import DataTypes.*;
+import DataTypes.Exception.DeserialiseException;
 import DataTypes.Exception.ParseTileColourException;
-import DataTypes.GameParams;
 import Entities.Characters.Npc.FloorFollowingThief;
 import Entities.Characters.Npc.FlyingAssassin;
 import Entities.Characters.Player;
 import Entities.Characters.Npc.SmartThief;
+import Entities.Items.Bomb;
 import Entities.Items.Collectable.Clock;
 import Entities.Items.Gate;
 import Entities.Items.Collectable.Lever;
@@ -16,50 +15,64 @@ import Entities.Items.Collectable.Loot;
 import Game.Tile;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Iterator;
 
 /**
  * Utility meant to be used by GameFileHandler when loading a level/save file.
  */
 public class Deserialiser {
-    public static Object deserialiseObject(String serialisedString) throws ClassNotFoundException, ParseTileColourException {
+    public static Object deserialiseObject(
+        String serialisedString
+    ) throws ParseTileColourException, DeserialiseException {
         var args = serialisedString.split(" ");
         var objectTypeName = (args.length > 1) ? args[0] : "Tile";
-
-        switch (objectTypeName) {
-            case "Tile" -> { 
-                return Deserialiser.deserialiseTile(args[0]);
+        try {
+            switch (objectTypeName) {
+                case "Tile" -> {
+                    return Deserialiser.deserialiseTile(args[0]);
+                }
+                case "Clock" -> {
+                    return Deserialiser.deserialiseClock(args);
+                }
+                case "Gate" -> {
+                    return Deserialiser.deserialiseGate(args);
+                }
+                case "Lever" -> {
+                    return Deserialiser.deserialiseLever(args);
+                }
+                case "Loot" -> {
+                    return Deserialiser.deserialiseLoot(args);
+                }
+                case "FloorFollowingThief" -> {
+                    return Deserialiser.deserialiseFloorFollowingThief(args);
+                }
+                case "FlyingAssassin" -> {
+                    return Deserialiser.deserialiseFlyingAssassin(args);
+                }
+                case "Player" -> {
+                    return Deserialiser.deserialisePlayer(args);
+                }
+                case "SmartThief" -> {
+                    return Deserialiser.deserialiseSmartThief(args);
+                }
+                case "Bomb" -> {
+                    return Deserialiser.deserialiseBomb(args);
+                }
+                // TODO: case "Explosion -> {}"
+                default -> {
+                    throw new DeserialiseException(
+                        "Deserialisation of " + objectTypeName + " failed, class name not recognised"
+                    );
+                }
             }
-            case "Clock" -> { 
-                return Deserialiser.deserialiseClock(args);
-            }
-            case "Gate" -> {
-                return Deserialiser.deserialiseGate(args);
-            }
-            case "Lever" -> {
-                return Deserialiser.deserialiseLever(args);
-            }
-            case "Loot" -> {
-                return Deserialiser.deserialiseLoot(args);
-            }
-            case "FloorFollowingThief" -> {
-                return Deserialiser.deserialiseFloorFollowingThief(args);
-            }
-            case "FlyingAssassin" -> {
-                return Deserialiser.deserialiseFlyingAssassin(args);
-            }
-            case "Player" -> {
-                return Deserialiser.deserialisePlayer(args);
-            }
-            case "SmartThief" -> {
-                return Deserialiser.deserialiseSmartThief(args);
-            }
-            default -> {
-                // TODO: custom exception
-                throw new ClassNotFoundException(
-                    "Deserialisation of " + objectTypeName + " failed, class name not recognised"
-                );
-            }
+        } catch (Exception e) {
+            throw new DeserialiseException(
+                "Exception occurred when attempting to deserialise " + objectTypeName,
+                e
+            );
         }
+
     }
 
     // TODO: deserialiseGameParams
@@ -74,36 +87,83 @@ public class Deserialiser {
     //       been implemented.
 
     private static SmartThief deserialiseSmartThief(String[] splitString) {
-        return new SmartThief(new Coords(0, 0), 1); // TODO
+        Iterator<String> stringIterator = Arrays.stream(splitString).iterator();
+        Coords coords = Coords.fromString(stringIterator.next(), stringIterator.next());
+        int speed = Integer.parseInt(stringIterator.next());
+        Direction direction = Direction.fromString(stringIterator.next());
+        return new SmartThief(coords, speed, direction);
     }
 
     private static Player deserialisePlayer(String[] splitString) {
-        return new Player(new Coords(0, 0), 1); // TODO
+        Iterator<String> stringIterator = Arrays.stream(splitString).iterator();
+        Coords coords = Coords.fromString(stringIterator.next(), stringIterator.next());
+        int speed = Integer.parseInt(stringIterator.next());
+        Direction direction = Direction.fromString(stringIterator.next());
+        //TODO direction
+        return new Player(coords, speed); // TODO
     }
 
     private static FlyingAssassin deserialiseFlyingAssassin(String[] splitString) {
-        return new FlyingAssassin(new Coords(0, 0), 1); // TODO
+        Iterator<String> stringIterator = Arrays.stream(splitString).iterator();
+        Coords coords = Coords.fromString(stringIterator.next(), stringIterator.next());
+        int speed = Integer.parseInt(stringIterator.next());
+        Direction direction = Direction.fromString(stringIterator.next());
+        //TODO direction
+        return new FlyingAssassin(coords, speed); // TODO
     }
 
     private static FloorFollowingThief deserialiseFloorFollowingThief(String[] splitString) {
-        return new FloorFollowingThief(new Coords(0, 0), 1); // TODO
+        Iterator<String> stringIterator = Arrays.stream(splitString).iterator();
+        Coords coords = Coords.fromString(stringIterator.next(), stringIterator.next());
+        int speed = Integer.parseInt(stringIterator.next());
+        Direction direction = Direction.fromString(stringIterator.next());
+        Colour colour = Colour.fromChar(stringIterator.next().charAt(0));
+        //TODO coords
+        //TODO speed
+        //TODO direction
+        //TODO colour
+        return new FloorFollowingThief(coords, speed, colour, direction);
     }
 
     private static Lever deserialiseLever(String[] splitString) {
-        return new Lever(new Coords(0, 0)); // TODO
+        Iterator<String> stringIterator = Arrays.stream(splitString).iterator();
+        Coords coords = Coords.fromString(stringIterator.next(), stringIterator.next());
+        Colour colour = Colour.fromChar(stringIterator.next().charAt(0));
+        //TODO colour
+        return new Lever(coords); // TODO
     }
 
     private static Loot deserialiseLoot(String[] splitString) {
-        return new Loot(new Coords(0, 0)); // TODO
+        Iterator<String> stringIterator = Arrays.stream(splitString).iterator();
+        Coords coords = Coords.fromString(stringIterator.next(), stringIterator.next());
+        //TODO coords
+        //TODO lootType
+        return new Loot(coords); // TODO
     }
 
-    private static Gate deserialiseGate(String[] args) {
-        return new Gate(new Coords(0, 0)); // TODO
+    private static Gate deserialiseGate(String[] splitString) {
+        Iterator<String> stringIterator = Arrays.stream(splitString).iterator();
+        Coords coords = Coords.fromString(stringIterator.next(), stringIterator.next());
+        Colour colour = Colour.fromChar(stringIterator.next().charAt(0));
+        //TODO colour
+        return new Gate(coords); // TODO
     }
 
-    private static Clock deserialiseClock(String[] args) {
-        return new Clock(new Coords(0, 0)); // TODO
+    private static Clock deserialiseClock(String[] splitString) {
+        Iterator<String> stringIterator = Arrays.stream(splitString).iterator();
+        Coords coords = Coords.fromString(stringIterator.next(), stringIterator.next());
+        return new Clock(coords); // TODO
     }
+
+    private static Bomb deserialiseBomb(String[] splitString) {
+        Iterator<String> stringIterator = Arrays.stream(splitString).iterator();
+        Coords coords = Coords.fromString(stringIterator.next(), stringIterator.next());
+        //TODO detonated boolean
+        //TODO timer (in ms)
+        return new Bomb(coords); // TODO
+    }
+
+    // TODO: private static BombExplosion deserialiseExplosion(String[] splitString) {}
 
     private static Tile deserialiseTile(String arg) throws ParseTileColourException {
         // TODO: can either throw exception in fromChar(), or check length
