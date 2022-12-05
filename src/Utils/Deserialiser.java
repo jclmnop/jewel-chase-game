@@ -118,10 +118,6 @@ public class Deserialiser {
         int speed = Integer.parseInt(stringIterator.next());
         Direction direction = Direction.fromString(stringIterator.next());
         Colour colour = Colour.fromChar(stringIterator.next().charAt(0));
-        //TODO coords
-        //TODO speed
-        //TODO direction
-        //TODO colour
         return new FloorFollowingThief(coords, speed, colour, direction);
     }
 

@@ -1,13 +1,16 @@
 package Utils;
 
+import DataTypes.GameParams;
 import Game.PlayerProfile;
 import Game.Game;
+import Game.Tile;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -40,7 +43,7 @@ public class GameFileHandler {
         Game.setPlayerProfile(profile);
     }
 
-    public static ArrayList<String> getAvailableLevels(PlayerProfile playerProfile) throws RuntimeException {
+    public static ArrayList<String> getAvailableLevels(PlayerProfile playerProfile) {
         int playerMaxLevel = playerProfile.getMaxLevel();
         File[] levelFiles = new File(LEVEL_FILES_PATH).listFiles();
 
@@ -65,12 +68,63 @@ public class GameFileHandler {
             .filter(f -> Integer.parseInt(f) <= playerMaxLevel)
             .collect(Collectors.toCollection(ArrayList::new));
     }
+
+    public static GameParams loadLevelFile(int levelNumber, PlayerProfile playerProfile) throws IOException {
+        if (levelNumber > playerProfile.getMaxLevel()) {
+            throw new RuntimeException(String.format(
+                "Max level for %s is %s, but selected level is %s",
+                playerProfile.getPlayerName(),
+                playerProfile.getMaxLevel(),
+                levelNumber
+            ));
+        }
+        Path levelFilePath = Path.of(LEVEL_FILES_PATH + levelNumber + ".txt");
+        String levelFileString = Files.readString(levelFilePath);
+        return GameFileHandler.loadLevelFromString(levelFileString);
+    }
+
+    public static GameParams loadSaveFile(String saveFileName, PlayerProfile playerProfile) throws IOException {
+        Path saveFilePath = Path.of(String.format(
+            "%s%s/%s.txt",
+            SAVE_GAME_PATH,
+            playerProfile.getPlayerName(),
+            saveFileName
+        ));
+        String saveFileString = Files.readString(saveFilePath);
+        return GameFileHandler.loadLevelFromString(saveFileString);
+    }
+
     //TODO: getAvailableSaves(playerProfile)
     //TODO: getAvailableProfiles()
-    //TODO: loadLevelFile(levelName)
-    //TODO: loadSaveFile(saveFileName, playerProfile)
     //TODO: saveGame(saveFileName, playerProfile)
     //TODO: loadHighScoreTable(levelName)
     //TODO: savePlayerProfile(playerProfile)
     //TODO: newPlayerProfile(playerName)
+
+    private static GameParams loadLevelFromString(String levelString) {
+        Iterator<String> levelStringLines = levelString.lines().iterator();
+        GameParams gameParams = Deserialiser.deserialiseGameParams(levelStringLines.next());
+        levelStringLines.next(); // Skip blank line
+
+        StringBuilder boardStringBuilder = new StringBuilder();
+        String nextLine = levelStringLines.next();
+        while (!nextLine.isBlank()) {
+            boardStringBuilder.append(nextLine).append("\n");
+            nextLine = levelStringLines.next();
+        }
+
+        Tile[][] board = BoardLoader.loadBoard(boardStringBuilder.toString());
+        int height = board.length;
+        int width = board[0].length;
+        Tile.newBoard(board, width, height);
+
+        while (levelStringLines.hasNext()) {
+            nextLine = levelStringLines.next();
+            if (!nextLine.isBlank()) {
+                Deserialiser.deserialiseObject(nextLine);
+            }
+        }
+
+        return gameParams;
+    }
 }
