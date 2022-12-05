@@ -58,7 +58,18 @@ public class GameFileHandlerTest {
         Assertions.assertTrue(Entity.getEntities().get(0) instanceof Player);
         Assertions.assertTrue(Entity.getEntities().get(1) instanceof SmartThief);
         Assertions.assertTrue(Entity.getEntities().get(2) instanceof FloorFollowingThief);
+    }
 
+    @Test
+    public void testCantLoadLevelHigherThanMax() {
+        Assertions.assertThrows(
+            RuntimeException.class,
+            () -> {
+                GameFileHandler.loadLevelFile(
+                    Game.getPlayerProfile().getMaxLevel() + 1, Game.getPlayerProfile()
+                );
+            }
+        );
     }
 
 }
