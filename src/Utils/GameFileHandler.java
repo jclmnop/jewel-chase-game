@@ -16,6 +16,10 @@ import java.util.Iterator;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+//TODO: getAvailableProfiles()
+//TODO: loadHighScoreTable(levelName)
+//TODO: savePlayerProfile(playerProfile)
+//TODO: newPlayerProfile(playerName)
 /**
  * Utility class for handling game files such as saves, levels, profiles, etc.
  * @author Jonny
@@ -67,6 +71,23 @@ public class GameFileHandler {
             .sorted()
             .map(f -> f.split("\\.")[0])
             .filter(f -> Integer.parseInt(f) <= playerMaxLevel)
+            .collect(Collectors.toCollection(ArrayList::new));
+    }
+
+    public static ArrayList<String> getAvailableSaveFiles(PlayerProfile playerProfile) throws IOException {
+        String playerName = playerProfile.getPlayerName();
+        String saveDirectory = SAVE_GAME_PATH + playerName;
+        File[] saveFiles = new File(saveDirectory).listFiles();
+
+        if (saveFiles == null) {
+            return new ArrayList<>();
+        }
+
+        return Stream.of(saveFiles)
+            .sorted()
+            .filter(File::isFile)
+            .map(File::getName)
+            .map(f -> f.split("\\.")[0])
             .collect(Collectors.toCollection(ArrayList::new));
     }
 
@@ -125,11 +146,6 @@ public class GameFileHandler {
         ));
     }
 
-    //TODO: getAvailableSaves(playerProfile)
-    //TODO: getAvailableProfiles()
-    //TODO: loadHighScoreTable(levelName)
-    //TODO: savePlayerProfile(playerProfile)
-    //TODO: newPlayerProfile(playerName)
 
     private static GameParams loadLevelFromString(String levelString) {
         Iterator<String> levelStringLines = levelString.lines().iterator();

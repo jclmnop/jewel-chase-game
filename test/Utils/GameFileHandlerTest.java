@@ -83,6 +83,12 @@ public class GameFileHandlerTest {
                 Entity.getEntities().get(i).serialise()
             );
         }
+
+        var saveFiles = GameFileHandler.getAvailableSaveFiles(
+            Game.getPlayerProfile()
+        );
+
+        Assertions.assertTrue(saveFiles.contains(TEST_SAVE_NAME));
     }
 
     @Test
