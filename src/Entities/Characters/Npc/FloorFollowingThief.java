@@ -57,7 +57,14 @@ public class FloorFollowingThief extends Npc {
     @Override
     public String serialise() {
         // TODO
-        return null;
+        return String.format(
+            "%s %s %s %s %s",
+            this.getClass().getSimpleName(),
+            this.coords.serialise(),
+            this.speed,
+            this.colour,
+            this.currentDirection
+        );
     }
 
 }

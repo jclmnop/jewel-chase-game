@@ -67,6 +67,14 @@ public class Game {
     }
 
     /**
+     * Get the current level number.
+     * @return Number of the level currently being played.
+     */
+    public static int getCurrentLevelNumber() {
+        return currentLevelNumber;
+    }
+
+    /**
      * Adjusts the current score
      * @param scoreChange Positive int to increase score, negative int to reduce
      *                    score.

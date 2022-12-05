@@ -2,6 +2,7 @@ package Utils;
 
 import DataTypes.Exception.DeserialiseException;
 import DataTypes.GameParams;
+import Entities.Entity;
 import Game.PlayerProfile;
 import Game.Game;
 import Game.Tile;
@@ -86,6 +87,24 @@ public class GameFileHandler {
         ));
         String saveFileString = Files.readString(saveFilePath);
         return GameFileHandler.loadLevelFromString(saveFileString);
+    }
+
+    public static void saveGame(String saveFileName, PlayerProfile playerProfile) {
+        // TODO build string: gameParams, blank line, board, blank line, entities
+        StringBuilder saveGameStringBuilder = new StringBuilder();
+        GameParams gameParams = new GameParams(
+            Game.getTimeRemaining(),
+            Game.getScore(),
+            false,
+            Game.getCurrentLevelNumber()
+        );
+        saveGameStringBuilder.append(gameParams.serialise()).append("\n");
+        saveGameStringBuilder.append("\n");
+        saveGameStringBuilder.append(Tile.serialiseBoard()).append("\n");
+        for (Entity entity : Entity.getEntities()) {
+            saveGameStringBuilder.append(entity.serialise()).append("\n");
+        }
+        System.out.println(saveGameStringBuilder.toString());
     }
 
     //TODO: getAvailableSaves(playerProfile)

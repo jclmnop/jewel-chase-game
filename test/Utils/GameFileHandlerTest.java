@@ -35,7 +35,6 @@ public class GameFileHandlerTest {
             Integer.parseInt(levels.get(levels.size()-1))
         );
 
-
         try {
             GameParams gameParams = GameFileHandler.loadLevelFile(
                 Integer.parseInt(levels.get(0)),
@@ -65,6 +64,8 @@ public class GameFileHandlerTest {
         Assertions.assertTrue(Entity.getEntities().get(0) instanceof Player);
         Assertions.assertTrue(Entity.getEntities().get(1) instanceof SmartThief);
         Assertions.assertTrue(Entity.getEntities().get(2) instanceof FloorFollowingThief);
+
+        GameFileHandler.saveGame("", Game.getPlayerProfile());
     }
 
     @Test

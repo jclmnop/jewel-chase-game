@@ -57,7 +57,8 @@ public record GameParams(int startTime, int startScore, boolean isHeadless, int 
     @Override
     public String serialise() {
         return String.format(
-            "%s %s",
+            "%s %s %s",
+            this.levelNumber,
             this.startTime,
             this.startScore
         );
