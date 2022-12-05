@@ -48,6 +48,21 @@ public class GameFileHandler {
         Files.writeString(profilePath, playerProfile.serialise());
     }
 
+    public static ArrayList<String> getAvailableProfiles() {
+        File[] profileFiles = new File(PLAYER_PROFILES_PATH).listFiles();
+
+        if (profileFiles == null) {
+            return new ArrayList<>();
+        }
+
+        return Stream.of(profileFiles)
+            .sorted()
+            .filter(File::isFile)
+            .map(File::getName)
+            .map(f -> f.split("\\.")[0])
+            .collect(Collectors.toCollection(ArrayList::new));
+    }
+
     public static ArrayList<String> getAvailableLevels(PlayerProfile playerProfile) {
         int playerMaxLevel = playerProfile.getMaxLevel();
         File[] levelFiles = new File(LEVEL_FILES_PATH).listFiles();

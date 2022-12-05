@@ -87,8 +87,10 @@ public class GameFileHandlerTest {
         var saveFiles = GameFileHandler.getAvailableSaveFiles(
             Game.getPlayerProfile()
         );
+        var profileFiles = GameFileHandler.getAvailableProfiles();
 
         Assertions.assertTrue(saveFiles.contains(TEST_SAVE_NAME));
+        Assertions.assertTrue(profileFiles.contains(PLAYER_NAME));
     }
 
     @Test
