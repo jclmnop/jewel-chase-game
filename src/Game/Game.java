@@ -36,6 +36,7 @@ public class Game {
     private static int timeRemaining = 0;
     private static int currentLevelNumber;
     private static boolean running = false;
+    private static boolean paused = false;
     private static boolean headless = false;
     private static long lastTickTime = 0;
     private static long lastCountdownTime = 0;
@@ -93,6 +94,22 @@ public class Game {
         if (Game.timeRemaining < 0) {
             Game.timeRemaining = 0;
         }
+    }
+
+    /**
+     * Set whether or not the game loop is paused.
+     * Pausing the game loop temporarily freezes execution until it's unpaused.
+     * @param paused true to pause, false to unpause.
+     */
+    public static void setPaused(boolean paused) {
+        Game.paused = paused;
+    }
+
+    /**
+     * Toggle whether or not the game is paused
+     */
+    public static void togglePaused() {
+        Game.paused = !paused;
     }
 
     /**
@@ -155,6 +172,8 @@ public class Game {
         if (playerInput != null) {
             // Update the most recent movement input for this player
             Game.currentMovementInputs.put(playerInput.player(), playerInput.direction());
+        } else if (keyPressed == KeyCode.SPACE) {
+            Game.togglePaused();
         }
     }
 
@@ -219,9 +238,11 @@ public class Game {
         System.out.println("gameLoop started.");
         while (Game.isRunning()) {
             //TODO: check for player movement inputs, add to playerInputs
-            Game.tick();
-            if (!Game.headless) {
-                Platform.runLater(GameRenderer::render);
+            if (!Game.paused) {
+                Game.tick();
+                if (!Game.headless) {
+                    Platform.runLater(GameRenderer::render);
+                }
             }
         }
         System.out.println("gameLoop ended.");
