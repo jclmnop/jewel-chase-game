@@ -207,7 +207,7 @@ public class Game {
             GameRenderer.renderWin();
         }
         // TODO: save highscore
-        // TODO: update playerProfile?
+        // TODO: update playerProfile
     }
 
     public static void lose() {
@@ -215,14 +215,11 @@ public class Game {
         if (!Game.headless) {
             GameRenderer.renderLose();
         }
-
-        // TODO: i think the spec says to save highscore when player loses but
-        //       that makes no sense to me? if we confirm it's in the spec though
-        //       probably best to implement it anyway
     }
 
     public static void quitGame() throws IOException {
         Game.endGame();
+        Game.resetGame();
         App.returnToMainMenu();
     }
 
@@ -246,7 +243,9 @@ public class Game {
             }
         }
         System.out.println("gameLoop ended.");
-        Game.resetGame();
+        if (headless) {
+            Game.resetGame();
+        }
     }
 
     private static void tick() {

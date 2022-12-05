@@ -9,6 +9,7 @@ import Entities.Characters.Player;
 import Entities.Characters.Npc.SmartThief;
 import Entities.Items.Bomb;
 import Entities.Items.Collectable.Clock;
+import Entities.Items.Door;
 import Entities.Items.Gate;
 import Entities.Items.Collectable.Lever;
 import Entities.Items.Collectable.Loot;
@@ -58,6 +59,9 @@ public class Deserialiser {
                 }
                 case "Bomb" -> {
                     return Deserialiser.deserialiseBomb(args);
+                }
+                case "Door" -> {
+                    return Deserialiser.deserialiseDoor(args);
                 }
                 // TODO: case "Explosion -> {}"
                 default -> {
@@ -172,6 +176,13 @@ public class Deserialiser {
         stringIterator.next(); // Skip type name
         Coords coords = Coords.fromString(stringIterator.next(), stringIterator.next());
         return new Clock(coords); // TODO
+    }
+
+    private static Door deserialiseDoor(String[] splitString) {
+        Iterator<String> stringIterator = Arrays.stream(splitString).iterator();
+        stringIterator.next(); // Skip type name
+        Coords coords = Coords.fromString(stringIterator.next(), stringIterator.next());
+        return new Door(coords); // TODO
     }
 
     private static Bomb deserialiseBomb(String[] splitString) {

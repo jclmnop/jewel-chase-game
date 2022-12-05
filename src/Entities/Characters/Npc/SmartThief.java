@@ -11,7 +11,7 @@ import Game.Tile;
 
 // TODO: remove javadoc from private methods (can leave this until last minute)
 public class SmartThief extends Npc {
-    private static final String IMAGE_PATH = Character.RESOURCES_PATH + "liam_face.png";
+    private static final String IMAGE_PATH = Character.RESOURCES_PATH + "faron.png";
     // Current desired item.
     private Item item;
 

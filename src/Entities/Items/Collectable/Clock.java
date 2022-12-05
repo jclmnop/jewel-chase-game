@@ -1,10 +1,13 @@
 package Entities.Items.Collectable;
 
 import DataTypes.Coords;
+import Entities.Items.Item;
 
 public class Clock extends Collectable {
+    private static final String IMAGE_PATH = Item.RESOURCES_PATH + "clock.png";
     public Clock(Coords coords) {
         super(CollisionType.CLOCK, false, coords);
+        this.imagePath = IMAGE_PATH;
     }
 
     /**
@@ -14,7 +17,10 @@ public class Clock extends Collectable {
      */
     @Override
     public String serialise() {
-        // TODO
-        return null;
+        return String.format(
+            "%s %s",
+            this.getClass().getSimpleName(),
+            this.coords.serialise()
+        );
     }
 }

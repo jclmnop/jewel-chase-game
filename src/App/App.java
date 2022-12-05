@@ -9,6 +9,7 @@ import DataTypes.GameParams;
 import Entities.Characters.Npc.FloorFollowingThief;
 import Entities.Characters.Player;
 import Utils.BoardLoader;
+import Utils.GameFileHandler;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -144,15 +145,17 @@ public class App extends Application {
             Platform.exit();
             System.exit(0);
         });
-        // TODO: this is just here for testing without level files
-        Tile.newBoard(BoardLoader.loadBoard(BOARD_STR), 5, 3);
-        new Player(new Coords(0, 0), 1);
-        new FloorFollowingThief(new Coords(1, 0), 1, Colour.YELLOW, Direction.RIGHT);
+
+        // TODO: this is just here for testing without level file menu
+        GameFileHandler.loadPlayerProfile("test");
+        GameParams gameParams = GameFileHandler.loadLevelFile(
+            0, Game.getPlayerProfile()
+        );
+        //
         App.stage.getScene().setOnKeyPressed(
             (key) -> Game.registerNewMovementInput(key.getCode())
         );
 
-        //
-        Thread gameThread = Game.startGame(new GameParams(10, 0, 0)); // TODO: get gameParams from level file
+        Thread gameThread = Game.startGame(gameParams);
     }
 }

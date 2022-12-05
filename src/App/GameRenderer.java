@@ -17,6 +17,7 @@ import Game.Tile;
 
 import java.awt.event.KeyEvent;
 import java.io.IOException;
+import java.util.ConcurrentModificationException;
 
 public class GameRenderer {
     public static final double BOARD_WIDTH = 1000;
@@ -150,10 +151,15 @@ public class GameRenderer {
         entityGridCell.setMinSize(tileDimensions, tileDimensions);
         entityGridCell.setAlignment(Pos.CENTER);
 
-        for (Entity entity : tile.getEntities()) {
-            entityGridCell.getChildren().add(
-                this.renderEntity(entity, tileDimensions)
-            );
+        try {
+            for (Entity entity : tile.getEntities()) {
+                entityGridCell.getChildren().add(
+                    this.renderEntity(entity, tileDimensions)
+                );
+            }
+        } catch (ConcurrentModificationException exception) {
+            System.out.println("No time for thread safety");
+            return this.renderEntities(tile, tileDimensions);
         }
 
         return entityGridCell;

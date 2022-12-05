@@ -5,6 +5,7 @@ import DataTypes.CollisionEvent;
 import DataTypes.Coords;
 import Entities.Characters.Character;
 import Entities.Characters.Player;
+import Entities.Items.Collectable.Collectable;
 import Interfaces.Renderable;
 import Interfaces.Serialisable;
 import Game.Game;
@@ -108,6 +109,7 @@ public abstract class Entity implements Serialisable, Renderable {
             CollisionEvent collisionEvent = CollisionEvent.calculateCollisionEvent(
                 collision
             );
+            System.out.println("COLLISION: " + collisionEvent);
             switch (collisionEvent) {
                 case NOTHING -> {}
                 case LOOT_STOLEN -> {
@@ -150,11 +152,15 @@ public abstract class Entity implements Serialisable, Renderable {
                 }
                 case LOSE -> {
                     //TODO: finish implementing Game.lose()
-                    Game.lose();
+                    if (Entity.getEntitiesOfType(Collectable.class).isEmpty()) {
+                        Game.lose();
+                    }
                 }
                 case WIN -> {
                     //TODO: finish implementing Game.win()
-                    Game.win();
+                    if (Entity.getEntitiesOfType(Collectable.class).isEmpty()) {
+                        Game.win();
+                    }
                 }
             }
         }
