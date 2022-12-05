@@ -1,5 +1,6 @@
 package Utils;
 
+import DataTypes.Exception.DeserialiseException;
 import DataTypes.GameParams;
 import Game.PlayerProfile;
 import Game.Game;
@@ -33,6 +34,17 @@ public class GameFileHandler {
         GameFileHandler.loadPlayerProfile("test");
         var levels = GameFileHandler.getAvailableLevels(Game.getPlayerProfile());
         System.out.println(levels);
+        try {
+            GameFileHandler.loadLevelFile(Integer.parseInt(levels.get(0)), Game.getPlayerProfile());
+        } catch (DeserialiseException deserialiseException) {
+            System.out.println(deserialiseException.getMessage());
+            Exception originalException = deserialiseException.getOriginalException();
+            if (originalException.getMessage() == null) {
+                System.out.println(originalException);
+            } else {
+                System.out.println(originalException.getMessage());
+            }
+        }
     }
 
     public static void loadPlayerProfile(String playerName) throws IOException {

@@ -25,7 +25,7 @@ public record GameParams(int startTime, int startScore, boolean isHeadless, int 
      * @param startScore Start score, usually retrieved from save game file.
      */
     public GameParams(int startTime, int startScore, int levelNumber) {
-        this(startTime, startScore, false, 0);
+        this(startTime, startScore, false, levelNumber);
     }
 
 

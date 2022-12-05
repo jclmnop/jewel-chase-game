@@ -12,4 +12,8 @@ public class DeserialiseException extends RuntimeException {
         super(msg);
         this.originalException = originalException;
     }
+
+    public Exception getOriginalException() {
+        return originalException;
+    }
 }
