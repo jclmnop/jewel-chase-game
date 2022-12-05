@@ -78,9 +78,10 @@ public class Deserialiser {
     // TODO: deserialiseGameParams
     public static GameParams deserialiseGameParams(String gameParamString) {
         String[] args = gameParamString.split(" ");
-        int time = Integer.parseInt(args[0]);
-        int score = (args.length > 1) ? Integer.parseInt(args[1]) : 0;
-        return new GameParams(time, score);
+        int time = Integer.parseInt(args[1]);
+        int levelNumber = Integer.parseInt(args[0]);
+        int score = (args.length > 2) ? Integer.parseInt(args[2]) : 0;
+        return new GameParams(time, score, levelNumber);
     }
 
     // TODO: implement these methods once constructors for each class have

@@ -153,6 +153,6 @@ public class App extends Application {
         );
 
         //
-        Thread gameThread = Game.startGame(new GameParams(10, 0)); // TODO: get gameParams from level file
+        Thread gameThread = Game.startGame(new GameParams(10, 0, 0)); // TODO: get gameParams from level file
     }
 }

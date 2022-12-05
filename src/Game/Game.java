@@ -34,6 +34,7 @@ public class Game {
     private static final HashMap<Player, Direction> currentMovementInputs = new HashMap<>();
     private static int score = 0;
     private static int timeRemaining = 0;
+    private static int currentLevelNumber;
     private static boolean running = false;
     private static boolean headless = false;
     private static long lastTickTime = 0;
@@ -167,6 +168,7 @@ public class Game {
         Game.score = gameParams.startScore();
         Game.timeRemaining = gameParams.startTime();
         Game.headless = gameParams.isHeadless();
+        Game.currentLevelNumber = gameParams.levelNumber();
         Thread gameLoopThread = new Thread(Game::gameLoop);
         gameLoopThread.start();
         return gameLoopThread;
@@ -308,6 +310,7 @@ public class Game {
         Game.timeRemaining = 0;
         Game.score = 0;
         Game.headless = false;
+        Game.currentLevelNumber = 0;
         Game.currentMovementInputs.clear();
         Game.playerMovementKeys.clear();
         Entity.clearEntities();
