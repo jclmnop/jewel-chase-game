@@ -17,12 +17,13 @@ import java.util.ArrayList;
 
 public class GameFileHandlerTest {
     public static final String PLAYER_NAME = "test";
+    public static final String TEST_SAVE_NAME = "test save";
 
     @Test @BeforeEach
     public void testLoadPlayerProfile() throws IOException {
+        Entity.clearEntities();
         GameFileHandler.loadPlayerProfile(PLAYER_NAME);
         Assertions.assertEquals(PLAYER_NAME, Game.getPlayerProfile().getPlayerName());
-
     }
 
     @Test
@@ -65,7 +66,23 @@ public class GameFileHandlerTest {
         Assertions.assertTrue(Entity.getEntities().get(1) instanceof SmartThief);
         Assertions.assertTrue(Entity.getEntities().get(2) instanceof FloorFollowingThief);
 
-        GameFileHandler.saveGame("", Game.getPlayerProfile());
+        GameFileHandler.saveGame(TEST_SAVE_NAME, Game.getPlayerProfile());
+    }
+
+    @Test
+    public void testSaveAndLoad() throws IOException {
+        GameFileHandler.loadLevelFile(0, Game.getPlayerProfile());
+        ArrayList<Entity> entities = (ArrayList<Entity>) Entity.getEntities().clone();
+        GameFileHandler.saveGame(TEST_SAVE_NAME, Game.getPlayerProfile());
+        Entity.clearEntities();
+        GameFileHandler.loadSaveFile(TEST_SAVE_NAME, Game.getPlayerProfile());
+
+        for (int i = 0; i < entities.size(); i++) {
+            Assertions.assertEquals(
+                entities.get(i).serialise(),
+                Entity.getEntities().get(i).serialise()
+            );
+        }
     }
 
     @Test

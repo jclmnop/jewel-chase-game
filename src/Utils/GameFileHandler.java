@@ -79,17 +79,14 @@ public class GameFileHandler {
     }
 
     public static GameParams loadSaveFile(String saveFileName, PlayerProfile playerProfile) throws IOException {
-        Path saveFilePath = Path.of(String.format(
-            "%s%s/%s.txt",
-            SAVE_GAME_PATH,
-            playerProfile.getPlayerName(),
-            saveFileName
-        ));
+        Path saveFilePath = GameFileHandler.computeSaveGameFilePath(
+            saveFileName, playerProfile
+        );
         String saveFileString = Files.readString(saveFilePath);
         return GameFileHandler.loadLevelFromString(saveFileString);
     }
 
-    public static void saveGame(String saveFileName, PlayerProfile playerProfile) {
+    public static void saveGame(String saveFileName, PlayerProfile playerProfile) throws IOException {
         // TODO build string: gameParams, blank line, board, blank line, entities
         StringBuilder saveGameStringBuilder = new StringBuilder();
         GameParams gameParams = new GameParams(
@@ -104,12 +101,26 @@ public class GameFileHandler {
         for (Entity entity : Entity.getEntities()) {
             saveGameStringBuilder.append(entity.serialise()).append("\n");
         }
-        System.out.println(saveGameStringBuilder.toString());
+        Path saveFilePath = GameFileHandler.computeSaveGameFilePath(
+            saveFileName, playerProfile
+        );
+        Files.writeString(saveFilePath, saveGameStringBuilder.toString());
+    }
+
+    private static Path computeSaveGameFilePath(
+        String saveFileName,
+        PlayerProfile playerProfile
+    ) {
+       return Path.of(String.format(
+            "%s%s/%s.txt",
+            SAVE_GAME_PATH,
+            playerProfile.getPlayerName(),
+            saveFileName
+        ));
     }
 
     //TODO: getAvailableSaves(playerProfile)
     //TODO: getAvailableProfiles()
-    //TODO: saveGame(saveFileName, playerProfile)
     //TODO: loadHighScoreTable(levelName)
     //TODO: savePlayerProfile(playerProfile)
     //TODO: newPlayerProfile(playerName)
