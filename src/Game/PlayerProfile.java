@@ -2,6 +2,9 @@ package Game;
 
 import Interfaces.Serialisable;
 
+import java.util.Arrays;
+import java.util.Iterator;
+
 /**
  * Stores information about a player.
  * @author Jonny
@@ -30,6 +33,19 @@ public class PlayerProfile implements Serialisable {
     public PlayerProfile(String playerName, int maxLevel) {
         this(playerName);
         this.maxLevel = maxLevel;
+    }
+
+    public static PlayerProfile fromString(String str) throws IllegalArgumentException {
+        try {
+            Iterator<String> args = Arrays.stream(str.split(" ")).iterator();
+            String playerName = args.next();
+            int maxLevel = Integer.parseInt(args.next());
+            return new PlayerProfile(playerName, maxLevel);
+        } catch (RuntimeException e) {
+            throw new IllegalArgumentException(
+                "Invalid player profile string: '" + str + "'"
+            );
+        }
     }
 
     /**
