@@ -33,9 +33,15 @@ public class GameFileHandler {
     public static void loadPlayerProfile(String playerName) throws IOException {
         Path profilePath = Path.of(PLAYER_PROFILES_PATH + playerName + ".txt");
         String profileFile = Files.readString(profilePath);
-        System.out.println(profileFile);
         PlayerProfile profile = PlayerProfile.fromString(profileFile);
         Game.setPlayerProfile(profile);
+    }
+
+    public static void savePlayerProfile(PlayerProfile playerProfile) throws IOException {
+        Path profilePath = Path.of(
+            PLAYER_PROFILES_PATH + playerProfile.getPlayerName() + ".txt"
+        );
+        Files.writeString(profilePath, playerProfile.serialise());
     }
 
     public static ArrayList<String> getAvailableLevels(PlayerProfile playerProfile) {
