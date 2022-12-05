@@ -16,10 +16,7 @@ import java.util.Iterator;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-//TODO: getAvailableProfiles()
 //TODO: loadHighScoreTable(levelName)
-//TODO: savePlayerProfile(playerProfile)
-//TODO: newPlayerProfile(playerName)
 /**
  * Utility class for handling game files such as saves, levels, profiles, etc.
  * @author Jonny
@@ -46,6 +43,13 @@ public class GameFileHandler {
             PLAYER_PROFILES_PATH + playerProfile.getPlayerName() + ".txt"
         );
         Files.writeString(profilePath, playerProfile.serialise());
+    }
+
+    public static void newPlayerProfile(String playerName) throws IOException {
+        if (!GameFileHandler.getAvailableProfiles().contains(playerName)) {
+            PlayerProfile playerProfile = new PlayerProfile(playerName);
+            GameFileHandler.savePlayerProfile(playerProfile);
+        }
     }
 
     public static ArrayList<String> getAvailableProfiles() {
