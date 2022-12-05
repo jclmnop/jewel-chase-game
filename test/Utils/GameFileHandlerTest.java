@@ -2,6 +2,7 @@ package Utils;
 
 import DataTypes.Coords;
 import DataTypes.Exception.DeserialiseException;
+import DataTypes.GameParams;
 import Entities.Characters.Npc.FloorFollowingThief;
 import Entities.Characters.Npc.SmartThief;
 import Entities.Characters.Player;
@@ -36,7 +37,13 @@ public class GameFileHandlerTest {
 
 
         try {
-            GameFileHandler.loadLevelFile(Integer.parseInt(levels.get(0)), Game.getPlayerProfile());
+            GameParams gameParams = GameFileHandler.loadLevelFile(
+                Integer.parseInt(levels.get(0)),
+                Game.getPlayerProfile()
+            );
+            Assertions.assertEquals(0, gameParams.levelNumber());
+            Assertions.assertEquals(100, gameParams.startTime());
+            Assertions.assertEquals(0, gameParams.startScore());
         } catch (DeserialiseException deserialiseException) {
             System.out.println(deserialiseException.getMessage());
             Exception originalException = deserialiseException.getOriginalException();
