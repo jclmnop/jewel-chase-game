@@ -31,6 +31,7 @@ public class App extends Application {
     public static final int WINDOW_HEIGHT = 800;
     public static final String MENU_FXML_PATH = "fxml/menu.fxml";
     public static final String GAME_FXML_PATH = "fxml/game.fxml";
+    public static final String LOAD_SAVE_FILE_FXML_PATH = "fxml/loadGameMenu.fxml";
     public static final String LEVEL_SELECT_FXML_PATH = "fxml/levelSelect.fxml";
     public static final String PLAYER_PROFILES_FXML_PATH = "fxml/playerProfiles.fxml";
     public static final String RESOURCES_PATH = "src/App/resources/";
@@ -161,7 +162,15 @@ public class App extends Application {
         gameThread.setPriority(6);
     }
 
-    public void levelSelect(ActionEvent actionEvent) throws IOException {
+    public void loadSaveFile() throws IOException {
+        if (Game.getPlayerProfile() == null) {
+            App.showAlert("Select a profile first.");
+        } else {
+            this.changeScene(LOAD_SAVE_FILE_FXML_PATH);
+        }
+    }
+
+    public void levelSelect() throws IOException {
         if (Game.getPlayerProfile() == null) {
             App.showAlert("Select a profile first.");
         } else {

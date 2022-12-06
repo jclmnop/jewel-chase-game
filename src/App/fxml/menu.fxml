@@ -36,7 +36,7 @@
             </HBox>
             <HBox prefHeight="100.0" prefWidth="200.0">
                <children>
-                  <Button fx:id="loadGameButton" alignment="CENTER" mnemonicParsing="false" prefHeight="95.0" prefWidth="385.0" text="LOAD GAME">
+                  <Button fx:id="loadGameButton" alignment="CENTER" mnemonicParsing="false" onAction="#loadSaveFile" prefHeight="95.0" prefWidth="385.0" text="LOAD GAME">
                      <font>
                         <Font name="Roboto Mono" size="13.0" />
                      </font>

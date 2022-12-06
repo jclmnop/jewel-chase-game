@@ -246,10 +246,11 @@ public class Game {
                 }
             } else {
                 Game.tick();
-                if (!Game.headless) {
-                    Platform.runLater(GameRenderer::render);
-                }
             }
+            if (!Game.headless) {
+                Platform.runLater(GameRenderer::render);
+            }
+            Game.checkForLoss();
         }
         System.out.println("gameLoop ended.");
         if (headless) {
@@ -274,7 +275,6 @@ public class Game {
         Game.timerCountdown();
 
         // Check if time has reached zero or all players are dead
-        Game.checkForLoss();
 
 //        System.out.println("Ticked.");
     }

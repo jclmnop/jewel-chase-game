@@ -80,12 +80,14 @@ public class GameRenderer {
     }
 
     public void saveGame() throws IOException {
-        Game.setPaused(true);
-        String saveGameName = App.getUserInput("Enter a name for this save slot", 20);
-        if (saveGameName != null) {
-            GameFileHandler.saveGame(saveGameName, Game.getPlayerProfile());
+        if (Game.isRunning()) {
+            Game.setPaused(true);
+            String saveGameName = App.getUserInput("Enter a name for this save slot", 20);
+            if (saveGameName != null) {
+                GameFileHandler.saveGame(saveGameName, Game.getPlayerProfile());
+            }
+            Game.setPaused(false);
         }
-        Game.setPaused(false);
     };
 
     public void quitGameButton() throws IOException {
