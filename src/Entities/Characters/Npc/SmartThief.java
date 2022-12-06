@@ -47,17 +47,15 @@ public class SmartThief extends Npc {
             }
         }
 
-        try {
+        if (this.path != null && !this.path.isEmpty()) {
             Coords nextCoords = this.path.peek();
             if (this.move(nextCoords)) {
                 this.path.poll();
             };
-        } catch (NullPointerException e) {
+        } else {
             // A new path could not be calculated
             this.moveRandomly();
         }
-
-        this.ticksSinceLastMove++;
     }
 
     private void moveRandomly() {
@@ -65,6 +63,7 @@ public class SmartThief extends Npc {
         ArrayList<Coords> notNullCoords =
             Arrays.stream(adjacentCoords.toArray())
                 .filter(Objects::nonNull)
+                .filter(c -> !Tile.isBlockedCoords(c))
                 .collect(Collectors.toCollection(ArrayList::new));
 
         if (!notNullCoords.isEmpty()) {
@@ -106,7 +105,7 @@ public class SmartThief extends Npc {
                 coords = c;
             }
         }
-
+        this.path.clear();
         // Implementation of queue in BFS algorithm.
         LinkedList<Node> queue = new LinkedList<Node>();
         queue.add(new Node(this.coords));
@@ -128,6 +127,7 @@ public class SmartThief extends Npc {
                     Node n = new Node(c);
                     n.parent = currNode;
                     queue.add(n);
+                    foundCoords.add(c);
                 }
             }
         }

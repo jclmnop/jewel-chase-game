@@ -109,7 +109,7 @@ public class Game {
      * Toggle whether or not the game is paused
      */
     public static void togglePaused() {
-        Game.paused = !paused;
+        Game.paused = !Game.paused;
     }
 
     /**
@@ -234,8 +234,13 @@ public class Game {
         Game.lastTickTime = now;
         System.out.println("gameLoop started.");
         while (Game.isRunning()) {
-            //TODO: check for player movement inputs, add to playerInputs
-            if (!Game.paused) {
+            if (Game.paused) {
+                try {
+                    Thread.sleep(MILLI_PER_TICK);
+                } catch (InterruptedException e) {
+                    System.out.println(e.getMessage());
+                }
+            } else {
                 Game.tick();
                 if (!Game.headless) {
                     Platform.runLater(GameRenderer::render);
@@ -249,14 +254,8 @@ public class Game {
     }
 
     private static void tick() {
-        // TODO: call every function that needs to be called per tick
         Game.moveNpcs();
-        // TODO: figure out how to get keyboard inputs passed to this function
-        //          - will also need a way to make sure player can't move *every* tick
-        //              - probably best to implement movement speed etc in player.tryMove()
-        //                then this function can just blindly player inputs etc
-        //          - maybe getInputs() and/or parseInput() methods?
-        // TODO: for co-op power-up item, need to differentiate between player1&2 keyboard inputs
+        //TODO handle bombs + explosions
         Game.processPlayerInputs();
 
         // Collisions must be processed *after* movements

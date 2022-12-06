@@ -157,5 +157,6 @@ public class App extends Application {
         );
 
         Thread gameThread = Game.startGame(gameParams);
+        gameThread.setPriority(6);
     }
 }

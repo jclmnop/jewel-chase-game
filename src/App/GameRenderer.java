@@ -159,7 +159,8 @@ public class GameRenderer {
             }
         } catch (ConcurrentModificationException exception) {
             System.out.println("No time for thread safety");
-            return this.renderEntities(tile, tileDimensions);
+//            exception.printStackTrace();
+//            return this.renderEntities(tile, tileDimensions);
         }
 
         return entityGridCell;
