@@ -40,8 +40,10 @@ public class PlayerProfileController {
             "Enter name for new profile",
             PLAYER_NAME_CHAR_LIMIT
         );
-        GameFileHandler.newPlayerProfile(newProfileName);
-        this.loadProfileMenu();
+        if (newProfileName != null) {
+            GameFileHandler.newPlayerProfile(newProfileName);
+            this.loadProfileMenu();
+        }
     }
 
     private void loadProfileMenu() {

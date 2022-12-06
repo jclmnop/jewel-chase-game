@@ -10,6 +10,7 @@ import Game.Tile;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -66,6 +67,10 @@ public class GameFileHandler {
         if (!GameFileHandler.getAvailableProfiles().contains(playerName)) {
             PlayerProfile playerProfile = new PlayerProfile(playerName);
             GameFileHandler.savePlayerProfile(playerProfile);
+            boolean mkdirSuccess = new File(SAVE_GAME_PATH + playerName).mkdir();
+            if (!mkdirSuccess) {
+                throw new NoSuchFileException(SAVE_GAME_PATH + playerName);
+            }
         }
     }
 
