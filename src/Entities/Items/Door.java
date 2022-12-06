@@ -3,8 +3,10 @@ package Entities.Items;
 import DataTypes.Coords;
 
 public class Door extends Item{
+    private static final String IMAGE_PATH = Item.RESOURCES_PATH + "door.png";
     public Door(Coords coords) {
         super(CollisionType.DOOR, false, coords);
+        this.imagePath = IMAGE_PATH;
     }
 
     /**
@@ -14,7 +16,10 @@ public class Door extends Item{
      */
     @Override
     public String serialise() {
-        // TODO
-        return null;
+        return String.format(
+            "%s %s",
+            this.getClass().getSimpleName(),
+            this.coords.serialise()
+        );
     }
 }

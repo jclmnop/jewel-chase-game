@@ -9,9 +9,14 @@ import Interfaces.Serialisable;
  * Contains a headless option for running without JavaFx.
  *
  * @author Jonny
- * @version 1.1
+ * @version 1.2
+ * @param isHeadless Whether to start in headless mode.
+ * @param levelNumber Number of the level being loaded.
+ * @param startScore Starting score if loading from save game.
+ * @param startTime Start time if loading from level/save file.
  */
-public record GameParams(int startTime, int startScore, boolean isHeadless) implements Serialisable {
+public record GameParams(int startTime, int startScore, boolean isHeadless, int levelNumber) implements Serialisable {
+
 
     /**
      * Create a GameParams object with isHeadless set to false and a custom
@@ -19,9 +24,20 @@ public record GameParams(int startTime, int startScore, boolean isHeadless) impl
      * @param startTime Start time for timer.
      * @param startScore Start score, usually retrieved from save game file.
      */
-    public GameParams(int startTime, int startScore) {
-        this(startTime, startScore, false);
+    public GameParams(int startTime, int startScore, int levelNumber) {
+        this(startTime, startScore, false, levelNumber);
     }
+
+
+    /**
+     * @param startTime Start time for timer.
+     * @param startScore Start score, usually retrieved from save game file.
+     * @param isHeadless Whether to start in headless mode without JavaFx
+     */
+    public GameParams(int startTime, int startScore, boolean isHeadless) {
+        this(startTime, startScore, isHeadless, 0);
+    }
+
 
     /**
      * Create a GameParams object with score set to zero and
@@ -30,7 +46,7 @@ public record GameParams(int startTime, int startScore, boolean isHeadless) impl
      * @param startTime Start time for timer.
      */
     public GameParams(int startTime) {
-        this(startTime, 0, false);
+        this(startTime, 0, false, 0);
     }
 
     /**
@@ -41,7 +57,8 @@ public record GameParams(int startTime, int startScore, boolean isHeadless) impl
     @Override
     public String serialise() {
         return String.format(
-            "%s %s",
+            "%s %s %s",
+            this.levelNumber,
             this.startTime,
             this.startScore
         );

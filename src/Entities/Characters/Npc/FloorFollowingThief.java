@@ -38,8 +38,8 @@ public class FloorFollowingThief extends Npc {
         boolean foundTile = false;
         int i = 0;
         while (!foundTile && i < MAXIMUM_ATTEMPTS) {
-            if (adjCoords.getTileInDirection(dir) != null) {
-                Coords nextCoords = adjCoords.getCoordsInDirection(dir);
+            Coords nextCoords = adjCoords.getCoordsInDirection(dir);
+            if (nextCoords != null && !Tile.isBlockedCoords(nextCoords)) {
                 this.move(nextCoords);
                 foundTile = true;
             } else {
@@ -57,7 +57,14 @@ public class FloorFollowingThief extends Npc {
     @Override
     public String serialise() {
         // TODO
-        return null;
+        return String.format(
+            "%s %s %s %s %s",
+            this.getClass().getSimpleName(),
+            this.coords.serialise(),
+            this.speed,
+            this.colour,
+            this.currentDirection
+        );
     }
 
 }

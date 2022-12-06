@@ -167,8 +167,14 @@ public class Tile implements Serialisable {
             || this.colours.c4().equals(colour);
     }
 
-    public void addEntity(Entity entity) {
-        this.entities.add(entity);
+    public void addEntity(Entity newEntity) {
+        for (Entity entityOnTile : this.entities) {
+            Entity.enqueCollision(
+                entityOnTile.getCoords(),
+                entityOnTile, newEntity
+            );
+        }
+        this.entities.add(newEntity);
     }
 
     public void removeEntity(Entity entity) {

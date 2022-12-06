@@ -6,6 +6,7 @@ import Entities.Entity;
 import java.util.ArrayList;
 
 public abstract class Item extends Entity {
+    public static final String RESOURCES_PATH = Entity.RESOURCES_PATH + "items/";
     public Item(CollisionType collisionType, boolean isBlocking, Coords coords) {
         super(collisionType, isBlocking, coords);
     }

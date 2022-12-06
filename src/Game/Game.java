@@ -34,10 +34,13 @@ public class Game {
     private static final HashMap<Player, Direction> currentMovementInputs = new HashMap<>();
     private static int score = 0;
     private static int timeRemaining = 0;
+    private static int currentLevelNumber;
     private static boolean running = false;
+    private static boolean paused = false;
     private static boolean headless = false;
     private static long lastTickTime = 0;
     private static long lastCountdownTime = 0;
+    private static PlayerProfile playerProfile;
 
     static {
         Game.PLAYER1_MOVEMENT_KEYS.put(KeyCode.UP, Direction.UP);
@@ -65,6 +68,14 @@ public class Game {
     }
 
     /**
+     * Get the current level number.
+     * @return Number of the level currently being played.
+     */
+    public static int getCurrentLevelNumber() {
+        return currentLevelNumber;
+    }
+
+    /**
      * Adjusts the current score
      * @param scoreChange Positive int to increase score, negative int to reduce
      *                    score.
@@ -83,6 +94,40 @@ public class Game {
         if (Game.timeRemaining < 0) {
             Game.timeRemaining = 0;
         }
+    }
+
+    /**
+     * Set whether or not the game loop is paused.
+     * Pausing the game loop temporarily freezes execution until it's unpaused.
+     * @param paused true to pause, false to unpause.
+     */
+    public static void setPaused(boolean paused) {
+        Game.paused = paused;
+    }
+
+    /**
+     * Toggle whether or not the game is paused
+     */
+    public static void togglePaused() {
+        Game.paused = !Game.paused;
+    }
+
+    /**
+     * Get the current player profile that's being used to load levels and
+     * save high scores.
+     * @return Current player profile.
+     */
+    public static PlayerProfile getPlayerProfile() {
+        return playerProfile;
+    }
+
+    /**
+     * Set the current player profile which will be used to load levels and
+     * save high scores.
+     * @param playerProfile Profile to use.
+     */
+    public static void setPlayerProfile(PlayerProfile playerProfile) {
+        Game.playerProfile = playerProfile;
     }
 
     /**
@@ -127,6 +172,8 @@ public class Game {
         if (playerInput != null) {
             // Update the most recent movement input for this player
             Game.currentMovementInputs.put(playerInput.player(), playerInput.direction());
+        } else if (keyPressed == KeyCode.SPACE) {
+            Game.togglePaused();
         }
     }
 
@@ -148,6 +195,7 @@ public class Game {
         Game.score = gameParams.startScore();
         Game.timeRemaining = gameParams.startTime();
         Game.headless = gameParams.isHeadless();
+        Game.currentLevelNumber = gameParams.levelNumber();
         Thread gameLoopThread = new Thread(Game::gameLoop);
         gameLoopThread.start();
         return gameLoopThread;
@@ -159,7 +207,7 @@ public class Game {
             GameRenderer.renderWin();
         }
         // TODO: save highscore
-        // TODO: update playerProfile?
+        // TODO: update playerProfile
     }
 
     public static void lose() {
@@ -167,14 +215,11 @@ public class Game {
         if (!Game.headless) {
             GameRenderer.renderLose();
         }
-
-        // TODO: i think the spec says to save highscore when player loses but
-        //       that makes no sense to me? if we confirm it's in the spec though
-        //       probably best to implement it anyway
     }
 
     public static void quitGame() throws IOException {
         Game.endGame();
+        Game.resetGame();
         App.returnToMainMenu();
     }
 
@@ -189,25 +234,28 @@ public class Game {
         Game.lastTickTime = now;
         System.out.println("gameLoop started.");
         while (Game.isRunning()) {
-            //TODO: check for player movement inputs, add to playerInputs
-            Game.tick();
-            if (!Game.headless) {
-                Platform.runLater(GameRenderer::render);
+            if (Game.paused) {
+                try {
+                    Thread.sleep(MILLI_PER_TICK);
+                } catch (InterruptedException e) {
+                    System.out.println(e.getMessage());
+                }
+            } else {
+                Game.tick();
+                if (!Game.headless) {
+                    Platform.runLater(GameRenderer::render);
+                }
             }
         }
         System.out.println("gameLoop ended.");
-        Game.resetGame();
+        if (headless) {
+            Game.resetGame();
+        }
     }
 
     private static void tick() {
-        // TODO: call every function that needs to be called per tick
         Game.moveNpcs();
-        // TODO: figure out how to get keyboard inputs passed to this function
-        //          - will also need a way to make sure player can't move *every* tick
-        //              - probably best to implement movement speed etc in player.tryMove()
-        //                then this function can just blindly player inputs etc
-        //          - maybe getInputs() and/or parseInput() methods?
-        // TODO: for co-op power-up item, need to differentiate between player1&2 keyboard inputs
+        //TODO handle bombs + explosions
         Game.processPlayerInputs();
 
         // Collisions must be processed *after* movements
@@ -289,6 +337,7 @@ public class Game {
         Game.timeRemaining = 0;
         Game.score = 0;
         Game.headless = false;
+        Game.currentLevelNumber = 0;
         Game.currentMovementInputs.clear();
         Game.playerMovementKeys.clear();
         Entity.clearEntities();

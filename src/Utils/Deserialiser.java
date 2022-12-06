@@ -9,6 +9,7 @@ import Entities.Characters.Player;
 import Entities.Characters.Npc.SmartThief;
 import Entities.Items.Bomb;
 import Entities.Items.Collectable.Clock;
+import Entities.Items.Door;
 import Entities.Items.Gate;
 import Entities.Items.Collectable.Lever;
 import Entities.Items.Collectable.Loot;
@@ -59,6 +60,9 @@ public class Deserialiser {
                 case "Bomb" -> {
                     return Deserialiser.deserialiseBomb(args);
                 }
+                case "Door" -> {
+                    return Deserialiser.deserialiseDoor(args);
+                }
                 // TODO: case "Explosion -> {}"
                 default -> {
                     throw new DeserialiseException(
@@ -72,15 +76,15 @@ public class Deserialiser {
                 e
             );
         }
-
     }
 
     // TODO: deserialiseGameParams
     public static GameParams deserialiseGameParams(String gameParamString) {
         String[] args = gameParamString.split(" ");
-        int time = Integer.parseInt(args[0]);
-        int score = (args.length > 1) ? Integer.parseInt(args[1]) : 0;
-        return new GameParams(time, score);
+        int time = Integer.parseInt(args[1]);
+        int levelNumber = Integer.parseInt(args[0]);
+        int score = (args.length > 2) ? Integer.parseInt(args[2]) : 0;
+        return new GameParams(time, score, levelNumber);
     }
 
     // TODO: implement these methods once constructors for each class have
@@ -88,23 +92,36 @@ public class Deserialiser {
 
     private static SmartThief deserialiseSmartThief(String[] splitString) {
         Iterator<String> stringIterator = Arrays.stream(splitString).iterator();
+        stringIterator.next(); // Skip type name
         Coords coords = Coords.fromString(stringIterator.next(), stringIterator.next());
         int speed = Integer.parseInt(stringIterator.next());
-        Direction direction = Direction.fromString(stringIterator.next());
+        Direction direction;
+        if (stringIterator.hasNext()) {
+            direction = Direction.fromString(stringIterator.next());
+        } else {
+            direction = Direction.RIGHT;
+        }
         return new SmartThief(coords, speed, direction);
     }
 
     private static Player deserialisePlayer(String[] splitString) {
         Iterator<String> stringIterator = Arrays.stream(splitString).iterator();
+        stringIterator.next(); // Skip type name
         Coords coords = Coords.fromString(stringIterator.next(), stringIterator.next());
         int speed = Integer.parseInt(stringIterator.next());
-        Direction direction = Direction.fromString(stringIterator.next());
+        Direction direction;
+        if (stringIterator.hasNext()) {
+            direction = Direction.fromString(stringIterator.next());
+        } else {
+            direction = Direction.RIGHT;
+        }
         //TODO direction
         return new Player(coords, speed); // TODO
     }
 
     private static FlyingAssassin deserialiseFlyingAssassin(String[] splitString) {
         Iterator<String> stringIterator = Arrays.stream(splitString).iterator();
+        stringIterator.next(); // Skip type name
         Coords coords = Coords.fromString(stringIterator.next(), stringIterator.next());
         int speed = Integer.parseInt(stringIterator.next());
         Direction direction = Direction.fromString(stringIterator.next());
@@ -114,19 +131,22 @@ public class Deserialiser {
 
     private static FloorFollowingThief deserialiseFloorFollowingThief(String[] splitString) {
         Iterator<String> stringIterator = Arrays.stream(splitString).iterator();
+        stringIterator.next(); // Skip type name
         Coords coords = Coords.fromString(stringIterator.next(), stringIterator.next());
         int speed = Integer.parseInt(stringIterator.next());
-        Direction direction = Direction.fromString(stringIterator.next());
         Colour colour = Colour.fromChar(stringIterator.next().charAt(0));
-        //TODO coords
-        //TODO speed
-        //TODO direction
-        //TODO colour
+        Direction direction;
+        if (stringIterator.hasNext()) {
+            direction = Direction.fromString(stringIterator.next());
+        } else {
+            direction = Direction.RIGHT;
+        }
         return new FloorFollowingThief(coords, speed, colour, direction);
     }
 
     private static Lever deserialiseLever(String[] splitString) {
         Iterator<String> stringIterator = Arrays.stream(splitString).iterator();
+        stringIterator.next(); // Skip type name
         Coords coords = Coords.fromString(stringIterator.next(), stringIterator.next());
         Colour colour = Colour.fromChar(stringIterator.next().charAt(0));
         //TODO colour
@@ -135,6 +155,7 @@ public class Deserialiser {
 
     private static Loot deserialiseLoot(String[] splitString) {
         Iterator<String> stringIterator = Arrays.stream(splitString).iterator();
+        stringIterator.next(); // Skip type name
         Coords coords = Coords.fromString(stringIterator.next(), stringIterator.next());
         //TODO coords
         //TODO lootType
@@ -143,6 +164,7 @@ public class Deserialiser {
 
     private static Gate deserialiseGate(String[] splitString) {
         Iterator<String> stringIterator = Arrays.stream(splitString).iterator();
+        stringIterator.next(); // Skip type name
         Coords coords = Coords.fromString(stringIterator.next(), stringIterator.next());
         Colour colour = Colour.fromChar(stringIterator.next().charAt(0));
         //TODO colour
@@ -151,12 +173,21 @@ public class Deserialiser {
 
     private static Clock deserialiseClock(String[] splitString) {
         Iterator<String> stringIterator = Arrays.stream(splitString).iterator();
+        stringIterator.next(); // Skip type name
         Coords coords = Coords.fromString(stringIterator.next(), stringIterator.next());
         return new Clock(coords); // TODO
     }
 
+    private static Door deserialiseDoor(String[] splitString) {
+        Iterator<String> stringIterator = Arrays.stream(splitString).iterator();
+        stringIterator.next(); // Skip type name
+        Coords coords = Coords.fromString(stringIterator.next(), stringIterator.next());
+        return new Door(coords); // TODO
+    }
+
     private static Bomb deserialiseBomb(String[] splitString) {
         Iterator<String> stringIterator = Arrays.stream(splitString).iterator();
+        stringIterator.next(); // Skip type name
         Coords coords = Coords.fromString(stringIterator.next(), stringIterator.next());
         //TODO detonated boolean
         //TODO timer (in ms)

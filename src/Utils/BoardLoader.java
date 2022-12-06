@@ -5,7 +5,7 @@ import DataTypes.Exception.ParseTileColourException;
 import Game.Tile;
 
 public class BoardLoader {
-    public static Tile[][] loadBoard(String boardString) throws ParseBoardException, NumberFormatException, ParseTileColourException, ClassNotFoundException {
+    public static Tile[][] loadBoard(String boardString) throws ParseBoardException, NumberFormatException, ParseTileColourException {
         var lines = boardString.lines().toList();
         var it = lines.iterator();
         var dimensionsStrings = it.next().split(" ");
