@@ -80,12 +80,24 @@ public class App extends Application {
         alert.show();
     }
 
+    /**
+     * Display prompt text within a next dialog box and wait for user to provide
+     * input.
+     *
+     * String must be smaller than character limit and contain only alphanumeric
+     * characters otherwise user will be prompted to retry input.
+     * @param promptText Text to display to user.
+     * @param characterLimit Character limit for input string.
+     * @return The input string, or null if user cancels the action.
+     */
     public static String getUserInput(String promptText, int characterLimit) {
         TextInputDialog inputDialog = new TextInputDialog();
         inputDialog.setHeaderText(promptText);
         inputDialog.showAndWait();
         String inputResult = inputDialog.getResult();
-        if (inputResult.isBlank()) {
+        if (inputResult == null) {
+            return null;
+        }else if (inputResult.isBlank()) {
             promptText = "Must enter something...";
             return getUserInput(promptText, characterLimit);
         } else if (inputResult.length() > characterLimit) {

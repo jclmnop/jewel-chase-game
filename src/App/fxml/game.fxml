@@ -19,7 +19,7 @@
             </AnchorPane>
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="70.0" prefWidth="998.0">
                <children>
-                  <Button contentDisplay="CENTER" focusTraversable="false" layoutX="10.0" layoutY="9.0" mnemonicParsing="false" onAction="#saveGameButton" prefHeight="32.0" prefWidth="97.0" text="SAVE" textAlignment="CENTER" textOverrun="CLIP">
+                  <Button fx:id="saveGameButton" contentDisplay="CENTER" focusTraversable="false" layoutX="10.0" layoutY="9.0" mnemonicParsing="false" onAction="#saveGame" prefHeight="32.0" prefWidth="97.0" text="SAVE" textAlignment="CENTER" textOverrun="CLIP">
                      <font>
                         <Font name="Roboto Mono" size="19.0" />
                      </font>

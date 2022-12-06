@@ -3,6 +3,7 @@ package App;
 import DataTypes.Colours;
 import DataTypes.Coords;
 import Entities.Entity;
+import Utils.GameFileHandler;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
@@ -78,9 +79,16 @@ public class GameRenderer {
         gameRenderer.victoryScreen.visibleProperty().set(true);
     }
 
-    public void saveGameButton(ActionEvent actionEvent) {};
+    public void saveGame() throws IOException {
+        Game.setPaused(true);
+        String saveGameName = App.getUserInput("Enter a name for this save slot", 20);
+        if (saveGameName != null) {
+            GameFileHandler.saveGame(saveGameName, Game.getPlayerProfile());
+        }
+        Game.setPaused(false);
+    };
 
-    public void quitGameButton(ActionEvent actionEvent) throws IOException {
+    public void quitGameButton() throws IOException {
         Game.quitGame();
     };
 
