@@ -56,7 +56,7 @@
             </HBox>
             <HBox prefHeight="100.0" prefWidth="200.0">
                <children>
-                  <Button fx:id="selectProfileButton" alignment="CENTER" mnemonicParsing="false" prefHeight="95.0" prefWidth="389.0" text="SELECT PROFILE" />
+                  <Button fx:id="selectProfileButton" alignment="CENTER" mnemonicParsing="false" onAction="#selectProfile" prefHeight="95.0" prefWidth="389.0" text="SELECT PROFILE" />
                </children>
                <VBox.margin>
                   <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
