@@ -24,7 +24,7 @@
             </Text>
             <HBox prefHeight="100.0" prefWidth="200.0">
                <children>
-                  <Button fx:id="newGameButton" alignment="CENTER" mnemonicParsing="false" onAction="#newGame" prefHeight="95.0" prefWidth="383.0" text="NEW GAME">
+                  <Button fx:id="newGameButton" alignment="CENTER" mnemonicParsing="false" onAction="#levelSelect" prefHeight="95.0" prefWidth="383.0" text="NEW GAME">
                      <font>
                         <Font name="Roboto Mono" size="13.0" />
                      </font>

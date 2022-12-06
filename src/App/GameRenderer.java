@@ -3,7 +3,6 @@ package App;
 import DataTypes.Colours;
 import DataTypes.Coords;
 import Entities.Entity;
-import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
@@ -15,7 +14,6 @@ import javafx.scene.text.Text;
 import Game.Game;
 import Game.Tile;
 
-import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.util.ConcurrentModificationException;
 
