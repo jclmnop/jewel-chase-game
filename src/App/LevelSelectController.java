@@ -13,7 +13,6 @@ import javafx.scene.text.TextAlignment;
 import java.io.IOException;
 import java.util.ArrayList;
 
-
 public class LevelSelectController {
     private static LevelSelectController levelSelectController;
     @FXML

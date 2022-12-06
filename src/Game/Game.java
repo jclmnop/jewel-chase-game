@@ -8,6 +8,7 @@ import DataTypes.PlayerInput;
 import Entities.Characters.Npc.Npc;
 import Entities.Characters.Player;
 import Entities.Entity;
+import Utils.GameFileHandler;
 import javafx.application.Platform;
 import javafx.scene.input.KeyCode;
 
@@ -19,11 +20,6 @@ import java.time.Instant;
 
 
 public class Game {
-    //TODO: public static startGame(GameParams gameParams)
-    //TODO: public/private static quit()
-    //TODO: public/private static loadGame()
-    //TODO: public/private static saveGame()
-
     public static final long MILLI_PER_TICK = 100; //TODO: figure out reasonable value
     public static final long MILLI_PER_SECOND = 1000;
     public static final int MAX_PLAYERS = 2;
@@ -205,8 +201,17 @@ public class Game {
         if (!Game.headless) {
             GameRenderer.renderWin();
         }
+        if (Game.currentLevelNumber == Game.playerProfile.getMaxLevel()) {
+            Game.playerProfile.increaseMaxLevel();
+            try {
+                GameFileHandler.savePlayerProfile(Game.playerProfile);
+            } catch (IOException ioException) {
+                ioException.printStackTrace();
+                throw new RuntimeException("Error saving player profile");
+            }
+        }
+
         // TODO: save highscore
-        // TODO: update playerProfile
     }
 
     public static void lose() {
