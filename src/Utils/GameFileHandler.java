@@ -17,6 +17,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 //TODO: loadHighScoreTable(levelName)
+//TODO: updateHighScoreTable(levelName, newHighScoreTable)
 /**
  * Utility class for handling game files such as saves, levels, profiles, etc.
  * @author Jonny
@@ -31,6 +32,11 @@ public class GameFileHandler {
 
     private GameFileHandler() {}
 
+    /**
+     * Loads the player profile with the given playerName.
+     * @param playerName Name of the player.
+     * @throws IOException If an I/O error occurs reading from the file.
+     */
     public static void loadPlayerProfile(String playerName) throws IOException {
         Path profilePath = Path.of(PLAYER_PROFILES_PATH + playerName + ".txt");
         String profileFile = Files.readString(profilePath);
@@ -38,6 +44,11 @@ public class GameFileHandler {
         Game.setPlayerProfile(profile);
     }
 
+    /**
+     * Serialise the player profile and save it to a file.
+     * @param playerProfile Player profile to be saved.
+     * @throws IOException If an I/O error occurs reading from the file.
+     */
     public static void savePlayerProfile(PlayerProfile playerProfile) throws IOException {
         Path profilePath = Path.of(
             PLAYER_PROFILES_PATH + playerProfile.getPlayerName() + ".txt"
@@ -45,6 +56,12 @@ public class GameFileHandler {
         Files.writeString(profilePath, playerProfile.serialise());
     }
 
+    /**
+     * Create a new player profile and save it to a file. If one already exists
+     * with the same name, then it's not created.
+     * @param playerName Name of the player the profile is for.
+     * @throws IOException If an I/O error occurs reading from the file.
+     */
     public static void newPlayerProfile(String playerName) throws IOException {
         if (!GameFileHandler.getAvailableProfiles().contains(playerName)) {
             PlayerProfile playerProfile = new PlayerProfile(playerName);
@@ -52,6 +69,10 @@ public class GameFileHandler {
         }
     }
 
+    /**
+     * List names of all available player profile file.
+     * @return List of available profile files.
+     */
     public static ArrayList<String> getAvailableProfiles() {
         File[] profileFiles = new File(PLAYER_PROFILES_PATH).listFiles();
 
@@ -67,6 +88,11 @@ public class GameFileHandler {
             .collect(Collectors.toCollection(ArrayList::new));
     }
 
+    /**
+     * List all levels available to this player profile.
+     * @param playerProfile Profile to list levels for.
+     * @return List of all levels available for given profile.
+     */
     public static ArrayList<String> getAvailableLevels(PlayerProfile playerProfile) {
         int playerMaxLevel = playerProfile.getMaxLevel();
         File[] levelFiles = new File(LEVEL_FILES_PATH).listFiles();
@@ -93,6 +119,12 @@ public class GameFileHandler {
             .collect(Collectors.toCollection(ArrayList::new));
     }
 
+    /**
+     * List all save files associated with this player profile.
+     * @param playerProfile Profile to retrieve save game files for.
+     * @return List of all save files.
+     * @throws IOException If an I/O error occurs reading from the file.
+     */
     public static ArrayList<String> getAvailableSaveFiles(PlayerProfile playerProfile) throws IOException {
         String playerName = playerProfile.getPlayerName();
         String saveDirectory = SAVE_GAME_PATH + playerName;
@@ -110,6 +142,13 @@ public class GameFileHandler {
             .collect(Collectors.toCollection(ArrayList::new));
     }
 
+    /**
+     * Load a level file into the game.
+     * @param levelNumber Number of level to be loaded.
+     * @param playerProfile Player profile that's loading the level.
+     * @return Parameters of the game.
+     * @throws IOException If an I/O error occurs reading from the file.
+     */
     public static GameParams loadLevelFile(int levelNumber, PlayerProfile playerProfile) throws IOException {
         if (levelNumber > playerProfile.getMaxLevel()) {
             throw new RuntimeException(String.format(
@@ -124,6 +163,14 @@ public class GameFileHandler {
         return GameFileHandler.loadLevelFromString(levelFileString);
     }
 
+    /**
+     * Load a save file into the game.
+     * @param saveFileName Name of the save game to be loaded.
+     * @param playerProfile Player profile that's loading the game, must be the
+     *                      same player profile that saved the game.
+     * @return Parameters of the game.
+     * @throws IOException If an I/O error occurs reading from the file.
+     */
     public static GameParams loadSaveFile(String saveFileName, PlayerProfile playerProfile) throws IOException {
         Path saveFilePath = GameFileHandler.computeSaveGameFilePath(
             saveFileName, playerProfile
@@ -132,6 +179,14 @@ public class GameFileHandler {
         return GameFileHandler.loadLevelFromString(saveFileString);
     }
 
+    /**
+     * Save the current game.
+     * @param saveFileName Name to be given to the save game file. If a save
+     *                     file with this name already exists, it will be
+     *                     overwritten.
+     * @param playerProfile Player profile that's saving the game.
+     * @throws IOException If an I/O error occurs reading from the file.
+     */
     public static void saveGame(String saveFileName, PlayerProfile playerProfile) throws IOException {
         // TODO build string: gameParams, blank line, board, blank line, entities
         StringBuilder saveGameStringBuilder = new StringBuilder();
@@ -164,7 +219,6 @@ public class GameFileHandler {
             saveFileName
         ));
     }
-
 
     private static GameParams loadLevelFromString(String levelString) {
         Iterator<String> levelStringLines = levelString.lines().iterator();
