@@ -7,7 +7,6 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
-import javafx.scene.text.Text;
 import Game.Game;
 import javafx.scene.text.TextAlignment;
 
@@ -31,6 +30,7 @@ public class LevelSelectController {
     private void loadLevelMenu() {
         this.levelMenu.setFillWidth(true);
         this.levelMenu.setAlignment(Pos.TOP_CENTER);
+        this.levelMenu.getChildren().clear();
         ArrayList<String> availableLevels =
             GameFileHandler.getAvailableLevels(Game.getPlayerProfile());
         for (String level : availableLevels) {

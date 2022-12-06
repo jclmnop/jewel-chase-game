@@ -13,6 +13,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.TextInputDialog;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
@@ -31,6 +32,7 @@ public class App extends Application {
     public static final String MENU_FXML_PATH = "fxml/menu.fxml";
     public static final String GAME_FXML_PATH = "fxml/game.fxml";
     public static final String LEVEL_SELECT_FXML_PATH = "fxml/levelSelect.fxml";
+    public static final String PLAYER_PROFILES_FXML_PATH = "fxml/playerProfiles.fxml";
     public static final String RESOURCES_PATH = "src/App/resources/";
     public static final String BRODYQUEST_MP3_PATH = RESOURCES_PATH + "brodyquest.mp3";
     public static final String ANACONDA_MP3_PATH = RESOURCES_PATH + "anaconda.mp3";
@@ -78,6 +80,26 @@ public class App extends Application {
         alert.show();
     }
 
+    public static String getUserInput(String promptText, int characterLimit) {
+        TextInputDialog inputDialog = new TextInputDialog();
+        inputDialog.setHeaderText(promptText);
+        inputDialog.showAndWait();
+        String inputResult = inputDialog.getResult();
+        if (inputResult.isBlank()) {
+            promptText = "Must enter something...";
+            return getUserInput(promptText, characterLimit);
+        } else if (inputResult.length() > characterLimit) {
+            promptText = String.format(
+                "Can't be longer than %s characters.", characterLimit
+            );
+            return getUserInput(promptText, characterLimit);
+        } else if (App.containsIllegalChars(inputResult)) {
+            promptText = "You some sort of hacker or something?";
+            return getUserInput(promptText, characterLimit);
+        }
+        return inputResult;
+    }
+
     @Override
     public void start(Stage primaryStage) throws IOException {
         App.stage = primaryStage;
@@ -94,11 +116,10 @@ public class App extends Application {
         App.volume();
     }
 
-
     /**
      * Switches to a new scene from an FXML file associated with input URL
      * @param fxmlPath Path to FXML file relative to App package,
-     *            e.g. `"fxml/menu.fxml"`
+     *                 e.g. `"fxml/menu.fxml"`
      * @throws IOException if fxmlPath is invalid
      */
     public void changeScene(String fxmlPath) throws IOException {
@@ -108,20 +129,6 @@ public class App extends Application {
         Scene menuScene = new Scene(root, WINDOW_WIDTH, WINDOW_HEIGHT);
         App.stage.setScene(menuScene);
         App.stage.show();
-    }
-
-    public void levelSelect(ActionEvent actionEvent) throws IOException {
-        // TODO: this is just here for testing without profileSelect menu
-//        GameFileHandler.loadPlayerProfile("test");
-        //
-
-        if (Game.getPlayerProfile() == null) {
-            App.showAlert("Select a profile first.");
-        } else {
-            this.changeScene(LEVEL_SELECT_FXML_PATH);
-        }
-
-
     }
 
     public void newGame(
@@ -140,6 +147,27 @@ public class App extends Application {
 
         Thread gameThread = Game.startGame(gameParams);
         gameThread.setPriority(6);
+    }
+
+    public void levelSelect(ActionEvent actionEvent) throws IOException {
+        if (Game.getPlayerProfile() == null) {
+            App.showAlert("Select a profile first.");
+        } else {
+            this.changeScene(LEVEL_SELECT_FXML_PATH);
+        }
+    }
+
+    public void selectProfile() throws IOException {
+        this.changeScene(PLAYER_PROFILES_FXML_PATH);
+    }
+
+    private static boolean containsIllegalChars(String userInput) {
+        for (char ch : userInput.toCharArray()) {
+            if (!Character.isAlphabetic(ch) && !Character.isDigit(ch)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private static void volume() {
