@@ -169,8 +169,12 @@ public abstract class Entity implements Serialisable, Renderable {
                 }
                 case CLONE -> {
                     Entity entityToBeCloned = collision.getEntityTwo();
-                    Deserialiser.deserialiseObject(entityToBeCloned.serialise());
+                    Object deserialised =
+                        Deserialiser.deserialiseObject(entityToBeCloned.serialise());
                     Entity.removeEntity(collision.getEntityOne());
+                    if (deserialised instanceof Character deserialisedCharacter) {
+                        deserialisedCharacter.decrementTicksSinceLastMove();
+                    }
                 }
             }
         }

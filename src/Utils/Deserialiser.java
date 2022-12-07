@@ -99,13 +99,13 @@ public class Deserialiser {
         stringIterator.next(); // Skip type name
         Coords coords = Coords.fromString(stringIterator.next(), stringIterator.next());
         int speed = Integer.parseInt(stringIterator.next());
-        Direction direction;
-        if (stringIterator.hasNext()) {
-            direction = Direction.fromString(stringIterator.next());
-        } else {
-            direction = Direction.RIGHT;
-        }
-        return new SmartThief(coords, speed, direction);
+        Direction direction = stringIterator.hasNext()
+            ? Direction.fromString(stringIterator.next())
+            : Direction.RIGHT;
+        int ticksSinceLastMove = stringIterator.hasNext()
+            ? Integer.parseInt(stringIterator.next())
+            : 0;
+        return new SmartThief(coords, speed, direction, ticksSinceLastMove);
     }
 
     private static Player deserialisePlayer(String[] splitString) {
@@ -113,14 +113,14 @@ public class Deserialiser {
         stringIterator.next(); // Skip type name
         Coords coords = Coords.fromString(stringIterator.next(), stringIterator.next());
         int speed = Integer.parseInt(stringIterator.next());
-        Direction direction;
-        if (stringIterator.hasNext()) {
-            direction = Direction.fromString(stringIterator.next());
-        } else {
-            direction = Direction.RIGHT;
-        }
+        Direction direction = stringIterator.hasNext()
+            ? Direction.fromString(stringIterator.next())
+            : Direction.RIGHT;
+        int ticksSinceLastMove = stringIterator.hasNext()
+            ? Integer.parseInt(stringIterator.next())
+            : 0;
         //TODO direction
-        return new Player(coords, speed); // TODO
+        return new Player(coords, speed, direction, ticksSinceLastMove); // TODO
     }
 
     private static FlyingAssassin deserialiseFlyingAssassin(String[] splitString) {
@@ -139,13 +139,13 @@ public class Deserialiser {
         Coords coords = Coords.fromString(stringIterator.next(), stringIterator.next());
         int speed = Integer.parseInt(stringIterator.next());
         Colour colour = Colour.fromChar(stringIterator.next().charAt(0));
-        Direction direction;
-        if (stringIterator.hasNext()) {
-            direction = Direction.fromString(stringIterator.next());
-        } else {
-            direction = Direction.RIGHT;
-        }
-        return new FloorFollowingThief(coords, speed, colour, direction);
+        Direction direction = stringIterator.hasNext()
+            ? Direction.fromString(stringIterator.next())
+            : Direction.RIGHT;
+        int ticksSinceLastMove = stringIterator.hasNext()
+            ? Integer.parseInt(stringIterator.next())
+            : 0;
+        return new FloorFollowingThief(coords, speed, colour, direction, ticksSinceLastMove);
     }
 
     private static Lever deserialiseLever(String[] splitString) {

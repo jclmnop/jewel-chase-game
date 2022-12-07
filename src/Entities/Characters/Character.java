@@ -22,7 +22,15 @@ public abstract class Character extends Entity {
     public Character(CollisionType collisionType, boolean isBlocking, Coords coords, int speed) {
         super(collisionType, isBlocking, coords);
         this.speed = speed;
-        this.ticksSinceLastMove = speed;
+        this.ticksSinceLastMove = 0;
+    }
+
+    /**
+     * Used when cloning an entity to make sure they don't both try moving at
+     * the exact same time.
+     */
+    public void decrementTicksSinceLastMove() {
+        this.ticksSinceLastMove--;
     }
 
     public void kill() {

@@ -137,6 +137,7 @@ public class App extends Application {
      * @param exception Exception to be displayed.
      */
     public static void errorPopup(Thread currentThread, Throwable exception) {
+        exception.printStackTrace();
         final double FONT_SIZE = 20;
         final double Y_OFFSET = 28;
         while (exception.getCause() != null) {
