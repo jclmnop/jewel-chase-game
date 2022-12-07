@@ -187,9 +187,9 @@ public class App extends Application {
 
     public void newGame(
         GameParams gameParams
-    ) throws IOException, ParseBoardException, ParseTileColourException {
-        //TODO: change scene to level select, then load selected level from there
+    ) throws IOException, ParseBoardException, ParseTileColourException, InterruptedException {
         this.changeScene(GAME_FXML_PATH);
+        Thread.sleep(100);
         App.stage.setOnCloseRequest(t -> {
             Platform.exit();
             System.exit(0);

@@ -51,12 +51,28 @@ public class PlayerProfileController {
 
     private void profileOnClick(String playerName) throws IOException {
         if (deleteMode.isSelected()) {
-            GameFileHandler.deletePlayerProfile(playerName);
-            this.loadProfileMenu();
-            this.deleteMode.setSelected(false);
+            try {
+                GameFileHandler.deletePlayerProfile(playerName);
+                this.loadProfileMenu();
+                this.deleteMode.setSelected(false);
+            } catch (Exception anyException) {
+                anyException.printStackTrace();
+                this.loadProfileMenu();
+                throw new RuntimeException("Failed to delete file.");
+            }
         } else {
-            GameFileHandler.loadPlayerProfile(playerName);
-            App.returnToMainMenu();
+            try {
+                GameFileHandler.loadPlayerProfile(playerName);
+                App.returnToMainMenu();
+            } catch (IOException ioException) {
+                ioException.printStackTrace();
+                throw new RuntimeException("IO Error when trying to load profile.");
+            } catch (Exception anyOtherException) {
+                anyOtherException.printStackTrace();
+                throw new RuntimeException(
+                    "Failed to load player profile. File may be corrupt."
+                );
+            }
         }
     }
 
