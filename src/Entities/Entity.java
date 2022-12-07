@@ -176,6 +176,10 @@ public abstract class Entity implements Serialisable, Renderable {
                         deserialisedCharacter.decrementTicksSinceLastMove();
                     }
                 }
+                case SPEED_UP -> {
+                    Character character = (Character) collision.getEntityTwo();
+                    character.speedUp();
+                }
             }
         }
     }

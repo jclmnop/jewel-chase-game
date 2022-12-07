@@ -34,12 +34,15 @@ public abstract class Character extends Entity {
     }
 
     /**
-     * Speed up the character by 1 tick.
+     * Double the speed of a character.
      */
     public void speedUp() {
-        // We subtract 1 because speed is the number of ticks something needs
-        // to wait before it moves.
-        this.ticksPerMove--;
+        this.ticksPerMove = this.ticksPerMove / 2;
+        // Nothing bad would happen if ticksPerMove goes below 1, or even below
+        // zero (would still behave the same as 1), but 1 is technically the minimum.
+        if (this.ticksPerMove < 1) {
+            this.ticksPerMove = 1;
+        }
     }
 
     public void kill() {

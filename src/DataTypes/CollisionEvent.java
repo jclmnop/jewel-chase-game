@@ -22,6 +22,8 @@ public enum CollisionEvent {
     CLOCK_COLLECTED,
     /** Star collected, entity will be cloned. */
     CLONE,
+    /** Mushroom collected, grant permanent speed boost. */
+    SPEED_UP,
     /** Relevant gates should open. */
     LEVER_TRIGGERED,
     /** A character was assassinated. */
@@ -55,6 +57,10 @@ public enum CollisionEvent {
             case STAR -> switch (collisionTwo) {
                 case PLAYER, THIEF -> CLONE;
                 default            -> NOTHING;
+            };
+            case MUSHROOM -> switch (collisionTwo) {
+                case THIEF, PLAYER, ASSASSIN -> SPEED_UP;
+                default                      -> NOTHING;
             };
             case LEVER -> switch (collisionTwo) {
                 case THIEF, PLAYER -> LEVER_TRIGGERED;
