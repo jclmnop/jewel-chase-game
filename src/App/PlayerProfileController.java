@@ -53,6 +53,7 @@ public class PlayerProfileController {
         if (deleteMode.isSelected()) {
             GameFileHandler.deletePlayerProfile(playerName);
             this.loadProfileMenu();
+            this.deleteMode.setSelected(false);
         } else {
             GameFileHandler.loadPlayerProfile(playerName);
             App.returnToMainMenu();
