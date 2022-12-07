@@ -84,7 +84,6 @@ public class Deserialiser {
         }
     }
 
-    // TODO: deserialiseGameParams
     public static GameParams deserialiseGameParams(String gameParamString) {
         String[] args = gameParamString.split(" ");
         int time = Integer.parseInt(args[1]);
