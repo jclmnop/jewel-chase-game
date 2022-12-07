@@ -24,7 +24,7 @@ import java.util.stream.Stream;
 /**
  * Utility class for handling game files such as saves, levels, profiles, etc.
  * @author Jonny
- * @version 1.0
+ * @version 1.2
  */
 public class GameFileHandler {
     public static final String GAME_FILES_PATH = "src/Game/files/";
@@ -86,6 +86,11 @@ public class GameFileHandler {
         }
     }
 
+    /**
+     * Delete a player profile and all its save files.
+     * @param playerName Name of player profile to be deleted.
+     * @throws IOException If an I/O error occurs deleting the files.
+     */
     public static void deletePlayerProfile(String playerName) throws IOException {
         Path profilePath = Path.of(PLAYER_PROFILES_PATH + playerName + ".txt");
         Files.deleteIfExists(profilePath);
