@@ -179,6 +179,7 @@ public abstract class Entity implements Serialisable, Renderable {
                 case SPEED_UP -> {
                     Character character = (Character) collision.getEntityTwo();
                     character.speedUp();
+                    Entity.removeEntity(collision.getEntityOne());
                 }
             }
         }
