@@ -8,11 +8,9 @@ import Entities.Characters.Npc.FlyingAssassin;
 import Entities.Characters.Player;
 import Entities.Characters.Npc.SmartThief;
 import Entities.Items.Bomb;
-import Entities.Items.Collectable.Clock;
+import Entities.Items.Collectable.*;
 import Entities.Items.Door;
 import Entities.Items.Gate;
-import Entities.Items.Collectable.Lever;
-import Entities.Items.Collectable.Loot;
 import Game.Tile;
 
 import java.util.ArrayList;
@@ -63,6 +61,13 @@ public class Deserialiser {
                 case "Door" -> {
                     return Deserialiser.deserialiseDoor(args);
                 }
+                case "Star" -> {
+                    return Deserialiser.deserialiseStar(args);
+                }
+                case "Mushroom" -> {
+                    return Deserialiser.deserialiseMushroom(args);
+
+                }
                 // TODO: case "Explosion -> {}"
                 default -> {
                     throw new DeserialiseException(
@@ -71,6 +76,7 @@ public class Deserialiser {
                 }
             }
         } catch (Exception e) {
+            e.printStackTrace();
             throw new DeserialiseException(
                 "Exception occurred when attempting to deserialise " + objectTypeName,
                 e
@@ -95,13 +101,13 @@ public class Deserialiser {
         stringIterator.next(); // Skip type name
         Coords coords = Coords.fromString(stringIterator.next(), stringIterator.next());
         int speed = Integer.parseInt(stringIterator.next());
-        Direction direction;
-        if (stringIterator.hasNext()) {
-            direction = Direction.fromString(stringIterator.next());
-        } else {
-            direction = Direction.RIGHT;
-        }
-        return new SmartThief(coords, speed, direction);
+        Direction direction = stringIterator.hasNext()
+            ? Direction.fromString(stringIterator.next())
+            : Direction.RIGHT;
+        int ticksSinceLastMove = stringIterator.hasNext()
+            ? Integer.parseInt(stringIterator.next())
+            : 0;
+        return new SmartThief(coords, speed, direction, ticksSinceLastMove);
     }
 
     private static Player deserialisePlayer(String[] splitString) {
@@ -109,14 +115,13 @@ public class Deserialiser {
         stringIterator.next(); // Skip type name
         Coords coords = Coords.fromString(stringIterator.next(), stringIterator.next());
         int speed = Integer.parseInt(stringIterator.next());
-        Direction direction;
-        if (stringIterator.hasNext()) {
-            direction = Direction.fromString(stringIterator.next());
-        } else {
-            direction = Direction.RIGHT;
-        }
-        //TODO direction
-        return new Player(coords, speed); // TODO
+        Direction direction = stringIterator.hasNext()
+            ? Direction.fromString(stringIterator.next())
+            : Direction.RIGHT;
+        int ticksSinceLastMove = stringIterator.hasNext()
+            ? Integer.parseInt(stringIterator.next())
+            : 0;
+        return new Player(coords, speed, direction, ticksSinceLastMove); // TODO
     }
 
     private static FlyingAssassin deserialiseFlyingAssassin(String[] splitString) {
@@ -135,13 +140,13 @@ public class Deserialiser {
         Coords coords = Coords.fromString(stringIterator.next(), stringIterator.next());
         int speed = Integer.parseInt(stringIterator.next());
         Colour colour = Colour.fromChar(stringIterator.next().charAt(0));
-        Direction direction;
-        if (stringIterator.hasNext()) {
-            direction = Direction.fromString(stringIterator.next());
-        } else {
-            direction = Direction.RIGHT;
-        }
-        return new FloorFollowingThief(coords, speed, colour, direction);
+        Direction direction = stringIterator.hasNext()
+            ? Direction.fromString(stringIterator.next())
+            : Direction.RIGHT;
+        int ticksSinceLastMove = stringIterator.hasNext()
+            ? Integer.parseInt(stringIterator.next())
+            : 0;
+        return new FloorFollowingThief(coords, speed, colour, direction, ticksSinceLastMove);
     }
 
     private static Lever deserialiseLever(String[] splitString) {
@@ -192,6 +197,20 @@ public class Deserialiser {
         //TODO detonated boolean
         //TODO timer (in ms)
         return new Bomb(coords); // TODO
+    }
+
+    private static Star deserialiseStar(String[] splitString) {
+        Iterator<String> stringIterator = Arrays.stream(splitString).iterator();
+        stringIterator.next(); // Skip type name
+        Coords coords = Coords.fromString(stringIterator.next(), stringIterator.next());
+        return new Star(coords);
+    }
+
+    private static Mushroom deserialiseMushroom(String[] splitString) {
+        Iterator<String> stringIterator = Arrays.stream(splitString).iterator();
+        stringIterator.next(); // Skip type name
+        Coords coords = Coords.fromString(stringIterator.next(), stringIterator.next());
+        return new Mushroom(coords);
     }
 
     // TODO: private static BombExplosion deserialiseExplosion(String[] splitString) {}
