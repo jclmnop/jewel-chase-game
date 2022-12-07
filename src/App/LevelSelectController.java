@@ -1,5 +1,7 @@
 package App;
 
+import DataTypes.Exception.ParseBoardException;
+import DataTypes.Exception.ParseTileColourException;
 import DataTypes.GameParams;
 import Utils.GameFileHandler;
 import javafx.fxml.FXML;
@@ -43,10 +45,15 @@ public class LevelSelectController {
             (actionEvent) -> {
                 try {
                     loadSelectedLevel(level);
-                } catch (IOException e) {
-                    e.printStackTrace();
+                } catch (IOException ioException) {
+                    ioException.printStackTrace();
                     throw new RuntimeException(
                         "I/O Error when loading level " + level
+                    );
+                } catch (Exception anyOtherException) {
+                    anyOtherException.printStackTrace();
+                    throw new RuntimeException(
+                        "Failed to load level. File may be corrupt."
                     );
                 }
             }
@@ -68,7 +75,12 @@ public class LevelSelectController {
         GameParams gameParams = GameFileHandler.loadLevelFile(
             Integer.parseInt(level), Game.getPlayerProfile()
         );
-        App.getApp().newGame(gameParams);
+        try {
+            App.getApp().newGame(gameParams);
+        } catch (Exception gameStartError) {
+            gameStartError.printStackTrace();
+            throw new RuntimeException("Failed to start new game.");
+        }
     }
 
 }

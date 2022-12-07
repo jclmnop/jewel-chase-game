@@ -270,6 +270,9 @@ public class GameFileHandler {
     private static void deleteAllSaves(String playerName) throws IOException {
         String directoryPath = SAVE_GAME_PATH + playerName;
         File[] saveFiles = GameFileHandler.listFiles(directoryPath);
+        if (saveFiles == null) {
+            return;
+        }
         ArrayList<Path> saveFilePaths = Arrays.stream(saveFiles)
             .map(File::toPath)
             .collect(Collectors.toCollection(ArrayList::new));

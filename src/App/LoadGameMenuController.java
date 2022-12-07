@@ -48,11 +48,12 @@ public class LoadGameMenuController {
             (actionEvent) -> {
                 try {
                     loadSelectedSaveFile(save);
-                } catch (IOException e) {
+                } catch (IOException | InterruptedException e) {
                     e.printStackTrace();
-                    throw new RuntimeException(
-                        "I/O Error when loading save " + save
-                    );
+                    throw new RuntimeException("Failed to load saved game.");
+                } catch (Exception anyOtherException) {
+                    anyOtherException.printStackTrace();
+                    throw new RuntimeException("Error loading corrupt save file.");
                 }
             }
         );
@@ -69,7 +70,7 @@ public class LoadGameMenuController {
 
     }
 
-    private void loadSelectedSaveFile(String level) throws IOException {
+    private void loadSelectedSaveFile(String level) throws IOException, InterruptedException {
         GameParams gameParams = GameFileHandler.loadSaveFile(
             level, Game.getPlayerProfile()
         );

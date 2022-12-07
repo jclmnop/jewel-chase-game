@@ -18,4 +18,4 @@ FloorFollowingThief 3 4 5 RED RIGHT 0
 Door 12 9
 Clock 0 9
 Star 1 0
-Mushroom 9 9
+Mushroom 12 0
