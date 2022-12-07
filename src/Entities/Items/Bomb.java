@@ -11,14 +11,17 @@ import Game.Tile;
 
 public class Bomb extends Item {
 
-    private int state = 4;
+    private int state = 4000;
     private Coords[] trigZones = Tile.getNoColourAdjacentTiles(coords).toArray();
     private boolean triggered = false;
 
     public Bomb(Coords coords) {
         super(CollisionType.BOMB, false, coords);
     }
-
+public Bomb(Coords coords, int state) {
+    this(coords);
+    this.state = state;
+}
     /**
      * Checks whether bomb is waiting to be triggered or is in the process of exploding.
      */
@@ -26,7 +29,7 @@ public class Bomb extends Item {
         if (!triggered) {
             detect();
         } else {
-            state--;
+            state - Game.MILLI_PER_TICK;
             if (state == 0) {
                 explode();
             }
@@ -50,6 +53,19 @@ public class Bomb extends Item {
     }
 
     /**
+    * Serialises the Object into a String.
+    *
+    * @return Serialised string for `this` Object.
+    */
+    @Override
+    public String serialise() {
+        return String.format(
+            "%s %s %s",
+            this.getClass().getSimpleName(),
+            this.coords.serialise(),
+            this.state
+        ) ;
+    }
      * Serialises the Object into a String.
      *
      * @return Serialised string for `this` Object.
