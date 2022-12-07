@@ -88,7 +88,6 @@ public class GameFileHandler {
 
     public static void deletePlayerProfile(String playerName) throws IOException {
         Path profilePath = Path.of(PLAYER_PROFILES_PATH + playerName + ".txt");
-        Path savePath = Path.of(SAVE_GAME_PATH + playerName); //TODO
         Files.deleteIfExists(profilePath);
         GameFileHandler.deleteAllSaves(playerName);
         if (Game.getPlayerProfile().getPlayerName().equals(playerName)) {
