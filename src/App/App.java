@@ -47,6 +47,8 @@ public class App extends Application {
     private static App app;
     @FXML
     private Text messageOfTheDay;
+    @FXML
+    private Text currentPlayerProfile;
 
     //TODO: for testing only, remember to remove
     public static final String BOARD_STR = """
@@ -122,6 +124,12 @@ public class App extends Application {
         App.stage.setResizable(false);
         App.playMusic();
         this.changeScene(MENU_FXML_PATH);
+        // Load cached profile if it exists
+    }
+
+    public void initialize() throws IOException {
+        GameFileHandler.loadPlayerProfile("");
+        this.updateCurrentPlayerProfie();
         App.updateMessageOfTheDay();
     }
 
@@ -258,6 +266,17 @@ public class App extends Application {
         } catch (IOException | InterruptedException e) {
             System.out.println(e.getMessage());
             App.app.messageOfTheDay.setText("There is only pain.");
+        }
+    }
+
+    private void updateCurrentPlayerProfie() {
+        if (Game.getPlayerProfile() != null) {
+            this.currentPlayerProfile.setText(
+                String.format(
+                    "Player: %s",
+                    Game.getPlayerProfile().getPlayerName()
+                )
+            );
         }
     }
 }
