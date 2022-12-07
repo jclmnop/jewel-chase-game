@@ -16,6 +16,7 @@ import Game.Game;
 import Game.Tile;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
 
 public class GameRenderer {
@@ -159,18 +160,12 @@ public class GameRenderer {
         entityGridCell.setMinSize(tileDimensions, tileDimensions);
         entityGridCell.setAlignment(Pos.CENTER);
 
-        try {
-            for (Entity entity : tile.getEntities()) {
+            ArrayList<Entity> entities = (ArrayList<Entity>) tile.getEntities().clone();
+            for (Entity entity : entities) {
                 entityGridCell.getChildren().add(
                     this.renderEntity(entity, tileDimensions)
                 );
             }
-        } catch (ConcurrentModificationException exception) {
-            System.out.println("No time for thread safety");
-//            exception.printStackTrace();
-//            return this.renderEntities(tile, tileDimensions);
-        }
-
         return entityGridCell;
     }
 
