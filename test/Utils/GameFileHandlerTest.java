@@ -56,7 +56,7 @@ public class GameFileHandlerTest {
         }
 
         // Three entities are loaded
-        Assertions.assertEquals(5, Entity.getEntities().size());
+        Assertions.assertEquals(6, Entity.getEntities().size());
         // Entities have correct coordinates and appear in same order as file
         Assertions.assertEquals(new Coords(0, 0), Entity.getEntities().get(0).getCoords());
         Assertions.assertEquals(new Coords(5, 5), Entity.getEntities().get(1).getCoords());
