@@ -16,6 +16,7 @@ import Game.Game;
 import Game.Tile;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
 
 public class GameRenderer {
@@ -160,6 +161,7 @@ public class GameRenderer {
         entityGridCell.setAlignment(Pos.CENTER);
 
         try {
+            ArrayList<Entity> entities = (ArrayList<Entity>) tile.getEntities().clone();
             for (Entity entity : tile.getEntities()) {
                 entityGridCell.getChildren().add(
                     this.renderEntity(entity, tileDimensions)

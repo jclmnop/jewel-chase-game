@@ -20,6 +20,8 @@ public enum CollisionEvent {
     CLOCK_STOLEN,
     /** Clock collected by a player, time should increase. */
     CLOCK_COLLECTED,
+    /** Star collected, entity will be cloned. */
+    CLONE,
     /** Relevant gates should open. */
     LEVER_TRIGGERED,
     /** A character was assassinated. */
@@ -49,6 +51,10 @@ public enum CollisionEvent {
                 case THIEF  -> CLOCK_STOLEN;
                 case PLAYER -> CLOCK_COLLECTED;
                 default     -> NOTHING;
+            };
+            case STAR -> switch (collisionTwo) {
+                case PLAYER, THIEF -> CLONE;
+                default            -> NOTHING;
             };
             case LEVER -> switch (collisionTwo) {
                 case THIEF, PLAYER -> LEVER_TRIGGERED;

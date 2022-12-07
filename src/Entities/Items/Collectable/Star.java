@@ -3,11 +3,16 @@ package Entities.Items.Collectable;
 import DataTypes.Coords;
 import Entities.Items.Item;
 
-public class Clock extends Collectable {
-    private static final String IMAGE_PATH = Item.RESOURCES_PATH + "clock.png";
+/**
+ * Duplicates the entity when collected.
+ * @author Jonny
+ * @version 1.0
+ */
+public class Star extends Collectable {
+    private static final String IMAGE_PATH = Item.RESOURCES_PATH + "star.png";
 
-    public Clock(Coords coords) {
-        super(CollisionType.CLOCK, false, coords);
+    public Star(Coords coords) {
+        super(CollisionType.STAR, false, coords);
         this.imagePath = IMAGE_PATH;
     }
 

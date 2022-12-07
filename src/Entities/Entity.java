@@ -4,12 +4,15 @@ import DataTypes.Collision;
 import DataTypes.CollisionEvent;
 import DataTypes.Coords;
 import Entities.Characters.Character;
+import Entities.Characters.Npc.FloorFollowingThief;
+import Entities.Characters.Npc.SmartThief;
 import Entities.Characters.Player;
 import Entities.Items.Collectable.Collectable;
 import Interfaces.Renderable;
 import Interfaces.Serialisable;
 import Game.Game;
 import Game.Tile;
+import Utils.Deserialiser;
 import javafx.scene.image.Image;
 
 import java.util.ArrayDeque;
@@ -42,6 +45,8 @@ public abstract class Entity implements Serialisable, Renderable {
         LOOT,
         CLOCK,
         LEVER,
+        STAR,
+        MUSHROOM,
         GATE,
         DOOR,
         ASSASSIN,
@@ -147,7 +152,7 @@ public abstract class Entity implements Serialisable, Renderable {
                     entityTwo.kill();
                 }
                 case ASSASSINATION -> {
-                    Character entityTwo = (Character) collision.getEntityOne();
+                    Character entityTwo = (Character) collision.getEntityTwo();
                     entityTwo.kill();
                 }
                 case LOSE -> {
@@ -161,6 +166,11 @@ public abstract class Entity implements Serialisable, Renderable {
                     if (Entity.getEntitiesOfType(Collectable.class).isEmpty()) {
                         Game.win();
                     }
+                }
+                case CLONE -> {
+                    Entity entityToBeCloned = collision.getEntityTwo();
+                    Deserialiser.deserialiseObject(entityToBeCloned.serialise());
+                    Entity.removeEntity(collision.getEntityOne());
                 }
             }
         }

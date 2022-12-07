@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import java.time.Instant;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 
 public class Game {
@@ -27,6 +28,7 @@ public class Game {
     private static final HashMap<KeyCode, Direction> PLAYER2_MOVEMENT_KEYS = new HashMap<>();
     private static final HashMap<KeyCode, PlayerInput> playerMovementKeys = new HashMap<>();
     private static final HashMap<Player, Direction> currentMovementInputs = new HashMap<>();
+    private static final ReentrantReadWriteLock lock = new ReentrantReadWriteLock();
     private static int score = 0;
     private static int timeRemaining = 0;
     private static int currentLevelNumber;
@@ -60,6 +62,14 @@ public class Game {
 
     public static boolean isRunning() {
         return Game.running;
+    }
+
+    /**
+     * Gets the lock for the Game thread.
+     * @return Lock for the Game thread.
+     */
+    public static ReentrantReadWriteLock getLock() {
+        return Game.lock;
     }
 
     /**
@@ -245,7 +255,9 @@ public class Game {
                     System.out.println(e.getMessage());
                 }
             } else {
+                Game.lock.writeLock().lock();
                 Game.tick();
+                Game.lock.writeLock().unlock();
             }
             if (!Game.headless) {
                 Platform.runLater(GameRenderer::render);
@@ -282,8 +294,8 @@ public class Game {
     private static void processPlayerInputs() {
         for (Player player : Game.currentMovementInputs.keySet()) {
             Game.movePlayer(player, currentMovementInputs.get(player));
-            Game.currentMovementInputs.remove(player);
         }
+        Game.currentMovementInputs.clear();
     }
 
     private static void updateLastTickTime() {

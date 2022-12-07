@@ -6,17 +6,13 @@ import DataTypes.GameParams;
 import Utils.GameFileHandler;
 import javafx.application.Application;
 import javafx.application.Platform;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TextInputDialog;
-import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
@@ -155,7 +151,11 @@ public class App extends Application {
         });
 
         App.stage.getScene().setOnKeyPressed(
-            (key) -> Game.registerNewMovementInput(key.getCode())
+            (key) -> {
+                Game.getLock().writeLock().lock();
+                Game.registerNewMovementInput(key.getCode());
+                Game.getLock().writeLock().unlock();
+            }
         );
 
         Thread gameThread = Game.startGame(gameParams);
