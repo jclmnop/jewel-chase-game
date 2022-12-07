@@ -28,6 +28,11 @@ public class SmartThief extends Npc {
     public SmartThief(Coords coords, int speed) {
         this(coords, speed, Direction.UP);
     }
+
+    public SmartThief(Coords coords, int speed, Direction direction, int ticksSinceLastMove) {
+        this(coords, speed, direction);
+        this.ticksSinceLastMove = ticksSinceLastMove;
+    }
     
     /**
      * Tries to move SmartThief to next tile in its path.
@@ -56,6 +61,24 @@ public class SmartThief extends Npc {
             // A new path could not be calculated
             this.moveRandomly();
         }
+    }
+
+    /**
+     * Serialises the Object into a String.
+     *
+     * @return Serialised string for `this` Object.
+     */
+    @Override
+    public String serialise() {
+        // TODO
+        return String.format(
+            "%s %s %s %s %s",
+            this.getClass().getSimpleName(),
+            this.coords.serialise(),
+            this.speed,
+            this.currentDirection,
+            this.ticksSinceLastMove
+        );
     }
 
     private void moveRandomly() {
@@ -148,22 +171,5 @@ public class SmartThief extends Npc {
         } else {
             return false;
         }
-    }
-
-    /**
-     * Serialises the Object into a String.
-     *
-     * @return Serialised string for `this` Object.
-     */
-    @Override
-    public String serialise() {
-        // TODO
-        return String.format(
-            "%s %s %s %s",
-            this.getClass().getSimpleName(),
-            this.coords.serialise(),
-            this.speed,
-            this.currentDirection
-        );
     }
 }

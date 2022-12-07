@@ -17,7 +17,6 @@ import java.util.Iterator;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-//TODO: deletePlayerProfile(playerName)
 //TODO: loadHighScoreTable(levelName)
 //TODO: updateHighScoreTable(levelName, newHighScoreTable)
 //TODO: serialise/deserialise ms since last tick

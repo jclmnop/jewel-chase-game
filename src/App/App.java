@@ -17,12 +17,10 @@ import javafx.scene.control.TextInputDialog;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Popup;
-import javafx.stage.PopupWindow;
 import javafx.stage.Stage;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import Game.Game;
-import javafx.stage.Window;
 
 import java.io.File;
 import java.io.IOException;

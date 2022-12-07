@@ -22,6 +22,16 @@ public class FloorFollowingThief extends Npc {
     public FloorFollowingThief(Coords coords, int speed) {
         this(coords, speed, Colour.BLUE, Direction.UP);
     }
+    public FloorFollowingThief(
+        Coords coords,
+        int speed,
+        Colour colour,
+        Direction direction,
+        int ticksSinceLastMove
+    ) {
+        this(coords, speed, colour, direction);
+        this.ticksSinceLastMove = ticksSinceLastMove;
+    }
 
     /**
      * Trys to move to tile with assigned colour that is left most to FFT's current direction.
@@ -58,13 +68,13 @@ public class FloorFollowingThief extends Npc {
     public String serialise() {
         // TODO
         return String.format(
-            "%s %s %s %s %s",
+            "%s %s %s %s %s %s",
             this.getClass().getSimpleName(),
             this.coords.serialise(),
             this.speed,
             this.colour,
-            this.currentDirection
+            this.currentDirection,
+            this.ticksSinceLastMove
         );
     }
-
 }

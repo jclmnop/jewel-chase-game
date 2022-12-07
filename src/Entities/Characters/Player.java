@@ -23,6 +23,11 @@ public class Player extends Character {
         Game.addPlayer(this);
     }
 
+    public Player(Coords coords, int speed, Direction currentDirection, int ticksSinceLastMove) {
+        this(coords, speed, currentDirection);
+        this.ticksSinceLastMove = ticksSinceLastMove;
+    }
+
     public void tryMove(Direction direction) {
         AdjacentCoords adjacentCoords = Tile.getMultiColourAdjacentTiles(this.coords);
         Coords to = adjacentCoords.getCoordsInDirection(direction);
@@ -38,11 +43,12 @@ public class Player extends Character {
     @Override
     public String serialise() {
         return String.format(
-            "%s %s %s %s",
+            "%s %s %s %s %s",
             this.getClass().getSimpleName(),
             this.coords.serialise(),
             this.speed,
-            this.currentDirection
+            this.currentDirection,
+            this.ticksSinceLastMove
         );
     }
 }
