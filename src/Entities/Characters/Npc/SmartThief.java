@@ -18,19 +18,19 @@ public class SmartThief extends Npc {
     // Current path to item
     private LinkedList<Coords> path;
 
-    public SmartThief(Coords coords, int speed, Direction direction) { //TODO: edit Character contructor to take direction
-        super(CollisionType.THIEF, true, coords, speed);
+    public SmartThief(Coords coords, int ticksPerMove, Direction direction) { //TODO: edit Character contructor to take direction
+        super(CollisionType.THIEF, true, coords, ticksPerMove);
         this.currentDirection = direction;
         this.path = new LinkedList<>();
         this.imagePath = IMAGE_PATH;
     }
 
-    public SmartThief(Coords coords, int speed) {
-        this(coords, speed, Direction.UP);
+    public SmartThief(Coords coords, int ticksPerMove) {
+        this(coords, ticksPerMove, Direction.UP);
     }
 
-    public SmartThief(Coords coords, int speed, Direction direction, int ticksSinceLastMove) {
-        this(coords, speed, direction);
+    public SmartThief(Coords coords, int ticksPerMove, Direction direction, int ticksSinceLastMove) {
+        this(coords, ticksPerMove, direction);
         this.ticksSinceLastMove = ticksSinceLastMove;
     }
     
@@ -75,7 +75,7 @@ public class SmartThief extends Npc {
             "%s %s %s %s %s",
             this.getClass().getSimpleName(),
             this.coords.serialise(),
-            this.speed,
+            this.ticksPerMove,
             this.currentDirection,
             this.ticksSinceLastMove
         );

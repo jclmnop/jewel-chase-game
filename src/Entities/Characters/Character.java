@@ -14,14 +14,14 @@ import javafx.scene.transform.Translate;
 public abstract class Character extends Entity {
     public static final String RESOURCES_PATH = Entity.RESOURCES_PATH + "characters/";
     protected Direction currentDirection;
-    protected int speed;
+    protected int ticksPerMove;
     protected int ticksSinceLastMove;
     //TODO: sprite/image file?
     //TODO: death animation?
 
-    public Character(CollisionType collisionType, boolean isBlocking, Coords coords, int speed) {
+    public Character(CollisionType collisionType, boolean isBlocking, Coords coords, int ticksPerMove) {
         super(collisionType, isBlocking, coords);
-        this.speed = speed;
+        this.ticksPerMove = ticksPerMove;
         this.ticksSinceLastMove = 0;
     }
 
@@ -31,6 +31,15 @@ public abstract class Character extends Entity {
      */
     public void decrementTicksSinceLastMove() {
         this.ticksSinceLastMove--;
+    }
+
+    /**
+     * Speed up the character by 1 tick.
+     */
+    public void speedUp() {
+        // We subtract 1 because speed is the number of ticks something needs
+        // to wait before it moves.
+        this.ticksPerMove--;
     }
 
     public void kill() {
@@ -57,7 +66,7 @@ public abstract class Character extends Entity {
 
     protected boolean move(Coords nextCoords) {
         this.ticksSinceLastMove++;
-        if (this.ticksSinceLastMove >= this.speed) {
+        if (this.ticksSinceLastMove >= this.ticksPerMove) {
             this.ticksSinceLastMove = 0;
             this.currentDirection = this.coords.directionTo(nextCoords);
             Tile.move(this, this.coords, nextCoords);

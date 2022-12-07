@@ -12,24 +12,24 @@ public class FloorFollowingThief extends Npc {
     private static final String IMAGE_PATH = Character.RESOURCES_PATH + "stuart_face.png";
     private final Colour colour;
 
-    public FloorFollowingThief(Coords coords, int speed, Colour colour, Direction direction) {
-        super(CollisionType.THIEF, true, coords, speed);
+    public FloorFollowingThief(Coords coords, int ticksPerMove, Colour colour, Direction direction) {
+        super(CollisionType.THIEF, true, coords, ticksPerMove);
         this.colour = colour;
         this.currentDirection = direction;
         this.imagePath = IMAGE_PATH;
     }
 
-    public FloorFollowingThief(Coords coords, int speed) {
-        this(coords, speed, Colour.BLUE, Direction.UP);
+    public FloorFollowingThief(Coords coords, int ticksPerMove) {
+        this(coords, ticksPerMove, Colour.BLUE, Direction.UP);
     }
     public FloorFollowingThief(
         Coords coords,
-        int speed,
+        int ticksPerMove,
         Colour colour,
         Direction direction,
         int ticksSinceLastMove
     ) {
-        this(coords, speed, colour, direction);
+        this(coords, ticksPerMove, colour, direction);
         this.ticksSinceLastMove = ticksSinceLastMove;
     }
 
@@ -71,7 +71,7 @@ public class FloorFollowingThief extends Npc {
             "%s %s %s %s %s %s",
             this.getClass().getSimpleName(),
             this.coords.serialise(),
-            this.speed,
+            this.ticksPerMove,
             this.colour,
             this.currentDirection,
             this.ticksSinceLastMove
