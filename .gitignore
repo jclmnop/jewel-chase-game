@@ -141,3 +141,7 @@ replay_pid*
 
 # End of https://www.toptal.com/developers/gitignore/api/intellij,java
 .DS_store
+src/Game/files/cache/
+src/Game/files/playerProfiles/
+src/Game/files/saveGames/
+src/Game/files/highscores/
