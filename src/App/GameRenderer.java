@@ -160,18 +160,18 @@ public class GameRenderer {
         entityGridCell.setMinSize(tileDimensions, tileDimensions);
         entityGridCell.setAlignment(Pos.CENTER);
 
-        try {
+//        try {
             ArrayList<Entity> entities = (ArrayList<Entity>) tile.getEntities().clone();
             for (Entity entity : tile.getEntities()) {
                 entityGridCell.getChildren().add(
                     this.renderEntity(entity, tileDimensions)
                 );
             }
-        } catch (ConcurrentModificationException exception) {
-            System.out.println("No time for thread safety");
-//            exception.printStackTrace();
-//            return this.renderEntities(tile, tileDimensions);
-        }
+//        } catch (ConcurrentModificationException exception) {
+//            System.out.println("No time for thread safety");
+////            exception.printStackTrace();
+////            return this.renderEntities(tile, tileDimensions);
+//        }
 
         return entityGridCell;
     }

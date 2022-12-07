@@ -8,15 +8,21 @@ import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextInputDialog;
+import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import javafx.stage.Popup;
+import javafx.stage.PopupWindow;
 import javafx.stage.Stage;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import Game.Game;
+import javafx.stage.Window;
 
 import java.io.File;
 import java.io.IOException;
@@ -111,11 +117,43 @@ public class App extends Application {
 
     @Override
     public void start(Stage primaryStage) throws IOException {
+        Thread.setDefaultUncaughtExceptionHandler(App::errorPopup);
         App.stage = primaryStage;
         App.stage.setResizable(false);
         App.playMusic();
         this.changeScene(MENU_FXML_PATH);
         App.updateMessageOfTheDay();
+    }
+
+    /**
+     * Display error message popup to user. Auto-hides after losing focus.
+     * @param currentThread Thread from which exception was thrown.
+     * @param exception Exception to be displayed.
+     */
+    public static void errorPopup(Thread currentThread, Throwable exception) {
+        final double FONT_SIZE = 20;
+        final double Y_OFFSET = 28;
+        while (exception.getCause() != null) {
+            exception = exception.getCause();
+        }
+        String errorMsg =
+            exception.getMessage() == null
+                ? "Something went wrong"
+                : exception.getMessage();
+        Popup errorNotification = new Popup();
+        errorNotification.setAutoHide(true);
+
+        Label errorLabel = new Label(errorMsg);
+        errorLabel.setAlignment(Pos.CENTER);
+        errorLabel.setStyle("-fx-background-color: black; -fx-text-fill: red;");
+        errorLabel.setFont(new Font("Roboto Mono", FONT_SIZE));
+        errorLabel.setMinWidth(App.stage.getWidth());
+
+        errorNotification.getContent().add(errorLabel);
+        double xPos = App.stage.getX();
+        double yPos = App.stage.getY() + Y_OFFSET;
+        errorNotification.show(App.stage, xPos, yPos);
+
     }
 
     /**

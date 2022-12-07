@@ -194,15 +194,15 @@ public class Game {
      * @return Handle for game loop thread
      */
     public static Thread startGame(GameParams gameParams) {
-        // TODO: This should take path to level/save file instead,
-        //       then call load method and get GameParams from that
-        //       (load method will also ensure board etc is all set up)
         Game.score = gameParams.startScore();
         Game.timeRemaining = gameParams.startTime();
         Game.headless = gameParams.isHeadless();
         Game.currentLevelNumber = gameParams.levelNumber();
+
         Thread gameLoopThread = new Thread(Game::gameLoop);
+        gameLoopThread.setUncaughtExceptionHandler(App::errorPopup);
         gameLoopThread.start();
+
         return gameLoopThread;
     }
 
