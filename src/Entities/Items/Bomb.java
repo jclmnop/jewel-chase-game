@@ -49,6 +49,13 @@ public class Bomb extends Item {
         }
     }
 
+    /* TODO:    Spawn instances of explosion going vertical and horizontal from bomb.
+     *          Remove bomb from the board.    
+    */
+    private void explode() {
+
+    }
+
     /**
      * Serialises the Object into a String.
      *
