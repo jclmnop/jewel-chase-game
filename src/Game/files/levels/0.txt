@@ -14,7 +14,7 @@ YYYY YRYR YYYY YYYY YYYY YYYY YYYY YYYY YYYY YYYY YYYY YYYY YYYY
 
 Player 0 0 1
 SmartThief 5 5 5
-FloorFollowingThief 3 4 5 RED
+FloorFollowingThief 3 4 5
 Door 12 9
 Clock 0 9
 Star 1 0

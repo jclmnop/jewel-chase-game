@@ -138,7 +138,9 @@ public class Deserialiser {
         stringIterator.next(); // Skip type name
         Coords coords = Coords.fromString(stringIterator.next(), stringIterator.next());
         int speed = Integer.parseInt(stringIterator.next());
-        Colour colour = Colour.fromChar(stringIterator.next().charAt(0));
+        Colour colour = stringIterator.hasNext()
+            ? Colour.fromChar(stringIterator.next().charAt(0))
+            : Tile.getTile(coords).getColours().c1();
         Direction direction = stringIterator.hasNext()
             ? Direction.fromString(stringIterator.next())
             : Direction.RIGHT;
