@@ -9,6 +9,7 @@ import Entities.Characters.Npc.SmartThief;
 import Entities.Characters.Player;
 import Entities.Items.Collectable.Clock;
 import Entities.Items.Collectable.Collectable;
+import Entities.Items.Collectable.Mushroom;
 import Entities.Items.Collectable.Star;
 import Interfaces.Renderable;
 import Interfaces.Serialisable;
@@ -190,7 +191,14 @@ public abstract class Entity implements Serialisable, Renderable {
                 }
                 case SPEED_UP -> {
                     Character character = (Character) collision.getEntityTwo();
-                    character.speedUp();
+                    boolean maxSpeedAlreadyReached = character.speedUp();
+                    if (maxSpeedAlreadyReached) {
+                        int scoreAdjustment =
+                            character instanceof Player
+                                ? +Mushroom.POINTS_IF_MAX_SPEED_REACHED
+                                : -Mushroom.POINTS_IF_MAX_SPEED_REACHED;
+                        Game.adjustScore(scoreAdjustment);
+                    }
                     Entity.removeEntity(collision.getEntityOne());
                 }
             }

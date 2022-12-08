@@ -13,6 +13,7 @@ import javafx.scene.transform.Translate;
 
 public abstract class Character extends Entity {
     public static final String RESOURCES_PATH = Entity.RESOURCES_PATH + "characters/";
+    public static final int MIN_TICKS_PER_MOVE = 1;
     protected Direction currentDirection;
     protected int ticksPerMove;
     protected int ticksSinceLastMove;
@@ -34,14 +35,23 @@ public abstract class Character extends Entity {
     }
 
     /**
-     * Double the speed of a character.
+     * Double the speed if possible, otherwise return true to indicate that
+     * max speed had already been reached.
+     *
+     * @return true if max speed had already been reached before calling this
+     *         method, false otherwise.
      */
-    public void speedUp() {
-        this.ticksPerMove = this.ticksPerMove / 2;
-        // Nothing bad would happen if ticksPerMove goes below 1, or even below
-        // zero (would still behave the same as 1), but 1 is technically the minimum.
-        if (this.ticksPerMove < 1) {
-            this.ticksPerMove = 1;
+    public boolean speedUp() {
+        if (this.ticksPerMove == MIN_TICKS_PER_MOVE) {
+            return true;
+        } else {
+            this.ticksPerMove = this.ticksPerMove / 2;
+            // Nothing bad would happen if ticksPerMove goes below 1, or even below
+            // zero (would still behave the same as 1), but 1 is technically the minimum.
+            if (this.ticksPerMove <= MIN_TICKS_PER_MOVE ) {
+                this.ticksPerMove = MIN_TICKS_PER_MOVE;
+            }
+            return false;
         }
     }
 

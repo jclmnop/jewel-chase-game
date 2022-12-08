@@ -21,6 +21,8 @@ import java.util.Iterator;
  * Utility meant to be used by GameFileHandler when loading a level/save file.
  */
 public class Deserialiser {
+    public static final int DEFAULT_NPC_TICKS_PER_MOVE = 5;
+    public static final int DEFAULT_PLAYER_TICKS_PER_MOVE = 1;
     public static Object deserialiseObject(
         String serialisedString
     ) throws ParseTileColourException, DeserialiseException {
@@ -99,7 +101,9 @@ public class Deserialiser {
         Iterator<String> stringIterator = Arrays.stream(splitString).iterator();
         stringIterator.next(); // Skip type name
         Coords coords = Coords.fromString(stringIterator.next(), stringIterator.next());
-        int speed = Integer.parseInt(stringIterator.next());
+        int speed = stringIterator.hasNext() ?
+            Integer.parseInt(stringIterator.next())
+            : DEFAULT_NPC_TICKS_PER_MOVE;
         Direction direction = stringIterator.hasNext()
             ? Direction.fromString(stringIterator.next())
             : Direction.RIGHT;
@@ -113,7 +117,9 @@ public class Deserialiser {
         Iterator<String> stringIterator = Arrays.stream(splitString).iterator();
         stringIterator.next(); // Skip type name
         Coords coords = Coords.fromString(stringIterator.next(), stringIterator.next());
-        int speed = Integer.parseInt(stringIterator.next());
+        int speed = stringIterator.hasNext() ?
+            Integer.parseInt(stringIterator.next())
+            : DEFAULT_PLAYER_TICKS_PER_MOVE;
         Direction direction = stringIterator.hasNext()
             ? Direction.fromString(stringIterator.next())
             : Direction.RIGHT;
@@ -127,8 +133,10 @@ public class Deserialiser {
         Iterator<String> stringIterator = Arrays.stream(splitString).iterator();
         stringIterator.next(); // Skip type name
         Coords coords = Coords.fromString(stringIterator.next(), stringIterator.next());
-        int speed = Integer.parseInt(stringIterator.next());
         Direction direction = Direction.fromString(stringIterator.next());
+        int speed = stringIterator.hasNext() ?
+            Integer.parseInt(stringIterator.next())
+            : DEFAULT_NPC_TICKS_PER_MOVE;
         //TODO direction
         return new FlyingAssassin(coords, speed); // TODO
     }
@@ -137,7 +145,9 @@ public class Deserialiser {
         Iterator<String> stringIterator = Arrays.stream(splitString).iterator();
         stringIterator.next(); // Skip type name
         Coords coords = Coords.fromString(stringIterator.next(), stringIterator.next());
-        int speed = Integer.parseInt(stringIterator.next());
+        int speed = stringIterator.hasNext() ?
+            Integer.parseInt(stringIterator.next())
+            : DEFAULT_NPC_TICKS_PER_MOVE;
         Colour colour = stringIterator.hasNext()
             ? Colour.fromChar(stringIterator.next().charAt(0))
             : Tile.getTile(coords).getColours().c1();

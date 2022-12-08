@@ -62,22 +62,24 @@ public class GameRenderer {
         double tileDimensions = Math.min(
             BOARD_WIDTH / Tile.getWidth(), BOARD_WIDTH / Tile.getHeight()
         );
-        if (Game.isRunning()) {
+//        if (Game.isRunning()) {
             if (!gameRenderer.isBoardRendered) {
                 gameRenderer.renderBoard(tileDimensions); //TODO: only need to render board once
             }
             gameRenderer.renderEntityGrid(tileDimensions);
 //            System.out.println("Rendered.");
-        }
+//        }
         gameRenderer.updateText();
     }
 
     public static void renderLose() {
         gameRenderer.loseScreen.visibleProperty().set(true);
+        GameRenderer.render();
     }
 
     public static void renderWin() {
         gameRenderer.victoryScreen.visibleProperty().set(true);
+        GameRenderer.render();
     }
 
     public void saveGame() throws IOException {

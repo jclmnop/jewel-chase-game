@@ -208,8 +208,9 @@ public class Game {
 
     public static void win() {
         Game.endGame();
+        Game.adjustScore(+Game.timeRemaining);
         if (!Game.headless) {
-            GameRenderer.renderWin();
+            Platform.runLater(GameRenderer::renderWin);
         }
         if (Game.currentLevelNumber == Game.playerProfile.getMaxLevel()) {
             Game.playerProfile.increaseMaxLevel();
@@ -217,7 +218,7 @@ public class Game {
                 GameFileHandler.savePlayerProfile(Game.playerProfile);
             } catch (IOException ioException) {
                 ioException.printStackTrace();
-                throw new RuntimeException("Error saving player profile");
+                throw new RuntimeException("Error updating player profile");
             }
         }
 
@@ -227,7 +228,7 @@ public class Game {
     public static void lose() {
         Game.endGame();
         if (!Game.headless) {
-            GameRenderer.renderLose();
+            Platform.runLater(GameRenderer::renderLose);
         }
     }
 
