@@ -17,7 +17,6 @@ import Game.Tile;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.ConcurrentModificationException;
 
 public class GameRenderer {
     public static final double BOARD_WIDTH = 1000;
@@ -62,22 +61,21 @@ public class GameRenderer {
         double tileDimensions = Math.min(
             BOARD_WIDTH / Tile.getWidth(), BOARD_WIDTH / Tile.getHeight()
         );
-        if (Game.isRunning()) {
-            if (!gameRenderer.isBoardRendered) {
-                gameRenderer.renderBoard(tileDimensions); //TODO: only need to render board once
-            }
-            gameRenderer.renderEntityGrid(tileDimensions);
-//            System.out.println("Rendered.");
+        if (!gameRenderer.isBoardRendered) {
+            gameRenderer.renderBoard(tileDimensions); //TODO: only need to render board once
         }
+        gameRenderer.renderEntityGrid(tileDimensions);
         gameRenderer.updateText();
     }
 
     public static void renderLose() {
         gameRenderer.loseScreen.visibleProperty().set(true);
+        GameRenderer.render();
     }
 
     public static void renderWin() {
         gameRenderer.victoryScreen.visibleProperty().set(true);
+        GameRenderer.render();
     }
 
     public void saveGame() throws IOException {
@@ -104,7 +102,6 @@ public class GameRenderer {
                     this.renderTile(Tile.getTile(new Coords(col, row)), tileDimensions),
                     col, row
                 );
-
             }
         }
         this.isBoardRendered = true;
@@ -143,14 +140,19 @@ public class GameRenderer {
     private void renderEntityGrid(double tileDimensions) {
         this.entityGridPane.getChildren().clear();
 
-        for (int row = 0; row < Tile.getHeight(); row++) {
-            for (int col = 0; col < Tile.getWidth(); col++) {
-                Tile currentTile = Tile.getTile(new Coords(col, row));
-                this.entityGridPane.add(
-                    this.renderEntities(currentTile, tileDimensions),
-                    col, row
-                );
+        try {
+            for (int row = 0; row < Tile.getHeight(); row++) {
+                for (int col = 0; col < Tile.getWidth(); col++) {
+                    Tile currentTile = Tile.getTile(new Coords(col, row));
+                    this.entityGridPane.add(
+                        this.renderEntities(currentTile, tileDimensions),
+                        col, row
+                    );
+                }
             }
+        } catch (ArrayIndexOutOfBoundsException e) {
+            // This just means that game has been quit mid-render.
+            e.printStackTrace();
         }
     }
 
@@ -160,12 +162,13 @@ public class GameRenderer {
         entityGridCell.setMinSize(tileDimensions, tileDimensions);
         entityGridCell.setAlignment(Pos.CENTER);
 
-            ArrayList<Entity> entities = (ArrayList<Entity>) tile.getEntities().clone();
-            for (Entity entity : entities) {
-                entityGridCell.getChildren().add(
-                    this.renderEntity(entity, tileDimensions)
-                );
-            }
+        ArrayList<Entity> entities = (ArrayList<Entity>) tile.getEntities().clone();
+        for (Entity entity : entities) {
+            entityGridCell.getChildren().add(
+                this.renderEntity(entity, tileDimensions)
+            );
+        }
+
         return entityGridCell;
     }
 

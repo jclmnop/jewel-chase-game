@@ -13,10 +13,10 @@ import java.time.Instant;
 public class GameTest {
     // TODO: loads new game
     // TODO: clears all static instances when game ends
-    public static final long ACCEPTABLE_EXCESS_RUN_TIME_MILLI = 100;
+    public static final long ACCEPTABLE_EXCESS_RUN_TIME_MILLI = 200;
 
     @Test
-    public void testGameLoopRunsAndEndsGracefully() throws InterruptedException {
+    public void testGameLoopRunsAndEndsGracefully() {
         // Run for 1 second
         int runTimeSeconds = 1;
         GameParams gameParams = new GameParams(runTimeSeconds, 0, true);
@@ -27,10 +27,10 @@ public class GameTest {
         Assertions.assertEquals(1, Entity.getEntities().size());
 
         Instant start = Instant.now();
-        Thread gameThread = Game.startGame(gameParams);
-        gameThread.join();
+        Game.startGame(gameParams);
         Instant end = Instant.now();
         long actualRunTimeMilli = end.toEpochMilli() - start.toEpochMilli();
+        System.out.println(actualRunTimeMilli);
         long expectedRunTimeMilli = runTimeSeconds * Game.MILLI_PER_SECOND;
         long unacceptableRunTimeMilli = expectedRunTimeMilli + ACCEPTABLE_EXCESS_RUN_TIME_MILLI;
         boolean runTimeLongerThanExpected = actualRunTimeMilli > expectedRunTimeMilli;
