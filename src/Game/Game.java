@@ -9,8 +9,11 @@ import Entities.Characters.Npc.Npc;
 import Entities.Characters.Player;
 import Entities.Entity;
 import Utils.GameFileHandler;
-import javafx.application.Platform;
+import javafx.animation.Animation;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.scene.input.KeyCode;
+import javafx.util.Duration;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -35,9 +38,9 @@ public class Game {
     private static boolean running = false;
     private static boolean paused = false;
     private static boolean headless = false;
-    private static long lastTickTime = 0;
-    private static long lastCountdownTime = 0;
+    private static long lastCountdownTime;
     private static PlayerProfile playerProfile;
+    private static Timeline tickTimeline;
 
     static {
         Game.PLAYER1_MOVEMENT_KEYS.put(KeyCode.UP, Direction.UP);
@@ -175,8 +178,11 @@ public class Game {
     public static void registerNewMovementInput(KeyCode keyPressed) {
         PlayerInput playerInput = Game.playerMovementKeys.get(keyPressed);
         if (playerInput != null) {
-            // Update the most recent movement input for this player
-            Game.currentMovementInputs.put(playerInput.player(), playerInput.direction());
+            // Update the movement input for this player if it hasn't
+            // been updated during this tick
+            Game.currentMovementInputs.computeIfAbsent(
+                playerInput.player(), k -> playerInput.direction()
+            );
         } else if (keyPressed == KeyCode.SPACE) {
             Game.togglePaused();
         }
@@ -191,26 +197,39 @@ public class Game {
      * purposes.
      *
      * @param gameParams Parameters to initialise the Game with
-     * @return Handle for game loop thread
      */
-    public static Thread startGame(GameParams gameParams) {
+    public static void startGame(GameParams gameParams) {
         Game.score = gameParams.startScore();
         Game.timeRemaining = gameParams.startTime();
         Game.headless = gameParams.isHeadless();
         Game.currentLevelNumber = gameParams.levelNumber();
+        Game.lastCountdownTime = Instant.now().toEpochMilli();
+        Game.running = true;
 
-        Thread gameLoopThread = new Thread(Game::gameLoop);
-        gameLoopThread.setUncaughtExceptionHandler(App::errorPopup);
-        gameLoopThread.start();
+        if (Game.headless) {
+            try {
+                Game.headlessGameLoop();
+            } catch (InterruptedException e) {
+                throw new RuntimeException("Headless loop interrupted");
+            }
+        } else {
+            Game.tickTimeline = new Timeline(
+                new KeyFrame(
+                    Duration.millis(MILLI_PER_TICK),
+                    event -> Game.tick()
+                )
+            );
+            Game.tickTimeline.setCycleCount(Animation.INDEFINITE);
+            Game.tickTimeline.play();
+        }
 
-        return gameLoopThread;
     }
 
     public static void win() {
         Game.endGame();
         Game.adjustScore(+Game.timeRemaining);
         if (!Game.headless) {
-            Platform.runLater(GameRenderer::renderWin);
+            GameRenderer.renderWin();
         }
         if (Game.currentLevelNumber == Game.playerProfile.getMaxLevel()) {
             Game.playerProfile.increaseMaxLevel();
@@ -228,7 +247,7 @@ public class Game {
     public static void lose() {
         Game.endGame();
         if (!Game.headless) {
-            Platform.runLater(GameRenderer::renderLose);
+            GameRenderer.renderLose();
         }
     }
 
@@ -242,54 +261,38 @@ public class Game {
         Game.running = false;
     }
 
-    private static void gameLoop() {
-        Game.running = true;
-        long now = Instant.now().toEpochMilli();
-        Game.lastCountdownTime = now;
-        Game.lastTickTime = now;
-        System.out.println("gameLoop started.");
-        while (Game.isRunning()) {
-            if (Game.paused) {
-                try {
-                    Thread.sleep(MILLI_PER_TICK);
-                } catch (InterruptedException e) {
-                    System.out.println(e.getMessage());
-                }
-            } else {
-                Game.lock.writeLock().lock();
-                Game.tick();
-                Game.lock.writeLock().unlock();
-            }
-            if (!Game.headless) {
-                Platform.runLater(GameRenderer::render);
-            }
-            Game.checkForLoss();
-        }
-        System.out.println("gameLoop ended.");
-        if (headless) {
-            Game.resetGame();
+    private static void headlessGameLoop() throws InterruptedException {
+        while (Game.running) {
+            Game.tick();
+            Thread.sleep(Game.MILLI_PER_TICK);
         }
     }
 
     private static void tick() {
+        if (Game.isRunning()) {
+            if (!Game.paused) {
+                Game.handleEvents();
+            }
+            if (!Game.headless) {
+                GameRenderer.render();
+            }
+            Game.checkForLoss();
+        } else {
+            System.out.println("gameLoop ended.");
+            if (headless) {
+                Game.resetGame();
+            }
+            Game.tickTimeline.stop();
+        }
+    }
+
+    private static void handleEvents() {
         Game.moveNpcs();
         //TODO handle bombs + explosions
         Game.processPlayerInputs();
-
         // Collisions must be processed *after* movements
         Entity.processCollisions();
-
-        // Update lastTickTime, so we can delay until MILLI_PER_TICK has passed
-        Game.updateLastTickTime();
-        Game.delayNextTick();
-
-        // Countdown the timer if MILLI_PER_SECOND has passed since last timer
-        // decrement
         Game.timerCountdown();
-
-        // Check if time has reached zero or all players are dead
-
-//        System.out.println("Ticked.");
     }
 
     private static void processPlayerInputs() {
@@ -297,21 +300,6 @@ public class Game {
             Game.movePlayer(player, currentMovementInputs.get(player));
         }
         Game.currentMovementInputs.clear();
-    }
-
-    private static void updateLastTickTime() {
-        Game.lastTickTime = Instant.now().toEpochMilli();
-    }
-
-    private static void delayNextTick() {
-        var now = Instant.now().toEpochMilli();
-        var timeSinceLastTick = now - Game.lastTickTime;
-        var timeUntilNextTick = MILLI_PER_TICK - timeSinceLastTick;
-        try {
-            Thread.sleep(timeUntilNextTick);
-        } catch (InterruptedException e) {
-            System.out.println(e.getMessage());
-        }
     }
 
     private static void timerCountdown() {
