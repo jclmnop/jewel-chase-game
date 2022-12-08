@@ -7,7 +7,9 @@ import Entities.Characters.Character;
 import Entities.Characters.Npc.FloorFollowingThief;
 import Entities.Characters.Npc.SmartThief;
 import Entities.Characters.Player;
+import Entities.Items.Collectable.Clock;
 import Entities.Items.Collectable.Collectable;
+import Entities.Items.Collectable.Star;
 import Interfaces.Renderable;
 import Interfaces.Serialisable;
 import Game.Game;
@@ -115,6 +117,7 @@ public abstract class Entity implements Serialisable, Renderable {
                 collision
             );
             System.out.println("COLLISION: " + collisionEvent);
+            //TODO: extract into own methods (and maybe move all to CollisionEvent)
             switch (collisionEvent) {
                 case NOTHING -> {}
                 case LOOT_STOLEN -> {
@@ -132,13 +135,13 @@ public abstract class Entity implements Serialisable, Renderable {
                 case CLOCK_STOLEN -> {
                     //TODO: decide seconds per clock
                     int timeAdjustment = 10;
-                    Game.adjustTime(-timeAdjustment);
+                    Game.adjustTime(-Clock.SECONDS);
                     Entity.removeEntity(collision.getEntityOne());
                 }
                 case CLOCK_COLLECTED -> {
                     //TODO: decide seconds per clock
                     int timeAdjustment = 10;
-                    Game.adjustTime(timeAdjustment);
+                    Game.adjustTime(+Clock.SECONDS);
                     Entity.removeEntity(collision.getEntityOne());
                 }
                 case LEVER_TRIGGERED -> {
@@ -156,7 +159,6 @@ public abstract class Entity implements Serialisable, Renderable {
                     entityTwo.kill();
                 }
                 case LOSE -> {
-                    //TODO: finish implementing Game.lose()
                     if (Entity.getEntitiesOfType(Collectable.class).isEmpty()) {
                         Game.lose();
                     }
@@ -169,12 +171,22 @@ public abstract class Entity implements Serialisable, Renderable {
                 }
                 case CLONE -> {
                     Entity entityToBeCloned = collision.getEntityTwo();
-                    Object deserialised =
-                        Deserialiser.deserialiseObject(entityToBeCloned.serialise());
-                    Entity.removeEntity(collision.getEntityOne());
-                    if (deserialised instanceof Character deserialisedCharacter) {
-                        deserialisedCharacter.decrementTicksSinceLastMove();
+                    int playerCount = Entity.getEntitiesOfType(Player.class).size();
+                    if (
+                        entityToBeCloned instanceof Player
+                            && playerCount >= Game.MAX_PLAYERS
+                    ) {
+                        // If max players has already been reached, the item
+                        // will give extra points instead.
+                        Game.adjustScore(+Star.POINTS_IF_MAX_PLAYERS_REACHED);
+                    } else {
+                        Object deserialised =
+                            Deserialiser.deserialiseObject(entityToBeCloned.serialise());
+                        if (deserialised instanceof Character deserialisedCharacter) {
+                            deserialisedCharacter.decrementTicksSinceLastMove();
+                        }
                     }
+                    Entity.removeEntity(collision.getEntityOne());
                 }
                 case SPEED_UP -> {
                     Character character = (Character) collision.getEntityTwo();
