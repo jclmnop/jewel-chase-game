@@ -1,6 +1,5 @@
 package Utils;
 
-import DataTypes.Exception.DeserialiseException;
 import DataTypes.GameParams;
 import Entities.Entity;
 import Game.PlayerProfile;
@@ -13,16 +12,18 @@ import java.nio.file.Files;
 import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 //TODO: loadHighScoreTable(levelName)
 //TODO: updateHighScoreTable(levelName, newHighScoreTable)
+//TODO: serialise/deserialise ms since last tick
 /**
  * Utility class for handling game files such as saves, levels, profiles, etc.
  * @author Jonny
- * @version 1.0
+ * @version 1.2
  */
 public class GameFileHandler {
     public static final String GAME_FILES_PATH = "src/Game/files/";
@@ -30,19 +31,29 @@ public class GameFileHandler {
     public static final String LEVEL_FILES_PATH = GAME_FILES_PATH + "levels/";
     public static final String HIGH_SCORES_PATH = GAME_FILES_PATH + "highscores/";
     public static final String PLAYER_PROFILES_PATH = GAME_FILES_PATH + "playerProfiles/";
+    public static final String CACHE_PATH = GAME_FILES_PATH + "cache/";
+    public static final String PROFILE_CACHE_PATH = CACHE_PATH + "currentProfile.txt";
 
     private GameFileHandler() {}
 
     /**
-     * Loads the player profile with the given playerName.
-     * @param playerName Name of the player.
+     * Loads the player profile with the given playerName. If an empty string
+     * is provided, then this method attempts to load the most recently cached
+     * player profile.
+     * @param playerName Name of the player, or an empty string.
      * @throws IOException If an I/O error occurs reading from the file.
      */
     public static void loadPlayerProfile(String playerName) throws IOException {
-        Path profilePath = Path.of(PLAYER_PROFILES_PATH + playerName + ".txt");
-        String profileFile = Files.readString(profilePath);
-        PlayerProfile profile = PlayerProfile.fromString(profileFile);
-        Game.setPlayerProfile(profile);
+        if (playerName.isBlank()) {
+            // Load cached profile if it exists
+            GameFileHandler.loadCachedPlayerProfile();
+        } else {
+            Path profilePath = Path.of(PLAYER_PROFILES_PATH + playerName + ".txt");
+            String profileFile = Files.readString(profilePath);
+            PlayerProfile profile = PlayerProfile.fromString(profileFile);
+            Game.setPlayerProfile(profile);
+            GameFileHandler.cachePlayerProfile(playerName);
+        }
     }
 
     /**
@@ -64,7 +75,7 @@ public class GameFileHandler {
      * @throws IOException If an I/O error occurs reading from the file.
      */
     public static void newPlayerProfile(String playerName) throws IOException {
-        if (!GameFileHandler.getAvailableProfiles().contains(playerName)) {
+        if (!GameFileHandler.profileExists(playerName)) {
             PlayerProfile playerProfile = new PlayerProfile(playerName);
             GameFileHandler.savePlayerProfile(playerProfile);
             boolean mkdirSuccess = new File(SAVE_GAME_PATH + playerName).mkdir();
@@ -75,22 +86,25 @@ public class GameFileHandler {
     }
 
     /**
+     * Delete a player profile and all its save files.
+     * @param playerName Name of player profile to be deleted.
+     * @throws IOException If an I/O error occurs deleting the files.
+     */
+    public static void deletePlayerProfile(String playerName) throws IOException {
+        Path profilePath = Path.of(PLAYER_PROFILES_PATH + playerName + ".txt");
+        Files.deleteIfExists(profilePath);
+        GameFileHandler.deleteAllSaves(playerName);
+        if (Game.getPlayerProfile().getPlayerName().equals(playerName)) {
+            Game.setPlayerProfile(null);
+        }
+    }
+
+    /**
      * List names of all available player profile file.
      * @return List of available profile files.
      */
     public static ArrayList<String> getAvailableProfiles() {
-        File[] profileFiles = new File(PLAYER_PROFILES_PATH).listFiles();
-
-        if (profileFiles == null) {
-            return new ArrayList<>();
-        }
-
-        return Stream.of(profileFiles)
-            .sorted()
-            .filter(File::isFile)
-            .map(File::getName)
-            .map(f -> f.split("\\.")[0])
-            .collect(Collectors.toCollection(ArrayList::new));
+        return GameFileHandler.listFileNames(PLAYER_PROFILES_PATH, false);
     }
 
     /**
@@ -100,18 +114,8 @@ public class GameFileHandler {
      */
     public static ArrayList<String> getAvailableLevels(PlayerProfile playerProfile) {
         int playerMaxLevel = playerProfile.getMaxLevel();
-        File[] levelFiles = new File(LEVEL_FILES_PATH).listFiles();
 
-        if (levelFiles == null) {
-            throw new RuntimeException(
-                "COULD NOT LOAD LEVEL FILES FROM " + LEVEL_FILES_PATH
-            );
-        }
-
-        ArrayList<String> levelFileNames = Stream.of(levelFiles)
-            .filter(File::isFile)
-            .map(File::getName)
-            .collect(Collectors.toCollection(ArrayList::new));
+        ArrayList<String> levelFileNames = GameFileHandler.listFileNames(LEVEL_FILES_PATH, false);
 
         if (levelFileNames.isEmpty()) {
             throw new RuntimeException("NO LEVEL FILES IN " + LEVEL_FILES_PATH);
@@ -119,7 +123,6 @@ public class GameFileHandler {
 
         return levelFileNames.stream()
             .sorted()
-            .map(f -> f.split("\\.")[0])
             .filter(f -> Integer.parseInt(f) <= playerMaxLevel)
             .collect(Collectors.toCollection(ArrayList::new));
     }
@@ -132,19 +135,18 @@ public class GameFileHandler {
      */
     public static ArrayList<String> getAvailableSaveFiles(PlayerProfile playerProfile) throws IOException {
         String playerName = playerProfile.getPlayerName();
+        return GameFileHandler.getAvailableSaveFiles(playerName);
+    }
+
+    /**
+     * List all save files associated with this player name
+     * @param playerName Name of player profile to retrieve save game files for.
+     * @return List of all save files.
+     * @throws IOException If an I/O error occurs reading from the file.
+     */
+    public static ArrayList<String> getAvailableSaveFiles(String playerName) throws IOException {
         String saveDirectory = SAVE_GAME_PATH + playerName;
-        File[] saveFiles = new File(saveDirectory).listFiles();
-
-        if (saveFiles == null) {
-            return new ArrayList<>();
-        }
-
-        return Stream.of(saveFiles)
-            .sorted()
-            .filter(File::isFile)
-            .map(File::getName)
-            .map(f -> f.split("\\.")[0])
-            .collect(Collectors.toCollection(ArrayList::new));
+        return GameFileHandler.listFileNames(saveDirectory, false);
     }
 
     /**
@@ -250,5 +252,57 @@ public class GameFileHandler {
         }
 
         return gameParams;
+    }
+
+    private static void cachePlayerProfile(String playerName) throws IOException {
+        Path profileCachePath = Path.of(PROFILE_CACHE_PATH);
+        Files.writeString(profileCachePath, playerName);
+    }
+
+    private static void loadCachedPlayerProfile() throws IOException {
+        Path profileCachePath = Path.of(PROFILE_CACHE_PATH);
+        String cachedProfileName = Files.readString(profileCachePath);
+        if (!cachedProfileName.isBlank() && GameFileHandler.profileExists(cachedProfileName)) {
+            GameFileHandler.loadPlayerProfile(cachedProfileName);
+        }
+    }
+
+    private static void deleteAllSaves(String playerName) throws IOException {
+        String directoryPath = SAVE_GAME_PATH + playerName;
+        File[] saveFiles = GameFileHandler.listFiles(directoryPath);
+        ArrayList<Path> saveFilePaths = Arrays.stream(saveFiles)
+            .map(File::toPath)
+            .collect(Collectors.toCollection(ArrayList::new));
+        for (Path saveFilePath : saveFilePaths) {
+            Files.delete(saveFilePath);
+        }
+        Files.delete(Path.of(directoryPath));
+    }
+
+    private static ArrayList<String> listFileNames(
+        String path,
+        boolean includeExtensions
+    ) {
+        File[] profileFiles = GameFileHandler.listFiles(path);
+
+        if (profileFiles == null) {
+            return new ArrayList<>();
+        } else {
+            return Stream.of(profileFiles)
+                .sorted()
+                .filter(File::isFile)
+                .map(File::getName)
+                .map(f -> includeExtensions ? f : f.split("\\.")[0])
+                .collect(Collectors.toCollection(ArrayList::new));
+        }
+
+    }
+
+    private static File[] listFiles(String path) {
+        return new File(path).listFiles();
+    }
+
+    private static boolean profileExists(String playerName) throws IOException {
+        return GameFileHandler.getAvailableProfiles().contains(playerName);
     }
 }

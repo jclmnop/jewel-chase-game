@@ -78,5 +78,10 @@
             <Font name="Roboto Light" size="18.0" />
          </font>
       </Text>
+      <Text fx:id="currentPlayerProfile" layoutX="14.0" layoutY="107.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Player: " wrappingWidth="423.21630859375">
+         <font>
+            <Font name="Roboto Mono Bold" size="24.0" />
+         </font>
+      </Text>
    </children>
 </Pane>

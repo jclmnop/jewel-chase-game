@@ -3,19 +3,14 @@ package Entities.Items.Collectable;
 import DataTypes.Coords;
 import Entities.Items.Item;
 
-public class Clock extends Collectable {
-    private static final String IMAGE_PATH = Item.RESOURCES_PATH + "clock.png";
+public class Mushroom extends Collectable {
+    private static final String IMAGE_PATH = Item.RESOURCES_PATH + "mushroom.png";
 
-    public Clock(Coords coords) {
-        super(CollisionType.CLOCK, false, coords);
+    public Mushroom(Coords coords) {
+        super(CollisionType.MUSHROOM, false, coords);
         this.imagePath = IMAGE_PATH;
     }
 
-    /**
-     * Serialises the Object into a String.
-     *
-     * @return Serialised string for `this` Object.
-     */
     @Override
     public String serialise() {
         return String.format(
@@ -24,4 +19,5 @@ public class Clock extends Collectable {
             this.coords.serialise()
         );
     }
+
 }

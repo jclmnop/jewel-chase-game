@@ -18,15 +18,20 @@ public class SmartThief extends Npc {
     // Current path to item
     private LinkedList<Coords> path;
 
-    public SmartThief(Coords coords, int speed, Direction direction) { //TODO: edit Character contructor to take direction
-        super(CollisionType.THIEF, true, coords, speed);
+    public SmartThief(Coords coords, int ticksPerMove, Direction direction) { //TODO: edit Character contructor to take direction
+        super(CollisionType.THIEF, true, coords, ticksPerMove);
         this.currentDirection = direction;
         this.path = new LinkedList<>();
         this.imagePath = IMAGE_PATH;
     }
 
-    public SmartThief(Coords coords, int speed) {
-        this(coords, speed, Direction.UP);
+    public SmartThief(Coords coords, int ticksPerMove) {
+        this(coords, ticksPerMove, Direction.UP);
+    }
+
+    public SmartThief(Coords coords, int ticksPerMove, Direction direction, int ticksSinceLastMove) {
+        this(coords, ticksPerMove, direction);
+        this.ticksSinceLastMove = ticksSinceLastMove;
     }
     
     /**
@@ -56,6 +61,24 @@ public class SmartThief extends Npc {
             // A new path could not be calculated
             this.moveRandomly();
         }
+    }
+
+    /**
+     * Serialises the Object into a String.
+     *
+     * @return Serialised string for `this` Object.
+     */
+    @Override
+    public String serialise() {
+        // TODO
+        return String.format(
+            "%s %s %s %s %s",
+            this.getClass().getSimpleName(),
+            this.coords.serialise(),
+            this.ticksPerMove,
+            this.currentDirection,
+            this.ticksSinceLastMove
+        );
     }
 
     private void moveRandomly() {
@@ -148,22 +171,5 @@ public class SmartThief extends Npc {
         } else {
             return false;
         }
-    }
-
-    /**
-     * Serialises the Object into a String.
-     *
-     * @return Serialised string for `this` Object.
-     */
-    @Override
-    public String serialise() {
-        // TODO
-        return String.format(
-            "%s %s %s %s",
-            this.getClass().getSimpleName(),
-            this.coords.serialise(),
-            this.speed,
-            this.currentDirection
-        );
     }
 }

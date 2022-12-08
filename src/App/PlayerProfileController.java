@@ -5,6 +5,7 @@ import Utils.GameFileHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
+import javafx.scene.control.RadioButton;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
@@ -22,6 +23,8 @@ public class PlayerProfileController {
     private Button mainMenuButton;
     @FXML
     private VBox profileMenu;
+    @FXML
+    private RadioButton deleteMode;
 
     public PlayerProfileController() {
         PlayerProfileController.playerProfileController = this;
@@ -46,6 +49,17 @@ public class PlayerProfileController {
         }
     }
 
+    private void profileOnClick(String playerName) throws IOException {
+        if (deleteMode.isSelected()) {
+            GameFileHandler.deletePlayerProfile(playerName);
+            this.loadProfileMenu();
+            this.deleteMode.setSelected(false);
+        } else {
+            GameFileHandler.loadPlayerProfile(playerName);
+            App.returnToMainMenu();
+        }
+    }
+
     private void loadProfileMenu() {
         this.profileMenu.setFillWidth(true);
         this.profileMenu.setAlignment(Pos.TOP_CENTER);
@@ -62,12 +76,11 @@ public class PlayerProfileController {
         newButton.setOnAction(
             (actionEvent) -> {
                 try {
-                    GameFileHandler.loadPlayerProfile(playerName);
-                    App.returnToMainMenu();
+                    this.profileOnClick(playerName);
                 } catch (IOException e) {
                     e.printStackTrace();
                     throw new RuntimeException(
-                        "I/O Error when loading profile: " + playerName
+                        "I/O Error when loading/deleting profile: " + playerName
                     );
                 }
             }

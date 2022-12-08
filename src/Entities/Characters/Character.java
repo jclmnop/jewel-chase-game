@@ -14,15 +14,35 @@ import javafx.scene.transform.Translate;
 public abstract class Character extends Entity {
     public static final String RESOURCES_PATH = Entity.RESOURCES_PATH + "characters/";
     protected Direction currentDirection;
-    protected int speed;
+    protected int ticksPerMove;
     protected int ticksSinceLastMove;
     //TODO: sprite/image file?
     //TODO: death animation?
 
-    public Character(CollisionType collisionType, boolean isBlocking, Coords coords, int speed) {
+    public Character(CollisionType collisionType, boolean isBlocking, Coords coords, int ticksPerMove) {
         super(collisionType, isBlocking, coords);
-        this.speed = speed;
-        this.ticksSinceLastMove = speed;
+        this.ticksPerMove = ticksPerMove;
+        this.ticksSinceLastMove = 0;
+    }
+
+    /**
+     * Used when cloning an entity to make sure they don't both try moving at
+     * the exact same time.
+     */
+    public void decrementTicksSinceLastMove() {
+        this.ticksSinceLastMove--;
+    }
+
+    /**
+     * Double the speed of a character.
+     */
+    public void speedUp() {
+        this.ticksPerMove = this.ticksPerMove / 2;
+        // Nothing bad would happen if ticksPerMove goes below 1, or even below
+        // zero (would still behave the same as 1), but 1 is technically the minimum.
+        if (this.ticksPerMove < 1) {
+            this.ticksPerMove = 1;
+        }
     }
 
     public void kill() {
@@ -49,7 +69,7 @@ public abstract class Character extends Entity {
 
     protected boolean move(Coords nextCoords) {
         this.ticksSinceLastMove++;
-        if (this.ticksSinceLastMove >= this.speed) {
+        if (this.ticksSinceLastMove >= this.ticksPerMove) {
             this.ticksSinceLastMove = 0;
             this.currentDirection = this.coords.directionTo(nextCoords);
             Tile.move(this, this.coords, nextCoords);
