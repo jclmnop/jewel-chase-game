@@ -4,7 +4,6 @@ import DataTypes.Colours;
 import DataTypes.Coords;
 import Entities.Entity;
 import Utils.GameFileHandler;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -18,6 +17,12 @@ import Game.Tile;
 import java.io.IOException;
 import java.util.ArrayList;
 
+/**
+ * Handles the rendering of the game while it's running.
+ *
+ * @author Jonny
+ * @version 1.4
+ */
 public class GameRenderer {
     public static final double BOARD_WIDTH = 1000;
     public static final double BOARD_HEIGHT = 734;
@@ -40,6 +45,9 @@ public class GameRenderer {
         GameRenderer.gameRenderer = this;
     }
 
+    /**
+     * Set up the renderer after instantiation.
+     */
     public void initialize() {
         this.tileGridPane = new GridPane();
         this.entityGridPane = new GridPane();
@@ -49,14 +57,8 @@ public class GameRenderer {
     }
 
     /**
-     * Only one instance is used at any given time, so a static
-     * reference to it is stored in this class.
-     * @return The current instance of GameRenderer
+     * Render the game.
      */
-    public static GameRenderer getGameRenderer() {
-        return GameRenderer.gameRenderer;
-    }
-
     public static void render() {
         double tileDimensions = Math.min(
             BOARD_WIDTH / Tile.getWidth(), BOARD_WIDTH / Tile.getHeight()
@@ -68,16 +70,26 @@ public class GameRenderer {
         gameRenderer.updateText();
     }
 
+    /**
+     * Render the loss screen.
+     */
     public static void renderLose() {
         gameRenderer.loseScreen.visibleProperty().set(true);
         GameRenderer.render();
     }
 
+    /**
+     * Render the victory screen.
+     */
     public static void renderWin() {
         gameRenderer.victoryScreen.visibleProperty().set(true);
         GameRenderer.render();
     }
 
+    /**
+     * Pause the game and prompt user to enter a name for the save game file.
+     * @throws IOException If there is an I/O error while saving the game.
+     */
     public void saveGame() throws IOException {
         if (Game.isRunning()) {
             Game.setPaused(true);
@@ -89,6 +101,10 @@ public class GameRenderer {
         }
     };
 
+    /**
+     * Quit the game and return to main menu.
+     * @throws IOException If there is an I/O error while changing scenes.
+     */
     public void quitGameButton() throws IOException {
         Game.quitGame();
     };
