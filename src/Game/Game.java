@@ -257,8 +257,12 @@ public class Game {
                 throw new RuntimeException("Error updating player profile");
             }
         }
-
-        // TODO: save highscore
+        try {
+            Game.addHighScore();
+        } catch (IOException ioException) {
+            ioException.printStackTrace();
+            throw new RuntimeException("Error updating high score table");
+        }
     }
 
     /**
@@ -365,5 +369,15 @@ public class Game {
         Game.playerMovementKeys.clear();
         Entity.clearEntities();
         Tile.clearBoard();
+    }
+
+    private static void addHighScore() throws IOException {
+        HighScoreTable highScoreTable =
+            GameFileHandler.loadHighScoreTable(Game.currentLevelNumber);
+        highScoreTable.addNewEntry(new HighScoreTable.HighScoreEntry(
+            Game.playerProfile.getPlayerName(),
+            Game.score
+        ));
+        GameFileHandler.updateHighScoreTable(highScoreTable);
     }
 }
