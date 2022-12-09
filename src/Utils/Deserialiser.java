@@ -18,12 +18,25 @@ import java.util.Arrays;
 import java.util.Iterator;
 
 /**
- * Utility meant to be used by GameFileHandler when loading a level/save file.
+ * Used by GameFileHandler when loading a level/save file.
+ *
+ * @author Jonny
+ * @version 1.3
  */
 public class Deserialiser {
     public static final int DEFAULT_NPC_TICKS_PER_MOVE = 5;
     public static final int DEFAULT_PLAYER_TICKS_PER_MOVE = 1;
 
+    /**
+     * Deserialise a Tile or Entity object from its string representation and
+     * instantiate it.
+     * @param serialisedString String representation of the object.
+     * @return The deserialised object.
+     * @throws ParseTileColourException If a tile colour cannot be parsed from
+     *                                  a character.
+     * @throws DeserialiseException If class name in the serialised string does
+     *                              not match any known class.
+     */
     public static Object deserialiseObject(
         String serialisedString
     ) throws ParseTileColourException, DeserialiseException {
@@ -87,6 +100,11 @@ public class Deserialiser {
         }
     }
 
+    /**
+     * Deserialise game parameters from a string representation.
+     * @param gameParamString String to be deserialised.
+     * @return Deserialised game parameter object.
+     */
     public static GameParams deserialiseGameParams(String gameParamString) {
         String[] args = gameParamString.split(" ");
         int time = Integer.parseInt(args[1]);
