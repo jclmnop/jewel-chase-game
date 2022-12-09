@@ -7,6 +7,13 @@ import Interfaces.Serialisable;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+/**
+ * Represents a tile on the board and contains all the entities currently on
+ * that tile.
+ *
+ * @author Jonny
+ * @version 1.3
+ */
 public class Tile implements Serialisable {
     // Static attributes //
     private static Tile[][] board;
@@ -19,12 +26,23 @@ public class Tile implements Serialisable {
     private final Colours colours;
     private final ArrayList<Entity> entities;
 
+    /**
+     * Construct a fresh tile with the given colours.
+     * @param colours Colours to create tile with.
+     */
     public Tile(Colours colours) {
         this.colours = colours;
         this.entities = new ArrayList<>();
     }
 
     // Static methods //
+
+    /**
+     * Get adjacent coords for a given coord that match the assigned colour.
+     * @param coords Coords to retrieve adjacent coords for.
+     * @param colour Colour assigned to colour-bound entity.
+     * @return Adjacent coords.
+     */
     public static AdjacentCoords getSingleColourAdjacentTiles(Coords coords,
                                                               Colour colour) {
         return AdjacentCoords.singleColourAdjacentTiles(
@@ -33,14 +51,30 @@ public class Tile implements Serialisable {
         );
     }
 
+    /**
+     * Get adjacent coords for a given coord using the standard pathfinding
+     * method (used for SmartThief and Player).
+     * @param coords Coords to retrieve adjacent coords for.
+     * @return Adjacent coords.
+     */
     public static AdjacentCoords getMultiColourAdjacentTiles(Coords coords) {
         return multiColourAdjacencyMap.get(coords);
     }
 
+    /**
+     * Get absolute adjacent tiles without taking colour into account.
+     * @param coords Coords to retrieve adjacent coords for.
+     * @return Adjacent coords.
+     */
     public static AdjacentCoords getNoColourAdjacentTiles(Coords coords) {
         return noColourAdjacencyMap.get(coords);
     }
 
+    /**
+     * Get a tile located at the provided coordinates.
+     * @param coords Coordinates of tile.
+     * @return Tile at coordinates.
+     */
     public static Tile getTile(Coords coords) {
         if (coords != null) {
             return board[coords.y()][coords.x()];
@@ -49,18 +83,34 @@ public class Tile implements Serialisable {
         }
     }
 
+    /**
+     * @return Height of the current board.
+     */
     public static int getHeight() {
         return Tile.height;
     }
 
+    /**
+     * @return Width of the current board.
+     */
     public static int getWidth() {
         return Tile.width;
     }
 
+    /**
+     * Check whether the tile located at these coordinates is currently blocked.
+     * @param coords Coordinates for the tile to check.
+     * @return Whether tile is blocked.
+     */
     public static boolean isBlockedCoords(Coords coords) {
         return Tile.getTile(coords).isBlocked();
     }
 
+    /**
+     * Check whether coords are valid for the current board.
+     * @param coords Coords to check.
+     * @return Whether coords are valid.
+     */
     public static boolean isValidCoords(Coords coords) {
         if (coords == null) {
             return false;
@@ -69,6 +119,14 @@ public class Tile implements Serialisable {
         }
     }
 
+    /**
+     * Get all entities on a tile which are instances of the given Class.
+     * Can also be used to get entities which implement an interface.
+     * @param c Class or Interface.
+     * @param coords Coordinates of the Tile to check.
+     * @param <T> Type to return.
+     * @return Entities of the given type.
+     */
     public static <T extends Entity> ArrayList<T> getEntitiesOfTypeByCoords(
         Class<T> c,
         Coords coords
@@ -77,6 +135,12 @@ public class Tile implements Serialisable {
         return tile.getEntitiesOfType(c);
     }
 
+    /**
+     * Move an entity from one tile to another.
+     * @param entity Entity to be moved.
+     * @param from Coords to move from.
+     * @param to Coords to move to.
+     */
     public static void move(Entity entity, Coords from, Coords to) {
         var fromTile = Tile.getTile(from);
         var toTile = Tile.getTile(to);
@@ -85,7 +149,12 @@ public class Tile implements Serialisable {
         entity.setCoords(to);
     }
 
-
+    /**
+     * Load a new board.
+     * @param newBoard 2D Tile array to be loaded into the board.
+     * @param width Width of the board.
+     * @param height Height of the board.
+     */
     public static void newBoard(Tile[][] newBoard, int width, int height) {
         Tile.clearBoard();
         Tile.height = height;
@@ -101,19 +170,29 @@ public class Tile implements Serialisable {
         Tile.buildNoColourAdjacencyMap();
     }
 
+    /**
+     * Reset the board to an empty array.
+     */
     public static void clearBoard() {
         Tile.board = new Tile[][]{};
         Tile.multiColourAdjacencyMap = new HashMap<>();
         Tile.noColourAdjacencyMap = new HashMap<>();
     }
 
+    /**
+     * Completely remove an entity from the board.
+     * @param entity Entity to be removed.
+     */
     public static void removeEntityFromBoard(Entity entity) {
         var entityTile = Tile.getTile(entity.getCoords());
         entityTile.removeEntity(entity);
         entity.setCoords(null);
-        // TODO: remove from entities static list in Entity class
     }
 
+    /**
+     * Serialise the board into a string representation.
+     * @return The serialised board string.
+     */
     public static String serialiseBoard() {
         StringBuilder output = new StringBuilder();
         output.append(String.format("%s %s\n", Tile.width, Tile.height));
@@ -130,10 +209,17 @@ public class Tile implements Serialisable {
     }
 
     // Instance Methods //
+
+    /**
+     * @return Colours for this tile.
+     */
     public Colours getColours() {
         return colours;
     }
 
+    /**
+     * @return Entities on this tile.
+     */
     public ArrayList<Entity> getEntities() {
         return entities;
     }
@@ -149,6 +235,9 @@ public class Tile implements Serialisable {
         return Entity.filterEntitiesByType(c, this.entities);
     }
 
+    /**
+     * @return Whether this tile is currently blocked.
+     */
     public boolean isBlocked() {
         for (Entity e: entities) {
             if (e.isBlocking()) {
@@ -158,6 +247,11 @@ public class Tile implements Serialisable {
         return false;
     }
 
+    /**
+     * Check whether this tile has a specific colour.
+     * @param colour Colour to check for.
+     * @return Whether this tile has the colour.
+     */
     public boolean hasColour(Colour colour) {
         return this.colours.c1().equals(colour)
             || this.colours.c2().equals(colour)
@@ -165,6 +259,10 @@ public class Tile implements Serialisable {
             || this.colours.c4().equals(colour);
     }
 
+    /**
+     * Add a new entity to this tile.
+     * @param newEntity Entity to be added.
+     */
     public void addEntity(Entity newEntity) {
         for (Entity entityOnTile : this.entities) {
             Entity.enqueCollision(
@@ -175,6 +273,10 @@ public class Tile implements Serialisable {
         this.entities.add(newEntity);
     }
 
+    /**
+     * Remove an entity from this tile.
+     * @param entity Entity to be removed.
+     */
     public void removeEntity(Entity entity) {
         // TODO: test that this works in the way I expect it to
         this.entities.remove(entity);
