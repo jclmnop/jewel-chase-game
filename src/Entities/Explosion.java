@@ -25,7 +25,7 @@ public class Explosion extends Entity {
             destroy();
             currentDurationTicks += Game.MILLI_PER_TICK;
         } else {
-            // TODO Implement method to remove explosion from board.
+            Entity.removeEntity(this);
         }
     }
 
@@ -39,7 +39,7 @@ public class Explosion extends Entity {
                 if (e instanceof Bomb) {
                     ((Bomb) e).explode();
                 } else {
-                    // TODO Implement method to remove entities from board.
+                    Entity.removeEntity(e);
                 }
             }
         }
