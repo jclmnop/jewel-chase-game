@@ -6,6 +6,7 @@ import java.util.Arrays;
 import DataTypes.AdjacentCoords;
 import DataTypes.Coords;
 import Entities.Entity;
+import Entities.Explosion;
 import Entities.Characters.Npc.Npc;
 import Game.Tile;
 
@@ -52,11 +53,28 @@ public Bomb(Coords coords, int state) {
         }
     }
 
-    /* TODO:    Spawn instances of explosion going vertical and horizontal from bomb.
-     *          Remove bomb from the board.    
-    */
-    private void explode() {
+    /**
+     * Spawns explosions and removes the bomb from the board.
+     */
+    public void explode() {
+        // Spawns bombs in lines up, down, left and right from the bomb.
+        for (int i = 0; i < 4; i++) {
+            spawnExplosions(trigZones, i);
+        }
+        Entity.removeEntity(this);
+    }
 
+    /**
+     * Recursive method spawns explosions in a line from the bomb.
+     * @param zones Array of coords adjacent to explosion zone
+     * @param i The index of the current direction.
+     */
+    private void spawnExplosions(Coords[] zones, int i) {
+        // If null, the edge of the board has been reached so no more spawns.
+        if (zones[i] != null) {
+            new Explosion(collisionType, blocking, zones[i]);
+            spawnExplosions(Tile.getNoColourAdjacentTiles(zones[i]).toArray(), i);
+        }
     }
 
     /**
