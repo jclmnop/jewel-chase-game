@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import Game.Game;
+import Game.HighScoreTable;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -105,4 +106,16 @@ public class GameFileHandlerTest {
         );
     }
 
+    @Test
+    public void testLoadSaveHighScoreTable() throws IOException {
+        HighScoreTable highScoreTable = GameFileHandler.loadHighScoreTable(0);
+        String oldHighScoreTableStr = highScoreTable.serialise();
+        var newEntry = new HighScoreTable.HighScoreEntry("poop", 10000000);
+        highScoreTable.addNewEntry(newEntry);
+        GameFileHandler.updateHighScoreTable(highScoreTable);
+        highScoreTable = GameFileHandler.loadHighScoreTable(0);
+        Assertions.assertTrue(highScoreTable.getHighScores().contains(newEntry));
+        HighScoreTable oldHighScoreTable = Deserialiser.deserialiseHighScoreTable(oldHighScoreTableStr);
+        GameFileHandler.updateHighScoreTable(oldHighScoreTable);
+    }
 }
