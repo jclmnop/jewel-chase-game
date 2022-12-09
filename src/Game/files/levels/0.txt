@@ -20,3 +20,5 @@ Door 12 9
 Clock 0 9
 Star 1 0
 Mushroom 12 0
+Lever 6 3 RED
+Gate 6 4 RED
