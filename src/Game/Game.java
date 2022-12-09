@@ -19,7 +19,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import java.time.Instant;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 
@@ -38,7 +37,6 @@ public class Game {
     private static boolean running = false;
     private static boolean paused = false;
     private static boolean headless = false;
-    private static long lastTimeRemainingChange;
     private static PlayerProfile playerProfile;
     private static Timeline tickTimeline;
 
@@ -209,7 +207,6 @@ public class Game {
         Game.timeRemainingMilli = gameParams.startTime();
         Game.headless = gameParams.isHeadless();
         Game.currentLevelNumber = gameParams.levelNumber();
-        Game.lastTimeRemainingChange = Instant.now().toEpochMilli();
         Game.running = true;
 
         if (Game.headless) {
@@ -309,10 +306,7 @@ public class Game {
     }
 
     private static void timerCountdown() {
-        long now = Instant.now().toEpochMilli();
-        long millisSinceLastCountdown = now - Game.lastTimeRemainingChange;
-        Game.lastTimeRemainingChange = now;
-        Game.timeRemainingMilli -= millisSinceLastCountdown;
+        Game.timeRemainingMilli -= MILLI_PER_TICK;
     }
 
     private static void checkForLoss() {
