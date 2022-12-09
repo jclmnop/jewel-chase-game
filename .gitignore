@@ -144,4 +144,4 @@ replay_pid*
 src/Game/files/cache/
 src/Game/files/playerProfiles/
 src/Game/files/saveGames/
-src/Game/files/highscores/
+src/Game/files/highscores/*
