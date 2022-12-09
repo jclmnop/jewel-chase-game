@@ -13,7 +13,10 @@ import org.junit.jupiter.api.Test;
 import Game.Game;
 import Game.HighScoreTable;
 
+import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 
 public class GameFileHandlerTest {
@@ -108,6 +111,9 @@ public class GameFileHandlerTest {
 
     @Test
     public void testLoadSaveHighScoreTable() throws IOException {
+        if (!Files.exists(Path.of(GameFileHandler.HIGH_SCORES_PATH))) {
+            new File(GameFileHandler.HIGH_SCORES_PATH).mkdir();
+        }
         HighScoreTable highScoreTable = GameFileHandler.loadHighScoreTable(0);
         String oldHighScoreTableStr = highScoreTable.serialise();
         var newEntry = new HighScoreTable.HighScoreEntry("poop", 10000000);
