@@ -4,8 +4,25 @@ import DataTypes.Exception.ParseBoardException;
 import DataTypes.Exception.ParseTileColourException;
 import Game.Tile;
 
+/**
+ * Utility class for loading a board from a string.
+ *
+ * @author Jonny
+ * @version 1.0
+ */
 public class BoardLoader {
-    public static Tile[][] loadBoard(String boardString) throws ParseBoardException, NumberFormatException, ParseTileColourException {
+    /**
+     * Load a 2D Tile array from a string.
+     * @param boardString The string representing the board to be loaded.
+     * @return The deserialised 2D Tile array.
+     * @throws ParseBoardException If there's a discrepancy between the expected
+     *                             height/width and the actual height/width.
+     * @throws NumberFormatException If any strings cannot be parsed to integers.
+     * @throws ParseTileColourException If any colour characters cannot be parsed
+     *                                  to a Colour enum.
+     */
+    public static Tile[][] loadBoard(String boardString)
+    throws ParseBoardException, NumberFormatException, ParseTileColourException {
         var lines = boardString.lines().toList();
         var it = lines.iterator();
         var dimensionsStrings = it.next().split(" ");
