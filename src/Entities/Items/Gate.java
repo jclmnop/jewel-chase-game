@@ -1,10 +1,26 @@
 package Entities.Items;
 
+import DataTypes.Colour;
 import DataTypes.Coords;
+import javafx.scene.image.Image;
 
 public class Gate extends Item {
-    public Gate(Coords coords) {
+    private static final String IMAGE_PATH = Item.RESOURCES_PATH + "gate";
+    private final Colour colour;
+
+    public Gate(Coords coords, Colour colour) {
         super(CollisionType.GATE, true, coords);
+        this.colour = colour;
+    }
+
+    public Gate(Coords coords) {
+        this(coords, Colour.YELLOW);
+    }
+
+    @Override
+    public Image toImage() {
+        //TODO
+        return super.toImage();
     }
 
     /**
@@ -14,7 +30,11 @@ public class Gate extends Item {
      */
     @Override
     public String serialise() {
-        // TODO
-        return null;
+        return String.format(
+            "%s %s %s",
+            this.getClass().getSimpleName(),
+            this.coords.serialise(),
+            this.colour
+        );
     }
 }
