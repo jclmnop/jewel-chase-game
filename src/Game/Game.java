@@ -19,7 +19,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import java.time.Instant;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 
@@ -33,12 +32,11 @@ public class Game {
     private static final HashMap<Player, Direction> currentMovementInputs = new HashMap<>();
     private static final ReentrantReadWriteLock lock = new ReentrantReadWriteLock();
     private static int score = 0;
-    private static int timeRemaining = 0;
+    private static int timeRemainingMilli = 0;
     private static int currentLevelNumber;
     private static boolean running = false;
     private static boolean paused = false;
     private static boolean headless = false;
-    private static long lastCountdownTime;
     private static PlayerProfile playerProfile;
     private static Timeline tickTimeline;
 
@@ -60,7 +58,13 @@ public class Game {
     }
 
     public static int getTimeRemaining() {
-        return Game.timeRemaining;
+        double preciseTimeSeconds =
+            (double) Game.timeRemainingMilli / (double) MILLI_PER_SECOND;
+        if (preciseTimeSeconds < 0) {
+            return 0;
+        } else {
+            return (int) Math.ceil(preciseTimeSeconds);
+        }
     }
 
     public static boolean isRunning() {
@@ -98,9 +102,9 @@ public class Game {
      *                   timeRemaining.
      */
     public static void adjustTime(int timeChange) {
-        Game.timeRemaining += timeChange;
-        if (Game.timeRemaining < 0) {
-            Game.timeRemaining = 0;
+        Game.timeRemainingMilli += timeChange * MILLI_PER_SECOND;
+        if (Game.timeRemainingMilli < 0) {
+            Game.timeRemainingMilli = 0;
         }
     }
 
@@ -200,10 +204,9 @@ public class Game {
      */
     public static void startGame(GameParams gameParams) {
         Game.score = gameParams.startScore();
-        Game.timeRemaining = gameParams.startTime();
+        Game.timeRemainingMilli = gameParams.startTime();
         Game.headless = gameParams.isHeadless();
         Game.currentLevelNumber = gameParams.levelNumber();
-        Game.lastCountdownTime = Instant.now().toEpochMilli();
         Game.running = true;
 
         if (Game.headless) {
@@ -227,7 +230,7 @@ public class Game {
 
     public static void win() {
         Game.endGame();
-        Game.adjustScore(+Game.timeRemaining);
+        Game.adjustScore(+Game.getTimeRemaining());
         if (!Game.headless) {
             GameRenderer.renderWin();
         }
@@ -303,13 +306,7 @@ public class Game {
     }
 
     private static void timerCountdown() {
-        long now = Instant.now().toEpochMilli();
-        long millisSinceLastCountdown = now - Game.lastCountdownTime;
-
-        if (millisSinceLastCountdown >= MILLI_PER_SECOND) {
-            Game.adjustTime(-1);
-            Game.lastCountdownTime = now;
-        }
+        Game.timeRemainingMilli -= MILLI_PER_TICK;
     }
 
     private static void checkForLoss() {
@@ -339,7 +336,7 @@ public class Game {
     }
 
     private static void resetGame() {
-        Game.timeRemaining = 0;
+        Game.timeRemainingMilli = 0;
         Game.score = 0;
         Game.headless = false;
         Game.currentLevelNumber = 0;

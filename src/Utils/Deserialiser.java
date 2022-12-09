@@ -23,6 +23,7 @@ import java.util.Iterator;
 public class Deserialiser {
     public static final int DEFAULT_NPC_TICKS_PER_MOVE = 5;
     public static final int DEFAULT_PLAYER_TICKS_PER_MOVE = 1;
+
     public static Object deserialiseObject(
         String serialisedString
     ) throws ParseTileColourException, DeserialiseException {

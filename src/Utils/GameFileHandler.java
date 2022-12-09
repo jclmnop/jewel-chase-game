@@ -228,7 +228,7 @@ public class GameFileHandler {
     }
 
     private static GameParams loadLevelFromString(String levelString) {
-        Iterator<String> levelStringLines = levelString.lines().iterator();
+        Iterator<String> levelStringLines = GameFileHandler.prepareLevelStringIterator(levelString);
         GameParams gameParams = Deserialiser.deserialiseGameParams(levelStringLines.next());
         levelStringLines.next(); // Skip blank line
 
@@ -252,6 +252,17 @@ public class GameFileHandler {
         }
 
         return gameParams;
+    }
+
+    private static Iterator<String> prepareLevelStringIterator(String levelString) {
+        // Remove "comments"
+        var lines = levelString
+            .lines()
+            .filter(line -> !line.contains("//"))
+            .collect(Collectors.toCollection(ArrayList::new));
+        lines.forEach(System.out::println);
+        return lines.iterator();
+
     }
 
     private static void cachePlayerProfile(String playerName) throws IOException {
