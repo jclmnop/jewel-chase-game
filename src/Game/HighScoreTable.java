@@ -22,6 +22,7 @@ public class HighScoreTable implements Serialisable {
     public HighScoreTable(int levelNumber, ArrayList<HighScoreEntry> highScoreEntries) {
         this.levelNumber = levelNumber;
         this.highScoreEntries = highScoreEntries;
+        this.sortAndPrune();
     }
 
     /**
