@@ -197,9 +197,7 @@ public class App extends Application {
 
         App.stage.getScene().setOnKeyPressed(
             (key) -> {
-                Game.getLock().writeLock().lock();
                 Game.registerNewMovementInput(key.getCode());
-                Game.getLock().writeLock().unlock();
             }
         );
 
