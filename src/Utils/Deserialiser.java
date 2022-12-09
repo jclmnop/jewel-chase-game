@@ -185,7 +185,7 @@ public class Deserialiser {
         Coords coords = Coords.fromString(stringIterator.next(), stringIterator.next());
         Colour colour = Colour.fromChar(stringIterator.next().charAt(0));
         //TODO colour
-        return new Lever(coords); // TODO
+        return new Lever(coords, colour); // TODO
     }
 
     private static Loot deserialiseLoot(String[] splitString) {
@@ -203,7 +203,7 @@ public class Deserialiser {
         Coords coords = Coords.fromString(stringIterator.next(), stringIterator.next());
         Colour colour = Colour.fromChar(stringIterator.next().charAt(0));
         //TODO colour
-        return new Gate(coords); // TODO
+        return new Gate(coords, colour); // TODO
     }
 
     private static Clock deserialiseClock(String[] splitString) {

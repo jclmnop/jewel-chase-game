@@ -5,7 +5,7 @@ import Entities.Items.Item;
 
 public class Clock extends Collectable {
     public static final int SECONDS = 10;
-    private static final String IMAGE_PATH = Item.RESOURCES_PATH + "clock.png";
+    private static final String IMAGE_PATH = Item.RESOURCES_PATH + "clock.gif";
 
     public Clock(Coords coords) {
         super(CollisionType.CLOCK, false, coords);
