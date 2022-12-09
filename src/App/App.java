@@ -26,6 +26,13 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Objects;
 
+/**
+ * Handles the general running of the JavaFx application, and acts as a
+ * controller for the main menu.
+ *
+ * @author Jonny
+ * @version 1.3
+ */
 public class App extends Application {
     public static final int WINDOW_WIDTH = 1000;
     public static final int WINDOW_HEIGHT = 800;
@@ -48,35 +55,45 @@ public class App extends Application {
     @FXML
     private Text currentPlayerProfile;
 
-    //TODO: for testing only, remember to remove
-    public static final String BOARD_STR = """
-                                           5 3
-                                           YYYY YYYY YYYY YYYY YGRG
-                                           RRCR RRRR RRRR RRRR RRYY
-                                           RCCY CMMC MCCM CCCC CGCG
-                                           """;
-
     public App() {
         App.app = this;
     }
 
+    /**
+     * Entry point for program. Launches the application.
+     * @param args Command line arguments. Not used.
+     */
     public static void main(String[] args) {
         launch(args);
     }
 
+    /**
+     * @return The current instantiation of this class.
+     */
     public static App getApp() {
         return App.app;
     }
 
+    /**
+     * @return The current JavaFx stage.
+     */
     public static Stage getStage() {
         return stage;
     }
 
+    /**
+     * Return to the main menu of the application.
+     * @throws IOException If there's an I/O error during the scene change.
+     */
     public static void returnToMainMenu() throws IOException {
         App.app.changeScene(MENU_FXML_PATH);
         App.updateMessageOfTheDay();
     }
 
+    /**
+     * Show an alert with text that the user must click to close.
+     * @param textToDisplay Text to be displayed within the alert.
+     */
     public static void showAlert(String textToDisplay) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setHeaderText(textToDisplay);
@@ -115,6 +132,11 @@ public class App extends Application {
         return inputResult;
     }
 
+    /**
+     * Set up the JavaFx app and load the main menu.
+     * @param primaryStage The primary stage.
+     * @throws IOException If there are any I/O errors.
+     */
     @Override
     public void start(Stage primaryStage) throws IOException {
         Thread.setDefaultUncaughtExceptionHandler(App::errorPopup);
@@ -125,6 +147,10 @@ public class App extends Application {
         // Load cached profile if it exists
     }
 
+    /**
+     * Initialise after an instance of this class has been created.
+     * @throws IOException if there's an issue loading the cached player profile.
+     */
     public void initialize() throws IOException {
         GameFileHandler.loadPlayerProfile("");
         this.updateCurrentPlayerProfie();
@@ -185,6 +211,15 @@ public class App extends Application {
         App.stage.show();
     }
 
+    /**
+     * Begin a new game with the provided game parameters and change to the
+     * Game scene.
+     * @param gameParams Game parameters.
+     * @throws IOException If there are any I/O errors during loading.
+     * @throws ParseBoardException If there are any errors deserialising the board.
+     * @throws ParseTileColourException If there are any errors deserialising a tile.
+     * @throws InterruptedException If the thread is interrupted during the game.
+     */
     public void newGame(
         GameParams gameParams
     ) throws IOException, ParseBoardException, ParseTileColourException, InterruptedException {
@@ -197,15 +232,17 @@ public class App extends Application {
 
         App.stage.getScene().setOnKeyPressed(
             (key) -> {
-                Game.getLock().writeLock().lock();
                 Game.registerNewMovementInput(key.getCode());
-                Game.getLock().writeLock().unlock();
             }
         );
 
         Game.startGame(gameParams);
     }
 
+    /**
+     * Open the load game menu.
+     * @throws IOException If there's an I/O error while changing scenes.
+     */
     public void loadSaveFile() throws IOException {
         if (Game.getPlayerProfile() == null) {
             App.showAlert("Select a profile first.");
@@ -214,6 +251,10 @@ public class App extends Application {
         }
     }
 
+    /**
+     * Open the level select menu.
+     * @throws IOException If there's an I/O error while changing scenes.
+     */
     public void levelSelect() throws IOException {
         if (Game.getPlayerProfile() == null) {
             App.showAlert("Select a profile first.");
@@ -222,6 +263,10 @@ public class App extends Application {
         }
     }
 
+    /**
+     * Open the profile selection menu.
+     * @throws IOException If there's an I/O error while changing scenes.
+     */
     public void selectProfile() throws IOException {
         this.changeScene(PLAYER_PROFILES_FXML_PATH);
     }

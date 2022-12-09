@@ -13,20 +13,34 @@ import javafx.scene.text.TextAlignment;
 import java.io.IOException;
 import java.util.ArrayList;
 
+/**
+ * Controller for the load game menu.
+ *
+ * @author Jonny
+ * @version 1.0
+ */
 public class LoadGameMenuController {
     private static LoadGameMenuController loadGameMenuController;
 
     @FXML
     private VBox saveGameMenu;
 
-    public LoadGameMenuController() throws IOException {
+    public LoadGameMenuController() {
         LoadGameMenuController.loadGameMenuController = this;
     }
 
+    /**
+     * Set up the load game menu and show save files for current player profile..
+     * @throws IOException If there's an I/O error while trying to read the files.
+     */
     public void initialize() throws IOException {
         this.loadSaveFileMenu();
     }
 
+    /**
+     * Return to main menu.
+     * @throws IOException If there's an I/O error during scene change.
+     */
     public void mainMenu() throws IOException {
         App.returnToMainMenu();
     }
