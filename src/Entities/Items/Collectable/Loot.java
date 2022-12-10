@@ -51,7 +51,7 @@ public class Loot extends Collectable {
          * @return Parsed loot tier.
          * @throws IllegalArgumentException if string cannot be parsed.
          */
-        static LootTier fromString(String str) {
+        public static LootTier fromString(String str) {
             return switch (str) {
                 case "TIER_1" -> TIER_1;
                 case "TIER_2" -> TIER_2;
@@ -66,7 +66,7 @@ public class Loot extends Collectable {
         /**
          * @return Number of points awarded for collecting this tier of loot.
          */
-        int getScore() {
+        public int getScore() {
             return switch (this) {
                 case TIER_1 -> 10;
                 case TIER_2 -> 20;

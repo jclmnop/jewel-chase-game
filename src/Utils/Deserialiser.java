@@ -115,9 +115,6 @@ public class Deserialiser {
         return new GameParams(time, score, levelNumber);
     }
 
-    // TODO: implement these methods once constructors for each class have
-    //       been implemented.
-
     private static SmartThief deserialiseSmartThief(String[] splitString) {
         Iterator<String> stringIterator = Arrays.stream(splitString).iterator();
         stringIterator.next(); // Skip type name
@@ -147,7 +144,7 @@ public class Deserialiser {
         int ticksSinceLastMove = stringIterator.hasNext()
             ? Integer.parseInt(stringIterator.next())
             : 0;
-        return new Player(coords, speed, direction, ticksSinceLastMove); // TODO
+        return new Player(coords, speed, direction, ticksSinceLastMove);
     }
 
     private static FlyingAssassin deserialiseFlyingAssassin(String[] splitString) {
@@ -186,17 +183,17 @@ public class Deserialiser {
         stringIterator.next(); // Skip type name
         Coords coords = Coords.fromString(stringIterator.next(), stringIterator.next());
         Colour colour = Colour.fromChar(stringIterator.next().charAt(0));
-        //TODO colour
-        return new Lever(coords, colour); // TODO
+        return new Lever(coords, colour);
     }
 
     private static Loot deserialiseLoot(String[] splitString) {
         Iterator<String> stringIterator = Arrays.stream(splitString).iterator();
         stringIterator.next(); // Skip type name
         Coords coords = Coords.fromString(stringIterator.next(), stringIterator.next());
-        //TODO coords
-        //TODO lootType
-        return new Loot(coords); // TODO
+        Loot.LootTier lootTier = stringIterator.hasNext()
+            ? Loot.LootTier.fromString(stringIterator.next())
+            : Loot.LootTier.TIER_1;
+        return new Loot(coords, lootTier);
     }
 
     private static Gate deserialiseGate(String[] splitString) {
@@ -205,21 +202,21 @@ public class Deserialiser {
         Coords coords = Coords.fromString(stringIterator.next(), stringIterator.next());
         Colour colour = Colour.fromChar(stringIterator.next().charAt(0));
         //TODO colour
-        return new Gate(coords, colour); // TODO
+        return new Gate(coords, colour);
     }
 
     private static Clock deserialiseClock(String[] splitString) {
         Iterator<String> stringIterator = Arrays.stream(splitString).iterator();
         stringIterator.next(); // Skip type name
         Coords coords = Coords.fromString(stringIterator.next(), stringIterator.next());
-        return new Clock(coords); // TODO
+        return new Clock(coords);
     }
 
     private static Door deserialiseDoor(String[] splitString) {
         Iterator<String> stringIterator = Arrays.stream(splitString).iterator();
         stringIterator.next(); // Skip type name
         Coords coords = Coords.fromString(stringIterator.next(), stringIterator.next());
-        return new Door(coords); // TODO
+        return new Door(coords);
     }
 
     private static Bomb deserialiseBomb(String[] splitString) {
@@ -232,7 +229,7 @@ public class Deserialiser {
         int state = stringIterator.hasNext()
             ? Integer.parseInt(stringIterator.next())
             : Bomb.INITIAL_STATE;
-        return new Bomb(coords, triggered, state); // TODO
+        return new Bomb(coords, triggered, state);
     }
 
     private static Star deserialiseStar(String[] splitString) {
@@ -258,8 +255,6 @@ public class Deserialiser {
             : 0;
         return new Explosion(coords, currentDurationTicks);
     }
-
-    // TODO: private static BombExplosion deserialiseExplosion(String[] splitString) {}
 
     private static Tile deserialiseTile(String arg) throws ParseTileColourException {
         // TODO: can either throw exception in fromChar(), or check length
