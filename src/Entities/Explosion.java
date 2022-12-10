@@ -3,18 +3,34 @@ package Entities;
 import DataTypes.Coords;
 import Entities.Items.Bomb;
 import Entities.Items.Door;
+import Entities.Items.Gate;
+import Entities.Items.Item;
 import Game.Tile;
 
 /**
  * Destroys any item it collides with. Instances are created from bomb.
+ *
+ * @author Dillon
+ * @version 1.1
  */
 public class Explosion extends Entity {
-
-    private final int MAX_DURATION_TICKS = 1000; // Explosion is present on screen for 1 second
+    private static final String IMAGE_PATH = Item.RESOURCES_PATH + "explosion.png";
+    private static final int MAX_DURATION_TICKS = 2; // Explosion is present on screen for 1 tick
     private int currentDurationTicks = 0;
 
-    public Explosion(CollisionType collisionType, boolean blocking, Coords coords) {
-        super(collisionType, blocking, coords);
+    /**
+     * Loads an explosion with the specified number of ticks passed.
+     * @param coords Coordinates for explosion.
+     * @param currentDurationTicks Duration that explosion has existed for, in
+     *                             ticks.
+     */
+    public Explosion(Coords coords, int currentDurationTicks) {
+        super(CollisionType.EXPLOSION, false, coords);
+        this.currentDurationTicks = currentDurationTicks;
+    }
+
+    public Explosion(Coords coords) {
+        this(coords, 0);
     }
 
     /**
@@ -23,18 +39,18 @@ public class Explosion extends Entity {
     public void check() {
         if (currentDurationTicks < MAX_DURATION_TICKS) {
             destroy();
-            currentDurationTicks += Game.MILLI_PER_TICK;
+            currentDurationTicks++;
         } else {
             Entity.removeEntity(this);
         }
     }
 
     /**
-     * Removes any item that is not a door.
+     * Removes any item that is not a door or gate.
      */
     public void destroy() {
         for (Entity e : Tile.getTile(coords).getEntities()) {
-            if (!(e instanceof Door)) {
+            if (!(e instanceof Door) && !(e instanceof Gate)) {
                 // If explosion collides with bomb, that bomb explodes.
                 if (e instanceof Bomb) {
                     ((Bomb) e).explode();
@@ -48,7 +64,12 @@ public class Explosion extends Entity {
     @Override
     public String serialise() {
         // TODO Auto-generated method stub
-        return null;
+        return String.format(
+            "%s %s %s",
+            this.getClass().getSimpleName(),
+            this.coords.serialise(),
+            this.currentDurationTicks
+        );
     }
     
 }

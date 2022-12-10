@@ -55,6 +55,7 @@ public abstract class Entity implements Serialisable, Renderable {
         ASSASSIN,
         THIEF,
         PLAYER,
+        EXPLOSION,
     }
 
     public static void enqueCollision(Coords coords, Entity entityOne, Entity entityTwo) {
