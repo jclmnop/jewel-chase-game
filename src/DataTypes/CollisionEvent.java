@@ -56,7 +56,7 @@ public enum CollisionEvent {
                 case PLAYER -> CLOCK_COLLECTED;
                 default     -> NOTHING;
             };
-            case STAR -> switch (collisionTwo) {
+            case MIRROR -> switch (collisionTwo) {
                 case PLAYER, THIEF -> CLONE;
                 default            -> NOTHING;
             };

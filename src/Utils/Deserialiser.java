@@ -263,11 +263,11 @@ public class Deserialiser {
         return new Bomb(coords, triggered, state);
     }
 
-    private static Star deserialiseStar(String[] splitString) {
+    private static Mirror deserialiseStar(String[] splitString) {
         Iterator<String> stringIterator = Arrays.stream(splitString).iterator();
         stringIterator.next(); // Skip type name
         Coords coords = Coords.fromString(stringIterator.next(), stringIterator.next());
-        return new Star(coords);
+        return new Mirror(coords);
     }
 
     private static Coffee deserialiseMushroom(String[] splitString) {

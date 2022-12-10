@@ -45,7 +45,7 @@ public abstract class Entity implements Serialisable, Renderable {
         LOOT,
         CLOCK,
         KEY,
-        STAR,
+        MIRROR,
         COFFEE,
         GATE,
         DOOR,
@@ -178,7 +178,7 @@ public abstract class Entity implements Serialisable, Renderable {
                     ) {
                         // If max players has already been reached, the item
                         // will give extra points instead.
-                        Game.adjustScore(+Star.POINTS_IF_MAX_PLAYERS_REACHED);
+                        Game.adjustScore(+Mirror.POINTS_IF_MAX_PLAYERS_REACHED);
                     } else {
                         Object deserialised =
                             Deserialiser.deserialiseObject(entityToBeCloned.serialise());
