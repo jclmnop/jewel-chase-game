@@ -7,10 +7,7 @@ import Entities.Characters.Character;
 import Entities.Characters.Npc.FloorFollowingThief;
 import Entities.Characters.Npc.SmartThief;
 import Entities.Characters.Player;
-import Entities.Items.Collectable.Clock;
-import Entities.Items.Collectable.Collectable;
-import Entities.Items.Collectable.Mushroom;
-import Entities.Items.Collectable.Star;
+import Entities.Items.Collectable.*;
 import Interfaces.Renderable;
 import Interfaces.Serialisable;
 import Game.Game;
@@ -147,7 +144,9 @@ public abstract class Entity implements Serialisable, Renderable {
                     Entity.removeEntity(collision.getEntityOne());
                 }
                 case LEVER_TRIGGERED -> {
-                    //TODO: remove gate of same colour
+                    Lever triggeredLever = (Lever) collision.getEntityOne();
+                    triggeredLever.openGates();
+                    Entity.removeEntity(triggeredLever);
                 }
                 case DOUBLE_ASSASSINATION -> {
                     //TODO: this means two assassins collided, kill them both

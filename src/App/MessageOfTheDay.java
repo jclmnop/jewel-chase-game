@@ -8,6 +8,9 @@ import java.net.http.HttpResponse;
 
 /**
  * Static class which retrieves the current message of the day.
+ *
+ * @author Jonny
+ * @version 1.0
  */
 public class MessageOfTheDay {
     public static final String BASE_API = "http://cswebcat.swan.ac.uk/";

@@ -42,7 +42,7 @@ public class GameFileHandlerTest {
                 Game.getPlayerProfile()
             );
             Assertions.assertEquals(0, gameParams.levelNumber());
-            Assertions.assertEquals(100, gameParams.startTime());
+            Assertions.assertEquals(100000, gameParams.startTime());
             Assertions.assertEquals(0, gameParams.startScore());
         } catch (DeserialiseException deserialiseException) {
             System.out.println(deserialiseException.getMessage());

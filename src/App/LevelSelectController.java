@@ -1,7 +1,5 @@
 package App;
 
-import DataTypes.Exception.ParseBoardException;
-import DataTypes.Exception.ParseTileColourException;
 import DataTypes.GameParams;
 import Utils.GameFileHandler;
 import javafx.fxml.FXML;
@@ -15,6 +13,11 @@ import javafx.scene.text.TextAlignment;
 import java.io.IOException;
 import java.util.ArrayList;
 
+/**
+ * Controller for the level selection menu.
+ * @author Jonny
+ * @version 1.0
+ */
 public class LevelSelectController {
     private static LevelSelectController levelSelectController;
     @FXML
@@ -24,6 +27,9 @@ public class LevelSelectController {
         LevelSelectController.levelSelectController = this;
     }
 
+    /**
+     * Load the level menu.
+     */
     public void initialize() {
         this.loadLevelMenu();
     }

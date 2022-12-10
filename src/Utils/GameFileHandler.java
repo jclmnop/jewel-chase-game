@@ -19,7 +19,6 @@ import java.util.stream.Stream;
 
 //TODO: loadHighScoreTable(levelName)
 //TODO: updateHighScoreTable(levelName, newHighScoreTable)
-//TODO: serialise/deserialise ms since last tick
 /**
  * Utility class for handling game files such as saves, levels, profiles, etc.
  * @author Jonny
@@ -228,7 +227,7 @@ public class GameFileHandler {
     }
 
     private static GameParams loadLevelFromString(String levelString) {
-        Iterator<String> levelStringLines = levelString.lines().iterator();
+        Iterator<String> levelStringLines = GameFileHandler.prepareLevelStringIterator(levelString);
         GameParams gameParams = Deserialiser.deserialiseGameParams(levelStringLines.next());
         levelStringLines.next(); // Skip blank line
 
@@ -252,6 +251,17 @@ public class GameFileHandler {
         }
 
         return gameParams;
+    }
+
+    private static Iterator<String> prepareLevelStringIterator(String levelString) {
+        // Remove "comments"
+        var lines = levelString
+            .lines()
+            .filter(line -> !line.contains("//"))
+            .collect(Collectors.toCollection(ArrayList::new));
+        lines.forEach(System.out::println);
+        return lines.iterator();
+
     }
 
     private static void cachePlayerProfile(String playerName) throws IOException {

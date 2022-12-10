@@ -35,6 +35,13 @@ public class PlayerProfile implements Serialisable {
         this.maxLevel = maxLevel;
     }
 
+    /**
+     * Deserialise a player profile from the string representation.
+     * @param str String representation of player profile.
+     * @return Deserialised player profile.
+     * @throws IllegalArgumentException If string is invalid and cannot be
+     *                                  deserialised.
+     */
     public static PlayerProfile fromString(String str) throws IllegalArgumentException {
         try {
             Iterator<String> args = Arrays.stream(str.split(" ")).iterator();

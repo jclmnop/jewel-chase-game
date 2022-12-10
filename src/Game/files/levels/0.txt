@@ -1,4 +1,5 @@
-0 100
+// Score (starts at zero for levels), Start Time (in milliseconds)
+0 100000
 
 13 10
 YYYY YYYY YYYY YYYY YYYY YYYY YYYY YYYY YYYY YYYY YYYY YYYY YYYY
@@ -19,3 +20,5 @@ Door 12 9
 Clock 0 9
 Star 1 0
 Mushroom 12 0
+Lever 6 3 RED
+Gate 6 4 RED

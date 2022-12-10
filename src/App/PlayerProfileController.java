@@ -1,6 +1,5 @@
 package App;
 
-import Game.Game;
 import Utils.GameFileHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
@@ -10,10 +9,14 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
 
-import java.awt.event.ActionEvent;
 import java.io.IOException;
 import java.util.ArrayList;
 
+/**
+ * Controller for the player profile menu.
+ * @author Jonny
+ * @version 1.1
+ */
 public class PlayerProfileController {
     public static final int PLAYER_NAME_CHAR_LIMIT = 20;
     private static PlayerProfileController playerProfileController;
@@ -30,14 +33,25 @@ public class PlayerProfileController {
         PlayerProfileController.playerProfileController = this;
     }
 
+    /**
+     * Set up the player profile controller and the load the menu.
+     */
     public void initialize() {
         this.loadProfileMenu();
     }
 
+    /**
+     * Return to main menu.
+     * @throws IOException If there's an I/O error while switching scenes.
+     */
     public void mainMenu() throws IOException {
         App.returnToMainMenu();
     }
 
+    /**
+     * Create a new profile.
+     * @throws IOException If there's an I/O error while saving the new profile.
+     */
     public void newProfile() throws IOException {
         String newProfileName = App.getUserInput(
             "Enter name for new profile",

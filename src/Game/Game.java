@@ -19,10 +19,17 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import java.time.Instant;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
-
+/**
+ * Handles the game loop and all associated logic while ensuring everything runs
+ * in the correct order.
+ *
+ * Cannot be instantiated.
+ *
+ * @author Jonny
+ * @version 1.6
+ */
 public class Game {
     public static final long MILLI_PER_TICK = 100; //TODO: figure out reasonable value
     public static final long MILLI_PER_SECOND = 1000;
@@ -33,12 +40,11 @@ public class Game {
     private static final HashMap<Player, Direction> currentMovementInputs = new HashMap<>();
     private static final ReentrantReadWriteLock lock = new ReentrantReadWriteLock();
     private static int score = 0;
-    private static int timeRemaining = 0;
+    private static int timeRemainingMilli = 0;
     private static int currentLevelNumber;
     private static boolean running = false;
     private static boolean paused = false;
     private static boolean headless = false;
-    private static long lastCountdownTime;
     private static PlayerProfile playerProfile;
     private static Timeline tickTimeline;
 
@@ -55,28 +61,34 @@ public class Game {
 
     private Game() {};
 
+    /**
+     * @return The current score.
+     */
     public static int getScore() {
         return Game.score;
     }
 
+    /**
+     * @return The current time remaining in seconds.
+     */
     public static int getTimeRemaining() {
-        return Game.timeRemaining;
+        double preciseTimeSeconds =
+            (double) Game.timeRemainingMilli / (double) MILLI_PER_SECOND;
+        if (preciseTimeSeconds < 0) {
+            return 0;
+        } else {
+            return (int) Math.ceil(preciseTimeSeconds);
+        }
     }
 
+    /**
+     * @return Whether the game is currently running.
+     */
     public static boolean isRunning() {
         return Game.running;
     }
 
     /**
-     * Gets the lock for the Game thread.
-     * @return Lock for the Game thread.
-     */
-    public static ReentrantReadWriteLock getLock() {
-        return Game.lock;
-    }
-
-    /**
-     * Get the current level number.
      * @return Number of the level currently being played.
      */
     public static int getCurrentLevelNumber() {
@@ -93,19 +105,19 @@ public class Game {
     }
 
     /**
-     * Adjusts timeRemaining
+     * Adjusts timeRemaining.
      * @param timeChange Positive int to increase time, negative int to reduce
-     *                   timeRemaining.
+     *                   timeRemaining. Value is in seconds.
      */
     public static void adjustTime(int timeChange) {
-        Game.timeRemaining += timeChange;
-        if (Game.timeRemaining < 0) {
-            Game.timeRemaining = 0;
+        Game.timeRemainingMilli += timeChange * MILLI_PER_SECOND;
+        if (Game.timeRemainingMilli < 0) {
+            Game.timeRemainingMilli = 0;
         }
     }
 
     /**
-     * Set whether or not the game loop is paused.
+     * Set whether the game loop is paused.
      * Pausing the game loop temporarily freezes execution until it's unpaused.
      * @param paused true to pause, false to unpause.
      */
@@ -114,7 +126,7 @@ public class Game {
     }
 
     /**
-     * Toggle whether or not the game is paused
+     * Toggle whether the game is paused
      */
     public static void togglePaused() {
         Game.paused = !Game.paused;
@@ -200,10 +212,9 @@ public class Game {
      */
     public static void startGame(GameParams gameParams) {
         Game.score = gameParams.startScore();
-        Game.timeRemaining = gameParams.startTime();
+        Game.timeRemainingMilli = gameParams.startTime();
         Game.headless = gameParams.isHeadless();
         Game.currentLevelNumber = gameParams.levelNumber();
-        Game.lastCountdownTime = Instant.now().toEpochMilli();
         Game.running = true;
 
         if (Game.headless) {
@@ -225,9 +236,15 @@ public class Game {
 
     }
 
+    /**
+     * Win the game, calculate final score, unlock next level if necessary and
+     * add score to high score table for this level if it's high enough.
+     *
+     * Also triggers the victory screen.
+     */
     public static void win() {
         Game.endGame();
-        Game.adjustScore(+Game.timeRemaining);
+        Game.adjustScore(+Game.getTimeRemaining());
         if (!Game.headless) {
             GameRenderer.renderWin();
         }
@@ -244,6 +261,9 @@ public class Game {
         // TODO: save highscore
     }
 
+    /**
+     * Lose the game and show the loss screen.
+     */
     public static void lose() {
         Game.endGame();
         if (!Game.headless) {
@@ -251,6 +271,10 @@ public class Game {
         }
     }
 
+    /**
+     * Stop the game and return to main menu.
+     * @throws IOException If there's an I/O error when returning to main menu.
+     */
     public static void quitGame() throws IOException {
         Game.endGame();
         Game.resetGame();
@@ -303,13 +327,7 @@ public class Game {
     }
 
     private static void timerCountdown() {
-        long now = Instant.now().toEpochMilli();
-        long millisSinceLastCountdown = now - Game.lastCountdownTime;
-
-        if (millisSinceLastCountdown >= MILLI_PER_SECOND) {
-            Game.adjustTime(-1);
-            Game.lastCountdownTime = now;
-        }
+        Game.timeRemainingMilli -= MILLI_PER_TICK;
     }
 
     private static void checkForLoss() {
@@ -339,7 +357,7 @@ public class Game {
     }
 
     private static void resetGame() {
-        Game.timeRemaining = 0;
+        Game.timeRemainingMilli = 0;
         Game.score = 0;
         Game.headless = false;
         Game.currentLevelNumber = 0;
