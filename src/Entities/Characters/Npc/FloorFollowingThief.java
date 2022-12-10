@@ -10,7 +10,7 @@ import Game.Tile;
 import Interfaces.Handleable;
 
 public class FloorFollowingThief extends Npc implements Handleable {
-    private static final String IMAGE_PATH = Character.RESOURCES_PATH + "stuart_face.png";
+    private static final String IMAGE_PATH = Character.RESOURCES_PATH + "oliver_snail.png";
     private final Colour colour;
 
     public FloorFollowingThief(Coords coords, int ticksPerMove, Colour colour, Direction direction) {
