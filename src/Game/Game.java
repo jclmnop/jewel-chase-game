@@ -5,7 +5,6 @@ import App.GameRenderer;
 import DataTypes.Direction;
 import DataTypes.GameParams;
 import DataTypes.PlayerInput;
-import Entities.Characters.Npc.Npc;
 import Entities.Characters.Player;
 import Entities.Entity;
 import Interfaces.Handleable;
@@ -103,6 +102,9 @@ public class Game {
      */
     public static void adjustScore(int scoreChange) {
         Game.score += scoreChange;
+        if (Game.score < 0) {
+            Game.score = 0;
+        }
     }
 
     /**
