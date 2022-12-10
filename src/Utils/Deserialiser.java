@@ -12,6 +12,7 @@ import Entities.Items.Bomb;
 import Entities.Items.Collectable.*;
 import Entities.Items.Door;
 import Entities.Items.Gate;
+import Game.HighScoreTable;
 import Game.Tile;
 
 import java.util.ArrayList;
@@ -113,6 +114,36 @@ public class Deserialiser {
         int levelNumber = Integer.parseInt(args[0]);
         int score = (args.length > 2) ? Integer.parseInt(args[2]) : 0;
         return new GameParams(time, score, levelNumber);
+    }
+
+
+    /**
+     * Deserialise a high score table from a string representation.
+     * @param highScoreTableString String representation to be deserialised.
+     * @return Deserialised high score table.
+     */
+    public static HighScoreTable deserialiseHighScoreTable(String highScoreTableString) {
+        Iterator<String> lines = highScoreTableString.lines().iterator();
+        int levelNumber = Integer.parseInt(lines.next());
+        ArrayList<HighScoreTable.HighScoreEntry> highScoreEntries = new ArrayList<>();
+        while (lines.hasNext()) {
+            String nextLine = lines.next();
+            if (!nextLine.isBlank()) {
+                highScoreEntries.add(
+                    Deserialiser.deserialiseHighScoreEntry(nextLine)
+                );
+            }
+        }
+        return new HighScoreTable(levelNumber, highScoreEntries);
+    }
+
+    private static HighScoreTable.HighScoreEntry deserialiseHighScoreEntry(String highScoreEntryString) {
+        Iterator<String> splitLine = Arrays.stream(highScoreEntryString.split(" ")).iterator();
+        return new HighScoreTable.HighScoreEntry(
+            splitLine.next(),
+            Integer.parseInt(splitLine.next())
+        );
+
     }
 
     private static SmartThief deserialiseSmartThief(String[] splitString) {

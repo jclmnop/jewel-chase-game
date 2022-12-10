@@ -5,6 +5,7 @@ import Entities.Entity;
 import Game.PlayerProfile;
 import Game.Game;
 import Game.Tile;
+import Game.HighScoreTable;
 
 import java.io.File;
 import java.io.IOException;
@@ -127,6 +128,22 @@ public class GameFileHandler {
     }
 
     /**
+     * List all levels.
+     * @return List of all levels available for given profile.
+     */
+    public static ArrayList<String> getAllLevels() {
+        ArrayList<String> levelFileNames = GameFileHandler.listFileNames(LEVEL_FILES_PATH, false);
+
+        if (levelFileNames.isEmpty()) {
+            throw new RuntimeException("NO LEVEL FILES IN " + LEVEL_FILES_PATH);
+        }
+
+        return levelFileNames.stream()
+            .sorted()
+            .collect(Collectors.toCollection(ArrayList::new));
+    }
+
+    /**
      * List all save files associated with this player profile.
      * @param playerProfile Profile to retrieve save game files for.
      * @return List of all save files.
@@ -212,6 +229,40 @@ public class GameFileHandler {
             saveFileName, playerProfile
         );
         Files.writeString(saveFilePath, saveGameStringBuilder.toString());
+    }
+
+    /**
+     * Load the high score table for a level.
+     * @param levelNumber Number of level to load high score table for.
+     * @return High score table for level.
+     * @throws IOException If there's an I/O error while reading the file.
+     */
+    public static HighScoreTable loadHighScoreTable(int levelNumber) throws IOException {
+        Path highScoreTablePath = Path.of(String.format(
+            "%s%s.txt",
+            HIGH_SCORES_PATH, levelNumber
+        ));
+
+        if (!Files.exists(highScoreTablePath)) {
+            return new HighScoreTable(levelNumber);
+        } else {
+            String highScoreTableString = Files.readString(highScoreTablePath);
+            return Deserialiser.deserialiseHighScoreTable(highScoreTableString);
+        }
+    }
+
+    /**
+     * Update a high score table file.
+     * @param highScoreTable The updated table to write to a file.
+     * @throws IOException If there's an I/O error while writing the file.
+     */
+    public static void updateHighScoreTable(HighScoreTable highScoreTable) throws IOException {
+        Path highScoreTablePath = Path.of(String.format(
+            "%s%s.txt",
+            HIGH_SCORES_PATH, highScoreTable.getLevelNumber()
+        ));
+        String highScoreTableString = highScoreTable.serialise();
+        Files.writeString(highScoreTablePath, highScoreTableString);
     }
 
     private static Path computeSaveGameFilePath(

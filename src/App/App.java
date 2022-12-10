@@ -41,6 +41,7 @@ public class App extends Application {
     public static final String LOAD_SAVE_FILE_FXML_PATH = "fxml/loadGameMenu.fxml";
     public static final String LEVEL_SELECT_FXML_PATH = "fxml/levelSelect.fxml";
     public static final String PLAYER_PROFILES_FXML_PATH = "fxml/playerProfiles.fxml";
+    public static final String HIGH_SCORE_FXML_PATH = "fxml/highScoreTable.fxml";
     public static final String RESOURCES_PATH = "src/App/resources/";
     public static final String BRODYQUEST_MP3_PATH = RESOURCES_PATH + "brodyquest.mp3";
     public static final String ANACONDA_MP3_PATH = RESOURCES_PATH + "anaconda.mp3";
@@ -50,6 +51,8 @@ public class App extends Application {
     private static Stage stage;
     private static MediaPlayer musicPlayer;
     private static App app;
+
+    private static boolean highScoreMenu = false;
     @FXML
     private Text messageOfTheDay;
     @FXML
@@ -99,6 +102,23 @@ public class App extends Application {
         alert.setHeaderText(textToDisplay);
         alert.show();
     }
+
+    /**
+     * @return Whether the level select menu is being used for high scores
+     *         instead of for loading a new game.
+     */
+    public static boolean isHighScoreMenu() {
+        return highScoreMenu;
+    }
+
+    /**
+     * Set whether the level select menu is being used for high scores
+     * instead of for loading a new game.
+     */
+    public static void setHighScoreMenu(boolean highScoreMenu) {
+        App.highScoreMenu = highScoreMenu;
+    }
+
 
     /**
      * Display prompt text within a next dialog box and wait for user to provide
@@ -239,11 +259,14 @@ public class App extends Application {
         Game.startGame(gameParams);
     }
 
-    /**
-     * Open the load game menu.
-     * @throws IOException If there's an I/O error while changing scenes.
-     */
-    public void loadSaveFile() throws IOException {
+    @FXML
+    private void openHighScoreMenu() throws IOException {
+        App.setHighScoreMenu(true);
+        this.changeScene(LEVEL_SELECT_FXML_PATH);
+    }
+
+    @FXML
+    private void loadSaveFile() throws IOException {
         if (Game.getPlayerProfile() == null) {
             App.showAlert("Select a profile first.");
         } else {
@@ -251,23 +274,18 @@ public class App extends Application {
         }
     }
 
-    /**
-     * Open the level select menu.
-     * @throws IOException If there's an I/O error while changing scenes.
-     */
-    public void levelSelect() throws IOException {
+    @FXML
+    private void levelSelect() throws IOException {
         if (Game.getPlayerProfile() == null) {
             App.showAlert("Select a profile first.");
         } else {
+            App.setHighScoreMenu(false);
             this.changeScene(LEVEL_SELECT_FXML_PATH);
         }
     }
 
-    /**
-     * Open the profile selection menu.
-     * @throws IOException If there's an I/O error while changing scenes.
-     */
-    public void selectProfile() throws IOException {
+    @FXML
+    private void selectProfile() throws IOException {
         this.changeScene(PLAYER_PROFILES_FXML_PATH);
     }
 
