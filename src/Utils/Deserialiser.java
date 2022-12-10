@@ -207,9 +207,13 @@ public class Deserialiser {
         Iterator<String> stringIterator = Arrays.stream(splitString).iterator();
         stringIterator.next(); // Skip type name
         Coords coords = Coords.fromString(stringIterator.next(), stringIterator.next());
-        //TODO detonated boolean
-        //TODO timer (in ms)
-        return new Bomb(coords); // TODO
+        boolean triggered = stringIterator.hasNext()
+            ? Boolean.parseBoolean(stringIterator.next())
+            : false;
+        int state = stringIterator.hasNext()
+            ? Integer.parseInt(stringIterator.next())
+            : Bomb.INITIAL_STATE;
+        return new Bomb(coords, triggered, state); // TODO
     }
 
     private static Star deserialiseStar(String[] splitString) {
