@@ -48,22 +48,6 @@ public class Explosion extends Entity implements Handleable {
         }
     }
 
-    /**
-     * Removes any item that is not a door or gate.
-     */
-    public void destroy() {
-        for (Entity e : Tile.getTile(coords).getEntities()) {
-            if (!(e instanceof Door) && !(e instanceof Gate)) {
-                // If explosion collides with bomb, that bomb explodes.
-                if (e instanceof Bomb) {
-                    ((Bomb) e).explode();
-                } else {
-                    Entity.removeEntity(e);
-                }
-            }
-        }
-    }
-
     @Override
     public String serialise() {
         return String.format(
