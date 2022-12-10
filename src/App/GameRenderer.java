@@ -60,8 +60,11 @@ public class GameRenderer {
      * Render the game.
      */
     public static void render() {
+        // We want a measurement for tile dimensions that allows every single
+        // tile fit on the screen, both vertically and horizontally.
         double tileDimensions = Math.min(
-            BOARD_WIDTH / Tile.getWidth(), BOARD_WIDTH / Tile.getHeight()
+            BOARD_WIDTH / Tile.getWidth(),
+            BOARD_HEIGHT / Tile.getHeight()
         );
         if (!gameRenderer.isBoardRendered) {
             gameRenderer.renderBoard(tileDimensions); //TODO: only need to render board once
