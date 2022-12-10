@@ -72,13 +72,6 @@ public abstract class Entity implements Serialisable, Renderable {
         return entities;
     }
 
-    public static ArrayList<Handleable> getHandleableEntities() {
-        return Entity.entities.stream()
-            .filter(e -> e instanceof Handleable)
-            .map(e -> (Handleable) e)
-            .collect(Collectors.toCollection(ArrayList::new));
-    }
-
     public static <T extends Entity> ArrayList<T> getEntitiesOfType(Class<T> c) {
         return Entity.filterEntitiesByType(c, Entity.entities);
     }

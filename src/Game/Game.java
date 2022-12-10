@@ -8,6 +8,7 @@ import DataTypes.PlayerInput;
 import Entities.Characters.Npc.Npc;
 import Entities.Characters.Player;
 import Entities.Entity;
+import Interfaces.Handleable;
 import Utils.GameFileHandler;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
@@ -339,6 +340,10 @@ public class Game {
         if (Game.getTimeRemaining() <= 0 || noPlayersLeft) {
             Game.lose();
         }
+    }
+
+    private static void handleEntities() {
+        ArrayList<Handleable> handleableEntities = Handleable.getHandleable(Entity.getEntities());
     }
 
     private static void moveNpcs() {
