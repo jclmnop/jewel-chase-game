@@ -9,9 +9,8 @@ import Entities.Items.*;
 import Entities.Items.Collectable.Collectable;
 import Game.Tile;
 
-// TODO: remove javadoc from private methods (can leave this until last minute)
 public class SmartThief extends Npc {
-    private static final String IMAGE_PATH = Character.RESOURCES_PATH + "faron.png";
+    private static final String IMAGE_PATH = Character.RESOURCES_PATH + "faron_fancy.png";
     // Current desired item.
     private Item item;
 
