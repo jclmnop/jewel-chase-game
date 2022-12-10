@@ -8,6 +8,7 @@ import DataTypes.PlayerInput;
 import Entities.Characters.Npc.Npc;
 import Entities.Characters.Player;
 import Entities.Entity;
+import Interfaces.Handleable;
 import Utils.GameFileHandler;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
@@ -311,8 +312,7 @@ public class Game {
     }
 
     private static void handleEvents() {
-        Game.moveNpcs();
-        //TODO handle bombs + explosions
+        Game.handleEntities();
         Game.processPlayerInputs();
         // Collisions must be processed *after* movements
         Entity.processCollisions();
@@ -341,14 +341,10 @@ public class Game {
         }
     }
 
-    private static void moveNpcs() {
-        ArrayList<Npc> npcs = Entity.filterEntitiesByType(
-            Npc.class,
-            Entity.getEntities()
-        );
-        // TODO: implement tryMove for each npc() + make sure they can only move
-        //       a certain number of times per second based on speed
-        npcs.forEach(Npc::tryMove);
+    private static void handleEntities() {
+        ArrayList<Handleable> handleableEntities =
+            Handleable.getHandleable(Entity.getEntities());
+        handleableEntities.forEach(Handleable::handle);
     }
 
     private static void movePlayer(Player player, Direction direction) {

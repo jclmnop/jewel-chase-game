@@ -46,7 +46,7 @@ public class FloorFollowingThiefTest {
         Coords[] expectedPath
     ) {
         for (Coords nextCoord : expectedPath) {
-            thief.tryMove();
+            thief.handle();
             Assertions.assertEquals(nextCoord, thief.getCoords());
         }
     }

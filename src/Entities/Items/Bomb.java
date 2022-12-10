@@ -4,12 +4,12 @@ import DataTypes.Coords;
 import Entities.Characters.Character;
 import Entities.Entity;
 import Entities.Explosion;
-import Entities.Characters.Npc.Npc;
 import Game.Tile;
 import Game.Game;
+import Interfaces.Handleable;
 import javafx.scene.image.Image;
 
-public class Bomb extends Item {
+public class Bomb extends Item implements Handleable {
     public static final int INITIAL_STATE = 4000;
     private static final String IMAGE_PATH = Item.RESOURCES_PATH + "bomb";
     private static final int FRAME_LENGTH_MILLI = 1000;
@@ -36,7 +36,8 @@ public class Bomb extends Item {
     /**
      * Checks whether bomb is waiting to be triggered or is in the process of exploding.
      */
-    public void check() {
+    @Override
+    public void handle() {
         if (!triggered) {
             detect();
         } else {

@@ -6,6 +6,7 @@ import Entities.Items.Door;
 import Entities.Items.Gate;
 import Entities.Items.Item;
 import Game.Tile;
+import Interfaces.Handleable;
 
 /**
  * Destroys any item it collides with. Instances are created from bomb.
@@ -13,7 +14,7 @@ import Game.Tile;
  * @author Dillon
  * @version 1.1
  */
-public class Explosion extends Entity {
+public class Explosion extends Entity implements Handleable {
     private static final String IMAGE_PATH = Item.RESOURCES_PATH + "explosion.png";
     private static final int MAX_DURATION_TICKS = 2; // Explosion is present on screen for 1 tick
     private int currentDurationTicks = 0;
@@ -27,6 +28,7 @@ public class Explosion extends Entity {
     public Explosion(Coords coords, int currentDurationTicks) {
         super(CollisionType.EXPLOSION, false, coords);
         this.currentDurationTicks = currentDurationTicks;
+        this.imagePath = IMAGE_PATH;
     }
 
     public Explosion(Coords coords) {
@@ -36,7 +38,8 @@ public class Explosion extends Entity {
     /**
      * Checks if explosion should be present on board. If so, it destroys certain items.
      */
-    public void check() {
+    @Override
+    public void handle() {
         if (currentDurationTicks < MAX_DURATION_TICKS) {
             destroy();
             currentDurationTicks++;

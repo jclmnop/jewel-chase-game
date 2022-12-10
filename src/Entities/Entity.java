@@ -8,6 +8,7 @@ import Entities.Characters.Npc.FloorFollowingThief;
 import Entities.Characters.Npc.SmartThief;
 import Entities.Characters.Player;
 import Entities.Items.Collectable.*;
+import Interfaces.Handleable;
 import Interfaces.Renderable;
 import Interfaces.Serialisable;
 import Game.Game;

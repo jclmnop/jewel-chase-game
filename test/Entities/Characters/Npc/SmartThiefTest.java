@@ -104,7 +104,7 @@ public class SmartThiefTest {
     private static void simulateTicks(SmartThief thief, Coords targetCoords, int expectedTicks) {
         int ticks = 0;
         while (!thief.getCoords().equals(targetCoords)) {
-            thief.tryMove();
+            thief.handle();
             ticks++;
             if (ticks > expectedTicks) {
                 System.out.println(thief.getCoords());
