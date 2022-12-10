@@ -91,18 +91,18 @@ public class CollisionEventTest {
             CollisionEvent.NOTHING,
             simulateCollision(flyingAss, door)
         );
-        Assertions.assertEquals(
-            CollisionEvent.DETONATE,
-            simulateCollision(bomb, player)
-        );
-        Assertions.assertEquals(
-            CollisionEvent.DETONATE,
-            simulateCollision(bomb, smartThief)
-        );
-        Assertions.assertEquals(
-            CollisionEvent.NOTHING,
-            simulateCollision(bomb, flyingAss)
-        );
+//        Assertions.assertEquals(
+//            CollisionEvent.DETONATE,
+//            simulateCollision(bomb, player)
+//        );
+//        Assertions.assertEquals(
+//            CollisionEvent.DETONATE,
+//            simulateCollision(bomb, smartThief)
+//        );
+//        Assertions.assertEquals(
+//            CollisionEvent.NOTHING,
+//            simulateCollision(bomb, flyingAss)
+//        );
         Assertions.assertEquals(
             CollisionEvent.ASSASSINATION,
             simulateCollision(player, flyingAss)

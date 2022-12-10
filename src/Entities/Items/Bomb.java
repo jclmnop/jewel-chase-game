@@ -11,7 +11,7 @@ import javafx.scene.image.Image;
 
 public class Bomb extends Item implements Handleable {
     public static final int INITIAL_STATE = 4000;
-    private static final String IMAGE_PATH = Item.RESOURCES_PATH + "bomb";
+    private static final String IMAGE_PATH = Item.RESOURCES_PATH + "bomb/";
     private static final int FRAME_LENGTH_MILLI = 1000;
     private final Coords[] trigZones;
     private int state;
@@ -42,7 +42,7 @@ public class Bomb extends Item implements Handleable {
             detect();
         } else {
             state -= Game.MILLI_PER_TICK;
-            if (state == 0) {
+            if (state <= 0) {
                 explode();
             }
         }
@@ -71,11 +71,11 @@ public class Bomb extends Item implements Handleable {
     @Override
     public Image toImage() {
         if (this.image == null) {
-            this.image = new Image(this.imagePath + ".png");
-            this.imageFrameOne = new Image(this.imagePath + "_1.png");
-            this.imageFrameTwo = new Image(this.imagePath + "_2.png");
-            this.imageFrameThree = new Image(this.imagePath + "_3.png");
-            this.imageFrameFour = new Image(this.imagePath + "_4.png");
+            this.image = new Image(this.imagePath + "0.png");
+            this.imageFrameOne = new Image(this.imagePath + "1.png");
+            this.imageFrameTwo = new Image(this.imagePath + "2.png");
+            this.imageFrameThree = new Image(this.imagePath + "3.png");
+            this.imageFrameFour = new Image(this.imagePath + "4.png");
         }
         // Only god can judge me.
         if (!this.triggered) {
@@ -112,12 +112,20 @@ public class Bomb extends Item implements Handleable {
      * Spawns explosions and removes the bomb from the board.
      */
     public void explode() {
-        // Spawns bombs in lines up, down, left and right from the bomb.
+        // Spawns explosions in lines up, down, left and right from the bomb.
         for (int i = 0; i < 4; i++) {
             spawnExplosions(trigZones, i);
         }
-        Entity.removeEntity(this);
         new Explosion(this.coords);
+        Entity.removeEntity(this);
+    }
+
+    /**
+     * Used to trigger chain reaction from another bomb's explosion
+     */
+    public void chainReaction() {
+        this.state = (int) (Game.MILLI_PER_TICK - 1);
+        this.triggered = true;
     }
 
     /**

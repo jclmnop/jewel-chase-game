@@ -7,6 +7,7 @@ import Entities.Characters.Character;
 import Entities.Characters.Npc.FloorFollowingThief;
 import Entities.Characters.Npc.SmartThief;
 import Entities.Characters.Player;
+import Entities.Items.Bomb;
 import Entities.Items.Collectable.*;
 import Interfaces.Handleable;
 import Interfaces.Renderable;
@@ -42,6 +43,7 @@ public abstract class Entity implements Serialisable, Renderable {
      * Used to compute the outcome of a collision between two Entity objects.
      */
     public enum CollisionType {
+        EXPLOSION,
         BOMB,
         LOOT,
         CLOCK,
@@ -53,7 +55,6 @@ public abstract class Entity implements Serialisable, Renderable {
         ASSASSIN,
         THIEF,
         PLAYER,
-        EXPLOSION,
     }
 
     public static void enqueCollision(Coords coords, Entity entityOne, Entity entityTwo) {
@@ -201,6 +202,13 @@ public abstract class Entity implements Serialisable, Renderable {
                         Game.adjustScore(scoreAdjustment);
                     }
                     Entity.removeEntity(collision.getEntityOne());
+                }
+                case DETONATE -> {
+                    Bomb bomb = (Bomb) collision.getEntityTwo();
+                    bomb.chainReaction();
+                }
+                case DESTROY -> {
+                    Entity.removeEntity(collision.getEntityTwo());
                 }
             }
         }

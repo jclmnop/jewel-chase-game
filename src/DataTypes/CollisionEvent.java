@@ -12,6 +12,8 @@ public enum CollisionEvent {
     NOTHING,
     /** Bomb should explode. */
     DETONATE,
+    /** Explosions should destroy entity */
+    DESTROY,
     /** Loot stolen by a thief, score should decrease. */
     LOOT_STOLEN,
     /** Loot collected by a player, score should increase. */
@@ -71,10 +73,10 @@ public enum CollisionEvent {
                 case PLAYER -> WIN;
                 default     -> NOTHING;
             };
-            case BOMB -> switch (collisionTwo) {
-                case THIEF, PLAYER -> DETONATE;
-                // TODO: explosion chain reaction
-                default            -> NOTHING;
+            case EXPLOSION -> switch (collisionTwo) {
+                case GATE, DOOR -> NOTHING;
+                case BOMB       -> DETONATE;
+                default         -> DESTROY;
             };
             case ASSASSIN -> switch (collisionTwo) {
                 case THIEF, PLAYER -> ASSASSINATION;
