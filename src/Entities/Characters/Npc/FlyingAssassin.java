@@ -8,7 +8,7 @@ public class FlyingAssassin extends Npc {
     }
 
     @Override
-    public void tryMove() {
+    protected void tryMove() {
         //TODO: implement
     }
 

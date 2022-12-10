@@ -7,8 +7,9 @@ import DataTypes.Coords;
 import DataTypes.Direction;
 import Entities.Characters.Character;
 import Game.Tile;
+import Interfaces.Handleable;
 
-public class FloorFollowingThief extends Npc {
+public class FloorFollowingThief extends Npc implements Handleable {
     private static final String IMAGE_PATH = Character.RESOURCES_PATH + "stuart_face.png";
     private final Colour colour;
 
@@ -37,7 +38,7 @@ public class FloorFollowingThief extends Npc {
      * Trys to move to tile with assigned colour that is left most to FFT's current direction.
      */
     @Override
-    public void tryMove() {
+    protected void tryMove() {
         AdjacentCoords adjCoords = Tile.getSingleColourAdjacentTiles(coords, colour);
         Direction dir = Direction.turnLeft(currentDirection);
         final int MAXIMUM_ATTEMPTS = 4;

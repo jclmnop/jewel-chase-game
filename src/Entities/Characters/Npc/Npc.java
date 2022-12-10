@@ -15,8 +15,6 @@ public abstract class Npc extends Character implements Handleable {
         super(collisionType, isBlocking, coords, speed);
     }
 
-    protected abstract void tryMove();
-
     /**
      * Called by Game class to perform any necessary actions per tick for this
      * entity.
@@ -25,4 +23,6 @@ public abstract class Npc extends Character implements Handleable {
     public void handle() {
         this.tryMove();
     }
+
+    protected abstract void tryMove();
 }

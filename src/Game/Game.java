@@ -312,8 +312,7 @@ public class Game {
     }
 
     private static void handleEvents() {
-        Game.moveNpcs();
-        //TODO handle bombs + explosions
+        Game.handleEntities();
         Game.processPlayerInputs();
         // Collisions must be processed *after* movements
         Entity.processCollisions();
@@ -343,17 +342,9 @@ public class Game {
     }
 
     private static void handleEntities() {
-        ArrayList<Handleable> handleableEntities = Handleable.getHandleable(Entity.getEntities());
-    }
-
-    private static void moveNpcs() {
-        ArrayList<Npc> npcs = Entity.filterEntitiesByType(
-            Npc.class,
-            Entity.getEntities()
-        );
-        // TODO: implement tryMove for each npc() + make sure they can only move
-        //       a certain number of times per second based on speed
-        npcs.forEach(Npc::tryMove);
+        ArrayList<Handleable> handleableEntities =
+            Handleable.getHandleable(Entity.getEntities());
+        handleableEntities.forEach(Handleable::handle);
     }
 
     private static void movePlayer(Player player, Direction direction) {
