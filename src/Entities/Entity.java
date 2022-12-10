@@ -44,7 +44,7 @@ public abstract class Entity implements Serialisable, Renderable {
         BOMB,
         LOOT,
         CLOCK,
-        LEVER,
+        KEY,
         STAR,
         COFFEE,
         GATE,
@@ -143,9 +143,9 @@ public abstract class Entity implements Serialisable, Renderable {
                     Entity.removeEntity(collision.getEntityOne());
                 }
                 case LEVER_TRIGGERED -> {
-                    Lever triggeredLever = (Lever) collision.getEntityOne();
-                    triggeredLever.openGates();
-                    Entity.removeEntity(triggeredLever);
+                    Key triggeredKey = (Key) collision.getEntityOne();
+                    triggeredKey.openGates();
+                    Entity.removeEntity(triggeredKey);
                 }
                 case DOUBLE_ASSASSINATION -> {
                     //TODO: this means two assassins collided, kill them both

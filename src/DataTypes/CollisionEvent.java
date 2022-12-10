@@ -64,7 +64,7 @@ public enum CollisionEvent {
                 case THIEF, PLAYER, ASSASSIN -> SPEED_UP;
                 default                      -> NOTHING;
             };
-            case LEVER -> switch (collisionTwo) {
+            case KEY -> switch (collisionTwo) {
                 case THIEF, PLAYER -> LEVER_TRIGGERED;
                 default            -> NOTHING;
             };

@@ -7,7 +7,7 @@ import Entities.Characters.Npc.SmartThief;
 import Entities.Entity;
 import Entities.Items.*;
 import Entities.Items.Collectable.Clock;
-import Entities.Items.Collectable.Lever;
+import Entities.Items.Collectable.Key;
 import Entities.Items.Collectable.Loot;
 import Game.Tile;
 import TestCases.Boards;
@@ -26,7 +26,7 @@ public class CollisionEventTest {
         var flyingAss = new FlyingAssassin(new Coords(0, 0), 1);
         var gate = new Gate(new Coords(0, 0));
         var clock = new Clock(new Coords(0, 0));
-        var lever = new Lever(new Coords(0, 0));
+        var lever = new Key(new Coords(0, 0));
         var loot = new Loot(new Coords(0, 0));
         var door = new Door(new Coords(0, 0));
         var bomb = new Bomb(new Coords(0, 0));

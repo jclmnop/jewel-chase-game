@@ -209,12 +209,12 @@ public class Deserialiser {
         return new FloorFollowingThief(coords, speed, colour, direction, ticksSinceLastMove);
     }
 
-    private static Lever deserialiseLever(String[] splitString) {
+    private static Key deserialiseLever(String[] splitString) {
         Iterator<String> stringIterator = Arrays.stream(splitString).iterator();
         stringIterator.next(); // Skip type name
         Coords coords = Coords.fromString(stringIterator.next(), stringIterator.next());
         Colour colour = Colour.fromChar(stringIterator.next().charAt(0));
-        return new Lever(coords, colour);
+        return new Key(coords, colour);
     }
 
     private static Loot deserialiseLoot(String[] splitString) {

@@ -9,20 +9,20 @@ import Entities.Items.Item;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 
-public class Lever extends Collectable {
-    private static final String IMAGE_PATH = Item.RESOURCES_PATH + "lever";
+public class Key extends Collectable {
+    private static final String IMAGE_PATH = Item.RESOURCES_PATH + "key";
     private final Colour colour;
 
-    public Lever(Coords coords, Colour colour) {
-        super(CollisionType.LEVER, false, coords);
+    public Key(Coords coords, Colour colour) {
+        super(CollisionType.KEY, false, coords);
         if (colour == Colour.CYAN || colour == Colour.MAGENTA) {
             throw new RuntimeException("Invalid Gate colour");
         }
         this.colour = colour;
-        this.imagePath = String.format("%s_%s.png", IMAGE_PATH, colour);
+        this.imagePath = String.format("%s_%s.gif", IMAGE_PATH, colour);
     }
 
-    public Lever(Coords coords) {
+    public Key(Coords coords) {
         this(coords, Colour.YELLOW);
     }
 
