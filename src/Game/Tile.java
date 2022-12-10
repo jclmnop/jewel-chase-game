@@ -66,7 +66,7 @@ public class Tile implements Serialisable {
      * @param coords Coords to retrieve adjacent coords for.
      * @return Adjacent coords.
      */
-    public static AdjacentCoords getNoColourAdjacentTiles(Coords coords) {
+    public static AdjacentCoords getAdjacentCoords(Coords coords) {
         return noColourAdjacencyMap.get(coords);
     }
 
