@@ -1,28 +1,37 @@
 package Entities.Items;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-
-import DataTypes.AdjacentCoords;
 import DataTypes.Coords;
 import Entities.Entity;
 import Entities.Explosion;
 import Entities.Characters.Npc.Npc;
 import Game.Tile;
+import Game.Game;
+import javafx.scene.image.Image;
 
 public class Bomb extends Item {
-
-    private int state = 4000;
-    private Coords[] trigZones = Tile.getNoColourAdjacentTiles(coords).toArray();
+    public static final int INITIAL_STATE = 4000;
+    private static final String IMAGE_PATH = Item.RESOURCES_PATH + "bomb";
+    private static final int FRAME_LENGTH_MILLI = 1000;
+    private final Coords[] trigZones;
+    private int state;
     private boolean triggered = false;
+    private Image imageFrameOne;
+    private Image imageFrameTwo;
+    private Image imageFrameThree;
+    private Image imageFrameFour;
 
     public Bomb(Coords coords) {
-        super(CollisionType.BOMB, false, coords);
+        super(CollisionType.BOMB, true, coords);
+        this.imagePath = IMAGE_PATH;
+        this.trigZones = Tile.getNoColourAdjacentTiles(this.coords).toArray();
+        this.state = INITIAL_STATE;
     }
-public Bomb(Coords coords, int state) {
-    this(coords);
-    this.state = state;
-}
+
+    public Bomb(Coords coords, boolean triggered, int state) {
+        this(coords);
+        this.state = state;
+        this.triggered = triggered;
+    }
     /**
      * Checks whether bomb is waiting to be triggered or is in the process of exploding.
      */
@@ -30,10 +39,53 @@ public Bomb(Coords coords, int state) {
         if (!triggered) {
             detect();
         } else {
-            state - Game.MILLI_PER_TICK;
+            state -= Game.MILLI_PER_TICK;
             if (state == 0) {
                 explode();
             }
+        }
+    }
+
+    /**
+     * Serialises the Object into a String.
+     *
+     * @return Serialised string for `this` Object.
+     */
+    @Override
+    public String serialise() {
+        return String.format(
+            "%s %s %s %s",
+            this.getClass().getSimpleName(),
+            this.coords.serialise(),
+            this.triggered,
+            this.state
+        ) ;
+    }
+
+    /**
+     * Load the image(s) and compute the correct image for the current frame.
+     * @return The current image.
+     */
+    @Override
+    public Image toImage() {
+        if (this.image == null) {
+            this.image = new Image(this.imagePath + ".png");
+            this.imageFrameOne = new Image(this.imagePath + "_1.png");
+            this.imageFrameTwo = new Image(this.imagePath + "_2.png");
+            this.imageFrameThree = new Image(this.imagePath + "_3.png");
+            this.imageFrameFour = new Image(this.imagePath + "_4.png");
+        }
+        // Only god can judge me.
+        if (!this.triggered) {
+            return this.image;
+        } else if (this.state >= INITIAL_STATE - FRAME_LENGTH_MILLI) {
+            return this.imageFrameOne;
+        } else if (this.state >= INITIAL_STATE - 2 * FRAME_LENGTH_MILLI) {
+            return this.imageFrameTwo;
+        } else if (this.state >= INITIAL_STATE - 3 * FRAME_LENGTH_MILLI) {
+            return this.imageFrameThree;
+        } else {
+            return this.imageFrameFour;
         }
     }
 
@@ -43,13 +95,14 @@ public Bomb(Coords coords, int state) {
     private void detect() {
         final int NUM_ZONES = 4;
         int i = 0;
-        while (!triggered || i < NUM_ZONES) {
+        while (!triggered && i < NUM_ZONES) {
             Coords zone = trigZones[i];
             if (zone != null) {
                 if (!Tile.getEntitiesOfTypeByCoords(Npc.class, zone).isEmpty()) {
                     triggered = true;
                 }
             }
+            i++;
         }
     }
 
@@ -72,32 +125,8 @@ public Bomb(Coords coords, int state) {
     private void spawnExplosions(Coords[] zones, int i) {
         // If null, the edge of the board has been reached so no more spawns.
         if (zones[i] != null) {
-            new Explosion(collisionType, blocking, zones[i]);
+            new Explosion(zones[i]);
             spawnExplosions(Tile.getNoColourAdjacentTiles(zones[i]).toArray(), i);
         }
-    }
-
-    /**
-    * Serialises the Object into a String.
-    *
-    * @return Serialised string for `this` Object.
-    */
-    @Override
-    public String serialise() {
-        return String.format(
-            "%s %s %s",
-            this.getClass().getSimpleName(),
-            this.coords.serialise(),
-            this.state
-        ) ;
-    }
-     * Serialises the Object into a String.
-     *
-     * @return Serialised string for `this` Object.
-     */
-    @Override
-    public String serialise() {
-        // TODO
-        return null;
     }
 }
