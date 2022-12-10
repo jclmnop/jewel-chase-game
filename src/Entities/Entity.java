@@ -8,6 +8,7 @@ import Entities.Characters.Npc.FloorFollowingThief;
 import Entities.Characters.Npc.SmartThief;
 import Entities.Characters.Player;
 import Entities.Items.Collectable.*;
+import Interfaces.Handleable;
 import Interfaces.Renderable;
 import Interfaces.Serialisable;
 import Game.Game;
@@ -52,6 +53,7 @@ public abstract class Entity implements Serialisable, Renderable {
         ASSASSIN,
         THIEF,
         PLAYER,
+        EXPLOSION,
     }
 
     public static void enqueCollision(Coords coords, Entity entityOne, Entity entityTwo) {
@@ -119,14 +121,14 @@ public abstract class Entity implements Serialisable, Renderable {
             switch (collisionEvent) {
                 case NOTHING -> {}
                 case LOOT_STOLEN -> {
-                    //TODO: get value of loot
-                    int lootValue = 10;
+                    Loot loot = (Loot) collision.getEntityOne();
+                    int lootValue = loot.getScore();
                     Game.adjustScore(-lootValue);
                     Entity.removeEntity(collision.getEntityOne());
                 }
                 case LOOT_COLLECTED -> {
-                    //TODO: get value of loot
-                    int lootValue = 10;
+                    Loot loot = (Loot) collision.getEntityOne();
+                    int lootValue = loot.getScore();
                     Game.adjustScore(lootValue);
                     Entity.removeEntity(collision.getEntityOne());
                 }
