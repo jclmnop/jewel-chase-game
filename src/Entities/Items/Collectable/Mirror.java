@@ -10,12 +10,12 @@ import Entities.Items.Item;
  * @author Jonny
  * @version 1.0
  */
-public class Star extends Collectable {
+public class Mirror extends Collectable {
     public static final int POINTS_IF_MAX_PLAYERS_REACHED = 10;
-    private static final String IMAGE_PATH = Item.RESOURCES_PATH + "star.png";
+    private static final String IMAGE_PATH = Item.RESOURCES_PATH + "mirror.png";
 
-    public Star(Coords coords) {
-        super(CollisionType.STAR, false, coords);
+    public Mirror(Coords coords) {
+        super(CollisionType.MIRROR, false, coords);
         this.imagePath = IMAGE_PATH;
     }
 

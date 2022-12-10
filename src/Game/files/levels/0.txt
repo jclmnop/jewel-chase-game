@@ -18,9 +18,13 @@ SmartThief 5 5
 FloorFollowingThief 3 4
 Door 12 9
 Clock 0 9
-Star 1 0
-Mushroom 12 0
-Lever 6 3 RED
+Mirror 1 0
+Coffee 12 0
+Key 6 3 RED
 Gate 6 4 RED
 Bomb 6 0
 Bomb 6 9
+Loot 2 0 TIER_1
+Loot 3 0 TIER_2
+Loot 4 0 TIER_3
+Loot 5 0 TIER_4

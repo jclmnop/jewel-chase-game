@@ -56,15 +56,15 @@ public enum CollisionEvent {
                 case PLAYER -> CLOCK_COLLECTED;
                 default     -> NOTHING;
             };
-            case STAR -> switch (collisionTwo) {
-                case PLAYER, THIEF -> CLONE;
-                default            -> NOTHING;
+            case MIRROR -> switch (collisionTwo) {
+                case PLAYER, THIEF, ASSASSIN -> CLONE;
+                default                      -> NOTHING;
             };
-            case MUSHROOM -> switch (collisionTwo) {
+            case COFFEE -> switch (collisionTwo) {
                 case THIEF, PLAYER, ASSASSIN -> SPEED_UP;
                 default                      -> NOTHING;
             };
-            case LEVER -> switch (collisionTwo) {
+            case KEY -> switch (collisionTwo) {
                 case THIEF, PLAYER -> LEVER_TRIGGERED;
                 default            -> NOTHING;
             };

@@ -4,12 +4,9 @@ import DataTypes.Collision;
 import DataTypes.CollisionEvent;
 import DataTypes.Coords;
 import Entities.Characters.Character;
-import Entities.Characters.Npc.FloorFollowingThief;
-import Entities.Characters.Npc.SmartThief;
 import Entities.Characters.Player;
 import Entities.Items.Bomb;
 import Entities.Items.Collectable.*;
-import Interfaces.Handleable;
 import Interfaces.Renderable;
 import Interfaces.Serialisable;
 import Game.Game;
@@ -47,9 +44,9 @@ public abstract class Entity implements Serialisable, Renderable {
         BOMB,
         LOOT,
         CLOCK,
-        LEVER,
-        STAR,
-        MUSHROOM,
+        KEY,
+        MIRROR,
+        COFFEE,
         GATE,
         DOOR,
         ASSASSIN,
@@ -146,9 +143,9 @@ public abstract class Entity implements Serialisable, Renderable {
                     Entity.removeEntity(collision.getEntityOne());
                 }
                 case LEVER_TRIGGERED -> {
-                    Lever triggeredLever = (Lever) collision.getEntityOne();
-                    triggeredLever.openGates();
-                    Entity.removeEntity(triggeredLever);
+                    Key triggeredKey = (Key) collision.getEntityOne();
+                    triggeredKey.openGates();
+                    Entity.removeEntity(triggeredKey);
                 }
                 case DOUBLE_ASSASSINATION -> {
                     //TODO: this means two assassins collided, kill them both
@@ -181,13 +178,14 @@ public abstract class Entity implements Serialisable, Renderable {
                     ) {
                         // If max players has already been reached, the item
                         // will give extra points instead.
-                        Game.adjustScore(+Star.POINTS_IF_MAX_PLAYERS_REACHED);
+                        Game.adjustScore(+Mirror.POINTS_IF_MAX_PLAYERS_REACHED);
                     } else {
                         Object deserialised =
                             Deserialiser.deserialiseObject(entityToBeCloned.serialise());
                         if (deserialised instanceof Character deserialisedCharacter) {
                             deserialisedCharacter.decrementTicksSinceLastMove();
                         }
+                        //TODO: if flying assassin, turn left
                     }
                     Entity.removeEntity(collision.getEntityOne());
                 }
@@ -197,8 +195,8 @@ public abstract class Entity implements Serialisable, Renderable {
                     if (maxSpeedAlreadyReached) {
                         int scoreAdjustment =
                             character instanceof Player
-                                ? +Mushroom.POINTS_IF_MAX_SPEED_REACHED
-                                : -Mushroom.POINTS_IF_MAX_SPEED_REACHED;
+                                ? +Coffee.POINTS_IF_MAX_SPEED_REACHED
+                                : -Coffee.POINTS_IF_MAX_SPEED_REACHED;
                         Game.adjustScore(scoreAdjustment);
                     }
                     Entity.removeEntity(collision.getEntityOne());

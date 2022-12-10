@@ -55,8 +55,8 @@ public class Deserialiser {
                 case "Gate" -> {
                     return Deserialiser.deserialiseGate(args);
                 }
-                case "Lever" -> {
-                    return Deserialiser.deserialiseLever(args);
+                case "Key" -> {
+                    return Deserialiser.deserialiseKey(args);
                 }
                 case "Loot" -> {
                     return Deserialiser.deserialiseLoot(args);
@@ -79,11 +79,11 @@ public class Deserialiser {
                 case "Door" -> {
                     return Deserialiser.deserialiseDoor(args);
                 }
-                case "Star" -> {
-                    return Deserialiser.deserialiseStar(args);
+                case "Mirror" -> {
+                    return Deserialiser.deserialiseMirror(args);
                 }
-                case "Mushroom" -> {
-                    return Deserialiser.deserialiseMushroom(args);
+                case "Coffee" -> {
+                    return Deserialiser.deserialiseCoffee(args);
                 }
                 case "Explosion" -> {
                     return Deserialiser.deserialiseExplosion(args);
@@ -209,12 +209,12 @@ public class Deserialiser {
         return new FloorFollowingThief(coords, speed, colour, direction, ticksSinceLastMove);
     }
 
-    private static Lever deserialiseLever(String[] splitString) {
+    private static Key deserialiseKey(String[] splitString) {
         Iterator<String> stringIterator = Arrays.stream(splitString).iterator();
         stringIterator.next(); // Skip type name
         Coords coords = Coords.fromString(stringIterator.next(), stringIterator.next());
         Colour colour = Colour.fromChar(stringIterator.next().charAt(0));
-        return new Lever(coords, colour);
+        return new Key(coords, colour);
     }
 
     private static Loot deserialiseLoot(String[] splitString) {
@@ -263,18 +263,18 @@ public class Deserialiser {
         return new Bomb(coords, triggered, state);
     }
 
-    private static Star deserialiseStar(String[] splitString) {
+    private static Mirror deserialiseMirror(String[] splitString) {
         Iterator<String> stringIterator = Arrays.stream(splitString).iterator();
         stringIterator.next(); // Skip type name
         Coords coords = Coords.fromString(stringIterator.next(), stringIterator.next());
-        return new Star(coords);
+        return new Mirror(coords);
     }
 
-    private static Mushroom deserialiseMushroom(String[] splitString) {
+    private static Coffee deserialiseCoffee(String[] splitString) {
         Iterator<String> stringIterator = Arrays.stream(splitString).iterator();
         stringIterator.next(); // Skip type name
         Coords coords = Coords.fromString(stringIterator.next(), stringIterator.next());
-        return new Mushroom(coords);
+        return new Coffee(coords);
     }
 
     private static Explosion deserialiseExplosion(String[] splitString) {

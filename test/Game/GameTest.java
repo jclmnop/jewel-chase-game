@@ -13,7 +13,7 @@ import java.time.Instant;
 public class GameTest {
     // TODO: loads new game
     // TODO: clears all static instances when game ends
-    public static final long ACCEPTABLE_EXCESS_RUN_TIME_MILLI = 50;
+    public static final long ACCEPTABLE_EXCESS_RUN_TIME_MILLI = 100;
 
     @Test
     public void testGameLoopRunsAndEndsGracefully() {

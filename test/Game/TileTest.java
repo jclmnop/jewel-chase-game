@@ -5,11 +5,9 @@ import DataTypes.Coords;
 import DataTypes.Direction;
 import DataTypes.Exception.ParseBoardException;
 import DataTypes.Exception.ParseTileColourException;
-import Entities.Characters.Player;
-import Entities.Items.Collectable.Lever;
+import Entities.Items.Collectable.Key;
 import Entities.Items.Collectable.Loot;
 import TestCases.Boards;
-import Utils.BoardLoader;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -49,7 +47,7 @@ public class TileTest {
         Tile.newBoard(Boards.CASE_2.TARGET_BOARD, 5, 3);
         Tile tile = Tile.getTile(new Coords(0, 0));
         Loot loot = new Loot(new Coords(0, 0));
-        new Lever(new Coords(0, 0));
+        new Key(new Coords(0, 0));
 
         ArrayList<Loot> lootOnly = tile.getEntitiesOfType(Loot.class);
         Assertions.assertEquals(1, lootOnly.size());
