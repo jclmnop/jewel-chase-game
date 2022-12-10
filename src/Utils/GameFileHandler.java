@@ -128,6 +128,22 @@ public class GameFileHandler {
     }
 
     /**
+     * List all levels.
+     * @return List of all levels available for given profile.
+     */
+    public static ArrayList<String> getAllLevels() {
+        ArrayList<String> levelFileNames = GameFileHandler.listFileNames(LEVEL_FILES_PATH, false);
+
+        if (levelFileNames.isEmpty()) {
+            throw new RuntimeException("NO LEVEL FILES IN " + LEVEL_FILES_PATH);
+        }
+
+        return levelFileNames.stream()
+            .sorted()
+            .collect(Collectors.toCollection(ArrayList::new));
+    }
+
+    /**
      * List all save files associated with this player profile.
      * @param playerProfile Profile to retrieve save game files for.
      * @return List of all save files.
