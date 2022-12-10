@@ -66,10 +66,12 @@ public class FlyingAssassin extends Npc {
     @Override
     public String serialise() {
         return String.format(
-                "%s %s %s ",
+                "%s %s %s %s %s",
                 this.getClass().getSimpleName(),
                 this.coords.serialise(),
-                this.currentDirection
+                this.currentDirection,
+                this.ticksPerMove,
+                this.ticksSinceLastMove
         );
     }
 
