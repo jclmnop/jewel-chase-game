@@ -116,6 +116,7 @@ public class Bomb extends Item {
             spawnExplosions(trigZones, i);
         }
         Entity.removeEntity(this);
+        new Explosion(this.coords);
     }
 
     /**
