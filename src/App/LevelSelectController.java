@@ -77,6 +77,11 @@ public class LevelSelectController {
 
     }
 
+    @FXML
+    private void mainMenu() throws IOException {
+        App.returnToMainMenu();
+    }
+
     private void loadSelectedLevel(String level) throws IOException {
         GameParams gameParams = GameFileHandler.loadLevelFile(
             Integer.parseInt(level), Game.getPlayerProfile()
