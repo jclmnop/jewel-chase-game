@@ -185,6 +185,7 @@ public abstract class Entity implements Serialisable, Renderable {
                         if (deserialised instanceof Character deserialisedCharacter) {
                             deserialisedCharacter.decrementTicksSinceLastMove();
                         }
+                        //TODO: if flying assassin, turn left
                     }
                     Entity.removeEntity(collision.getEntityOne());
                 }
