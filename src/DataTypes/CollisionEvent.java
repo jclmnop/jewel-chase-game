@@ -57,8 +57,8 @@ public enum CollisionEvent {
                 default     -> NOTHING;
             };
             case MIRROR -> switch (collisionTwo) {
-                case PLAYER, THIEF -> CLONE;
-                default            -> NOTHING;
+                case PLAYER, THIEF, ASSASSIN -> CLONE;
+                default                      -> NOTHING;
             };
             case COFFEE -> switch (collisionTwo) {
                 case THIEF, PLAYER, ASSASSIN -> SPEED_UP;
