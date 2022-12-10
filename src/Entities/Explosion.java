@@ -63,7 +63,6 @@ public class Explosion extends Entity {
 
     @Override
     public String serialise() {
-        // TODO Auto-generated method stub
         return String.format(
             "%s %s %s",
             this.getClass().getSimpleName(),
