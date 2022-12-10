@@ -174,7 +174,9 @@ public class Game {
      * @param player Player to be removed from the game.
      */
     public static void removePlayer(Player player) {
-        playerMovementKeys.forEach(
+        HashMap<KeyCode, PlayerInput> clonedPlayerMovementKeys =
+            (HashMap<KeyCode, PlayerInput>) Game.playerMovementKeys.clone();
+        clonedPlayerMovementKeys.forEach(
             (key, playerInput) -> {
                 if (playerInput.player() == player) {
                     playerMovementKeys.remove(key);

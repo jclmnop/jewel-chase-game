@@ -22,3 +22,5 @@ Star 1 0
 Mushroom 12 0
 Lever 6 3 RED
 Gate 6 4 RED
+Bomb 6 0
+Bomb 6 9

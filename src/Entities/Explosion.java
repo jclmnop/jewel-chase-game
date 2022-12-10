@@ -16,7 +16,7 @@ import Interfaces.Handleable;
  */
 public class Explosion extends Entity implements Handleable {
     private static final String IMAGE_PATH = Item.RESOURCES_PATH + "explosion.png";
-    private static final int MAX_DURATION_TICKS = 2; // Explosion is present on screen for 1 tick
+    private static final int MAX_DURATION_TICKS = 5; // Explosion is present on screen for 1 tick
     private int currentDurationTicks = 0;
 
     /**
@@ -41,7 +41,7 @@ public class Explosion extends Entity implements Handleable {
     @Override
     public void handle() {
         if (currentDurationTicks < MAX_DURATION_TICKS) {
-            destroy();
+//            destroy();
             currentDurationTicks++;
         } else {
             Entity.removeEntity(this);
