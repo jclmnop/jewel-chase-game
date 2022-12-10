@@ -4,12 +4,9 @@ import DataTypes.Collision;
 import DataTypes.CollisionEvent;
 import DataTypes.Coords;
 import Entities.Characters.Character;
-import Entities.Characters.Npc.FloorFollowingThief;
-import Entities.Characters.Npc.SmartThief;
 import Entities.Characters.Player;
 import Entities.Items.Bomb;
 import Entities.Items.Collectable.*;
-import Interfaces.Handleable;
 import Interfaces.Renderable;
 import Interfaces.Serialisable;
 import Game.Game;
@@ -49,7 +46,7 @@ public abstract class Entity implements Serialisable, Renderable {
         CLOCK,
         LEVER,
         STAR,
-        MUSHROOM,
+        COFFEE,
         GATE,
         DOOR,
         ASSASSIN,
@@ -197,8 +194,8 @@ public abstract class Entity implements Serialisable, Renderable {
                     if (maxSpeedAlreadyReached) {
                         int scoreAdjustment =
                             character instanceof Player
-                                ? +Mushroom.POINTS_IF_MAX_SPEED_REACHED
-                                : -Mushroom.POINTS_IF_MAX_SPEED_REACHED;
+                                ? +Coffee.POINTS_IF_MAX_SPEED_REACHED
+                                : -Coffee.POINTS_IF_MAX_SPEED_REACHED;
                         Game.adjustScore(scoreAdjustment);
                     }
                     Entity.removeEntity(collision.getEntityOne());

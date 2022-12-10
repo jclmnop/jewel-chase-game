@@ -60,7 +60,7 @@ public enum CollisionEvent {
                 case PLAYER, THIEF -> CLONE;
                 default            -> NOTHING;
             };
-            case MUSHROOM -> switch (collisionTwo) {
+            case COFFEE -> switch (collisionTwo) {
                 case THIEF, PLAYER, ASSASSIN -> SPEED_UP;
                 default                      -> NOTHING;
             };

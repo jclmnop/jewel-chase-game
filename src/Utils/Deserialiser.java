@@ -270,11 +270,11 @@ public class Deserialiser {
         return new Star(coords);
     }
 
-    private static Mushroom deserialiseMushroom(String[] splitString) {
+    private static Coffee deserialiseMushroom(String[] splitString) {
         Iterator<String> stringIterator = Arrays.stream(splitString).iterator();
         stringIterator.next(); // Skip type name
         Coords coords = Coords.fromString(stringIterator.next(), stringIterator.next());
-        return new Mushroom(coords);
+        return new Coffee(coords);
     }
 
     private static Explosion deserialiseExplosion(String[] splitString) {
