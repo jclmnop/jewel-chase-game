@@ -150,7 +150,7 @@ public class Deserialiser {
         Iterator<String> stringIterator = Arrays.stream(splitString).iterator();
         stringIterator.next(); // Skip type name
         Coords coords = Coords.fromString(stringIterator.next(), stringIterator.next());
-        int speed = stringIterator.hasNext() ?
+        int ticksPerMove = stringIterator.hasNext() ?
             Integer.parseInt(stringIterator.next())
             : DEFAULT_NPC_TICKS_PER_MOVE;
         Direction direction = stringIterator.hasNext()
@@ -159,14 +159,14 @@ public class Deserialiser {
         int ticksSinceLastMove = stringIterator.hasNext()
             ? Integer.parseInt(stringIterator.next())
             : 0;
-        return new SmartThief(coords, speed, direction, ticksSinceLastMove);
+        return new SmartThief(coords, ticksPerMove, direction, ticksSinceLastMove);
     }
 
     private static Player deserialisePlayer(String[] splitString) {
         Iterator<String> stringIterator = Arrays.stream(splitString).iterator();
         stringIterator.next(); // Skip type name
         Coords coords = Coords.fromString(stringIterator.next(), stringIterator.next());
-        int speed = stringIterator.hasNext() ?
+        int ticksPerMove = stringIterator.hasNext() ?
             Integer.parseInt(stringIterator.next())
             : DEFAULT_PLAYER_TICKS_PER_MOVE;
         Direction direction = stringIterator.hasNext()
@@ -175,7 +175,7 @@ public class Deserialiser {
         int ticksSinceLastMove = stringIterator.hasNext()
             ? Integer.parseInt(stringIterator.next())
             : 0;
-        return new Player(coords, speed, direction, ticksSinceLastMove);
+        return new Player(coords, ticksPerMove, direction, ticksSinceLastMove);
     }
 
     private static FlyingAssassin deserialiseFlyingAssassin(String[] splitString) {
@@ -183,18 +183,20 @@ public class Deserialiser {
         stringIterator.next(); // Skip type name
         Coords coords = Coords.fromString(stringIterator.next(), stringIterator.next());
         Direction direction = Direction.fromString(stringIterator.next());
-        int speed = stringIterator.hasNext() ?
+        int ticksPerMove = stringIterator.hasNext() ?
             Integer.parseInt(stringIterator.next())
             : DEFAULT_NPC_TICKS_PER_MOVE;
-        //TODO direction
-        return new FlyingAssassin(coords, speed); // TODO
+        int ticksSinceLastMove = stringIterator.hasNext()
+            ? Integer.parseInt(stringIterator.next())
+            : 0;
+        return new FlyingAssassin(coords, ticksPerMove, direction, ticksSinceLastMove);
     }
 
     private static FloorFollowingThief deserialiseFloorFollowingThief(String[] splitString) {
         Iterator<String> stringIterator = Arrays.stream(splitString).iterator();
         stringIterator.next(); // Skip type name
         Coords coords = Coords.fromString(stringIterator.next(), stringIterator.next());
-        int speed = stringIterator.hasNext() ?
+        int ticksPerMove = stringIterator.hasNext() ?
             Integer.parseInt(stringIterator.next())
             : DEFAULT_NPC_TICKS_PER_MOVE;
         Colour colour = stringIterator.hasNext()
@@ -206,7 +208,7 @@ public class Deserialiser {
         int ticksSinceLastMove = stringIterator.hasNext()
             ? Integer.parseInt(stringIterator.next())
             : 0;
-        return new FloorFollowingThief(coords, speed, colour, direction, ticksSinceLastMove);
+        return new FloorFollowingThief(coords, ticksPerMove, colour, direction, ticksSinceLastMove);
     }
 
     private static Key deserialiseKey(String[] splitString) {
