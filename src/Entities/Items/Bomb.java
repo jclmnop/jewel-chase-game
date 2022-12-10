@@ -1,6 +1,7 @@
 package Entities.Items;
 
 import DataTypes.Coords;
+import Entities.Characters.Character;
 import Entities.Entity;
 import Entities.Explosion;
 import Entities.Characters.Npc.Npc;
@@ -98,7 +99,7 @@ public class Bomb extends Item {
         while (!triggered && i < NUM_ZONES) {
             Coords zone = trigZones[i];
             if (zone != null) {
-                if (!Tile.getEntitiesOfTypeByCoords(Npc.class, zone).isEmpty()) {
+                if (!Tile.getEntitiesOfTypeByCoords(Character.class, zone).isEmpty()) {
                     triggered = true;
                 }
             }
