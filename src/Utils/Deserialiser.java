@@ -7,6 +7,7 @@ import Entities.Characters.Npc.FloorFollowingThief;
 import Entities.Characters.Npc.FlyingAssassin;
 import Entities.Characters.Player;
 import Entities.Characters.Npc.SmartThief;
+import Entities.Explosion;
 import Entities.Items.Bomb;
 import Entities.Items.Collectable.*;
 import Entities.Items.Door;
@@ -82,9 +83,10 @@ public class Deserialiser {
                 }
                 case "Mushroom" -> {
                     return Deserialiser.deserialiseMushroom(args);
-
                 }
-                // TODO: case "Explosion -> {}"
+                case "Explosion" -> {
+                    return Deserialiser.deserialiseExplosion(args);
+                }
                 default -> {
                     throw new DeserialiseException(
                         "Deserialisation of " + objectTypeName + " failed, class name not recognised"
@@ -224,9 +226,13 @@ public class Deserialiser {
         Iterator<String> stringIterator = Arrays.stream(splitString).iterator();
         stringIterator.next(); // Skip type name
         Coords coords = Coords.fromString(stringIterator.next(), stringIterator.next());
-        //TODO detonated boolean
-        //TODO timer (in ms)
-        return new Bomb(coords); // TODO
+        boolean triggered = stringIterator.hasNext()
+            ? Boolean.parseBoolean(stringIterator.next())
+            : false;
+        int state = stringIterator.hasNext()
+            ? Integer.parseInt(stringIterator.next())
+            : Bomb.INITIAL_STATE;
+        return new Bomb(coords, triggered, state); // TODO
     }
 
     private static Star deserialiseStar(String[] splitString) {
@@ -241,6 +247,16 @@ public class Deserialiser {
         stringIterator.next(); // Skip type name
         Coords coords = Coords.fromString(stringIterator.next(), stringIterator.next());
         return new Mushroom(coords);
+    }
+
+    private static Explosion deserialiseExplosion(String[] splitString) {
+        Iterator<String> stringIterator = Arrays.stream(splitString).iterator();
+        stringIterator.next(); // Skip type name
+        Coords coords = Coords.fromString(stringIterator.next(), stringIterator.next());
+        int currentDurationTicks = stringIterator.hasNext()
+            ? Integer.parseInt(stringIterator.next())
+            : 0;
+        return new Explosion(coords, currentDurationTicks);
     }
 
     // TODO: private static BombExplosion deserialiseExplosion(String[] splitString) {}
