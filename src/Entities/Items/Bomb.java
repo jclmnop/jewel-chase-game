@@ -24,7 +24,7 @@ public class Bomb extends Item implements Handleable {
     public Bomb(Coords coords) {
         super(CollisionType.BOMB, true, coords);
         this.imagePath = IMAGE_PATH;
-        this.trigZones = Tile.getNoColourAdjacentTiles(this.coords).toArray();
+        this.trigZones = Tile.getAdjacentCoords(this.coords).toArray();
         this.state = INITIAL_STATE;
     }
 
@@ -137,7 +137,7 @@ public class Bomb extends Item implements Handleable {
         // If null, the edge of the board has been reached so no more spawns.
         if (zones[i] != null) {
             new Explosion(zones[i]);
-            spawnExplosions(Tile.getNoColourAdjacentTiles(zones[i]).toArray(), i);
+            spawnExplosions(Tile.getAdjacentCoords(zones[i]).toArray(), i);
         }
     }
 }

@@ -1,17 +1,20 @@
 package Entities.Characters.Npc;
 
+import DataTypes.AdjacentCoords;
 import DataTypes.Coords;
 import DataTypes.Direction;
 import Entities.Characters.Character;
 import Game.Tile;
 
+/**
+ * Flies around the map and kills anything it touches. For some reason it
+ * looks a lot like Stewart Powell.
+ *
+ * @author Aleksandra
+ * @version 1.1
+ */
 public class FlyingAssassin extends Npc {
-
     private static final String IMAGE_PATH = Character.RESOURCES_PATH + "stuart_bat.gif";
-    private static final int MAX_WIDTH = Tile.getWidth();
-    private static final int MIN_WIDTH = 0;
-    private static final int MAX_HEIGHT = Tile.getHeight();
-    private static final int MIN_HEIGHT = 0;
 
     public FlyingAssassin(Coords coords, int speed, Direction dir) {
         super(CollisionType.ASSASSIN, false, coords, speed);
@@ -19,9 +22,13 @@ public class FlyingAssassin extends Npc {
         this.imagePath = IMAGE_PATH;
     }
 
-    public FlyingAssassin(Coords coords, int speed) {
+    public FlyingAssassin(Coords coords, int speed, Direction dir, int ticksSinceLastMove) {
+        this(coords, speed, dir);
+        this.ticksSinceLastMove = ticksSinceLastMove;
+    }
 
-        this(coords, speed, currentDirection.UP);
+    public FlyingAssassin(Coords coords, int speed) {
+        this(coords, speed, Direction.UP);
     }
 
     /**
@@ -30,31 +37,24 @@ public class FlyingAssassin extends Npc {
      */
     @Override
     public void tryMove() {
-        if (EdgeReached()) {
-            currentDirection = Direction.turnAround(this.currentDirection);
+        if (this.edgeReached()) {
+            this.currentDirection = Direction.turnAround(this.currentDirection);
         }
-        //get the next coords in the direction that the assassin is facing
-        Coords nextCoords = ;
-        this.move(nextCoords);
+        Coords nextCoords =
+            Tile.getAdjacentCoords(this.coords).getCoordsInDirection(
+                this.currentDirection
+            );
 
+        this.move(nextCoords);
     }
 
     /**
      * Checks whether the Assassin has reached the edge of the board
      */
-
-    private boolean EdgeReached() {
-        if ((currentDirection == Direction.LEFT && this.coords.x() == MIN_WIDTH)) {
-            return true;
-        } else if (currentDirection == Direction.RIGHT && this.coords.x() == MAX_WIDTH) {
-            return true;
-        } else if (currentDirection == Direction.UP && this.coords.y() == MAX_HEIGHT) {
-            return true;
-        } else if (currentDirection == Direction.DOWN && this.coords.y() == MIN_HEIGHT) {
-            return true;
-        } else {
-            return false;
-        }
+    private boolean edgeReached() {
+        AdjacentCoords adjacentCoords =
+            Tile.getAdjacentCoords(this.coords);
+        return adjacentCoords.getCoordsInDirection(this.currentDirection) == null;
     }
 
 
@@ -65,7 +65,6 @@ public class FlyingAssassin extends Npc {
      */
     @Override
     public String serialise() {
-
         return String.format(
                 "%s %s %s ",
                 this.getClass().getSimpleName(),
