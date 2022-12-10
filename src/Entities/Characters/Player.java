@@ -7,7 +7,7 @@ import Game.Game;
 import Game.Tile;
 
 public class Player extends Character {
-    private static final String IMAGE_PATH = Character.RESOURCES_PATH + "liam_face.png";
+    private static final String IMAGE_PATH = Character.RESOURCES_PATH + "liam_stick.gif";
 
     public Player(Coords coords, int ticksPerMove) {
         super(CollisionType.PLAYER, true, coords, ticksPerMove);
