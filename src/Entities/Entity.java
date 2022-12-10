@@ -8,6 +8,7 @@ import Entities.Characters.Npc.FloorFollowingThief;
 import Entities.Characters.Npc.SmartThief;
 import Entities.Characters.Player;
 import Entities.Items.Collectable.*;
+import Interfaces.Handleable;
 import Interfaces.Renderable;
 import Interfaces.Serialisable;
 import Game.Game;
@@ -69,6 +70,13 @@ public abstract class Entity implements Serialisable, Renderable {
 
     public static ArrayList<Entity> getEntities() {
         return entities;
+    }
+
+    public static ArrayList<Handleable> getHandleableEntities() {
+        return Entity.entities.stream()
+            .filter(e -> e instanceof Handleable)
+            .map(e -> (Handleable) e)
+            .collect(Collectors.toCollection(ArrayList::new));
     }
 
     public static <T extends Entity> ArrayList<T> getEntitiesOfType(Class<T> c) {
