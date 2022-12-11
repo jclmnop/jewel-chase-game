@@ -11,15 +11,30 @@ import javafx.scene.paint.Color;
 import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Translate;
 
+/**
+ * Represents an entity which is capable of moving on the board.
+ *
+ * @author Jonny
+ * @version 1.1
+ */
 public abstract class Character extends Entity {
     public static final String RESOURCES_PATH = Entity.RESOURCES_PATH + "characters/";
     public static final int MIN_TICKS_PER_MOVE = 1;
     protected Direction currentDirection;
     protected int ticksPerMove;
     protected int ticksSinceLastMove;
-    //TODO: sprite/image file?
-    //TODO: death animation?
 
+    /**
+     * Construct a character with given parameters.
+     * @param collisionType The collision type enum used to calculate collision
+     *                      outcomes when this character collides with another
+     *                      entity.
+     * @param isBlocking Whether this character blocks other entities from
+     *                   occupying the same tile.
+     * @param coords Coordinates to create this character on.
+     * @param ticksPerMove Number of ticks that must pass between each movement
+     *                     for this character.
+     */
     public Character(CollisionType collisionType, boolean isBlocking, Coords coords, int ticksPerMove) {
         super(collisionType, isBlocking, coords);
         this.ticksPerMove = ticksPerMove;
@@ -55,11 +70,25 @@ public abstract class Character extends Entity {
         }
     }
 
+    /**
+     * Kill a character.
+     *
+     * At the moment this method is no different to 
+     * {@link Entity#removeEntity(Entity)} but remains implemented for the 
+     * sake of future extendability. For example, if death animations for 
+     * characters need to be implemented. 
+     * 
+     * @see Entity#removeEntity(Entity)
+     */
     public void kill() {
-        // TODO: death animation?
         Entity.removeEntity(this);
     }
 
+    /**
+     * Load and return image associated with this character, rotated depending
+     * on the direction in which the character is currently facing.
+     * @return JavaFx image for this character.
+     */
     @Override
     public Image toImage() {
         ImageView imageView = new ImageView(super.toImage());
