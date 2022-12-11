@@ -12,6 +12,11 @@
 
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="App.App">
    <children>
+      <ImageView fitHeight="800.0" fitWidth="1000.0" layoutY="-1.0" pickOnBounds="true">
+         <image>
+            <Image url="@../resources/characters/background.png" />
+         </image>
+      </ImageView>
       <VBox alignment="CENTER" layoutX="312.0" layoutY="180.0" prefHeight="441.0" prefWidth="377.0">
          <children>
             <Text strokeType="OUTSIDE" strokeWidth="0.0" text="LiamQuest" textAlignment="CENTER" wrappingWidth="283.21630859375">

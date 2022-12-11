@@ -242,6 +242,10 @@ public class GameFileHandler {
      * @throws IOException If there's an I/O error while reading the file.
      */
     public static HighScoreTable loadHighScoreTable(int levelNumber) throws IOException {
+        Path highScoreDirectoryPath = Path.of(HIGH_SCORES_PATH);
+        if (!Files.exists(highScoreDirectoryPath)) {
+            Files.createDirectory(highScoreDirectoryPath);
+        }
         Path highScoreTablePath = Path.of(String.format(
             "%s%s.txt",
             HIGH_SCORES_PATH, levelNumber

@@ -37,12 +37,12 @@ public class GameFileHandlerTest {
 
         Assertions.assertEquals(
             Game.getPlayerProfile().getMaxLevel(),
-            Integer.parseInt(levels.get(levels.size()-1))
+            10
         );
 
         try {
             GameParams gameParams = GameFileHandler.loadLevelFile(
-                Integer.parseInt(levels.get(0)),
+                Integer.parseInt(levels.get(6)),
                 Game.getPlayerProfile()
             );
             Assertions.assertEquals(0, gameParams.levelNumber());
