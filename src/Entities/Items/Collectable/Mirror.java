@@ -13,6 +13,7 @@ import Entities.Items.Item;
  * @see Entities.Items.Collectable.Collectable
  */
 public class Mirror extends Collectable {
+    /** Points awarded to player if they collect item when max players reached. */
     public static final int POINTS_IF_MAX_PLAYERS_REACHED = 10;
     private static final String IMAGE_PATH = Item.RESOURCES_PATH + "mirror.png";
 

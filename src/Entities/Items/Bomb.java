@@ -12,7 +12,7 @@ import javafx.scene.image.Image;
 /**
  * Bomb which begins to count down and explode if a character occupies any of
  * its adjacent tiles.
- * <
+ *
  * @author Dillon
  * @version 1.1
  * @see Interfaces.Handleable

@@ -41,9 +41,13 @@ public class Loot extends Collectable {
      * awarded upon collection. Also affects the image displayed for a loot item.
      */
     public enum LootTier {
+        /** Lowest tier of loot */
         TIER_1,
+        /** Second-lowest tier of loot */
         TIER_2,
+        /** Second-highest tier of loot */
         TIER_3,
+        /** Highest tier of loot */
         TIER_4;
 
         /**

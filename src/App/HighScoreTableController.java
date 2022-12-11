@@ -26,10 +26,14 @@ public class HighScoreTableController {
     @FXML
     private Text selectedLevelText;
 
+    /**
+     * Construct new high score table controller.
+     */
     public HighScoreTableController() {}
 
     /**
      * Load the high score table.
+     * @throws IOException if there's an I/O error while loading high score table.
      */
     public void initialize() throws IOException {
         this.loadHighScoreTable();

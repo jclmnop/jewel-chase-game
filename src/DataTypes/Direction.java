@@ -12,9 +12,13 @@ import java.util.Locale;
  * @version 1.1
  */
 public enum Direction implements Serialisable {
+    /** Up/North */
     UP,
+    /** Down/South */
     DOWN,
+    /** Left/West */
     LEFT,
+    /** Right/East */
     RIGHT;
 
 

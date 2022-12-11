@@ -27,6 +27,9 @@ public class LoadGameMenuController {
     @FXML
     private VBox saveGameMenu;
 
+    /**
+     * Construct new load game menu controller.
+     */
     public LoadGameMenuController() {
         LoadGameMenuController.loadGameMenuController = this;
     }

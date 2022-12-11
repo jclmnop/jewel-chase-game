@@ -12,6 +12,7 @@ import Entities.Items.Item;
  * @see Entities.Items.Collectable.Collectable
  */
 public class Clock extends Collectable {
+    /** Number of seconds that will be added/subtracted from remaining time. */
     public static final int SECONDS = 10;
     private static final String IMAGE_PATH = Item.RESOURCES_PATH + "clock.gif";
 

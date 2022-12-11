@@ -12,6 +12,7 @@ import Entities.Items.Item;
  * @see Entities.Items.Collectable.Collectable
  */
 public class Coffee extends Collectable {
+    /** Number of points granted if collected when already at max speed */
     public static final int POINTS_IF_MAX_SPEED_REACHED = 10;
     private static final String IMAGE_PATH = Item.RESOURCES_PATH + "coffee.gif";
 

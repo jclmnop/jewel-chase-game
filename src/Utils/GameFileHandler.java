@@ -26,12 +26,19 @@ import java.util.stream.Stream;
  * @version 1.2
  */
 public class GameFileHandler {
+    /** Path to all game file directories */
     public static final String GAME_FILES_PATH = "src/Game/files/";
+    /** Path to save game directories */
     public static final String SAVE_GAME_PATH = GAME_FILES_PATH + "saveGames/";
+    /** Path to level files */
     public static final String LEVEL_FILES_PATH = GAME_FILES_PATH + "levels/";
+    /** Path to highscore table files */
     public static final String HIGH_SCORES_PATH = GAME_FILES_PATH + "highscores/";
+    /** Path to player profiles */
     public static final String PLAYER_PROFILES_PATH = GAME_FILES_PATH + "playerProfiles/";
+    /** Path to the cached player profile directory */
     public static final String CACHE_PATH = GAME_FILES_PATH + "cache/";
+    /** Path to the cached player profile file, used to load the most recently used profile */
     public static final String PROFILE_CACHE_PATH = CACHE_PATH + "currentProfile.txt";
 
     private GameFileHandler() {}

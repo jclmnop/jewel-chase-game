@@ -21,10 +21,15 @@ import javafx.scene.transform.Translate;
  * @see Entities.Entity
  */
 public abstract class Character extends Entity {
-    public static final String RESOURCES_PATH = Entity.RESOURCES_PATH + "characters/";
-    public static final int MIN_TICKS_PER_MOVE = 1;
+    /** Path to image files used for characters */
+    protected static final String RESOURCES_PATH = Entity.RESOURCES_PATH + "characters/";
+    /** Minimum value for ticksPerMove */
+    protected static final int MIN_TICKS_PER_MOVE = 1;
+    /** Current direction that character is facing. */
     protected Direction currentDirection;
+    /** Number of ticks that must pass between each move. */
     protected int ticksPerMove;
+    /** Ticks since last movement. */
     protected int ticksSinceLastMove;
 
     /**

@@ -11,7 +11,9 @@ import javafx.scene.image.Image;
  * @see Entities.Entity
  */
 public interface Renderable {
-    public static final String RESOURCES_PATH = "App/resources/";
+    /** Path to base resources directory */
+    String RESOURCES_PATH = "App/resources/";
+
     /**
      * Returns a loaded image to be rendered by JavaFx
      * @return the loaded image.

@@ -20,7 +20,7 @@ import java.util.ArrayList;
  * @see GameFileHandler
  */
 public class PlayerProfileController {
-    public static final int PLAYER_NAME_CHAR_LIMIT = 20;
+    private static final int PLAYER_NAME_CHAR_LIMIT = 20;
     private static PlayerProfileController playerProfileController;
     @FXML
     private Button newProfileButton;
@@ -31,6 +31,9 @@ public class PlayerProfileController {
     @FXML
     private RadioButton deleteMode;
 
+    /**
+     * Construct new player profile controller.
+     */
     public PlayerProfileController() {
         PlayerProfileController.playerProfileController = this;
     }

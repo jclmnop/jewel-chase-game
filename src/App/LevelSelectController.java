@@ -24,6 +24,9 @@ public class LevelSelectController {
     private VBox levelMenu;
     private int selectedLevel;
 
+    /**
+     * Construct new level select controller object.
+     */
     public LevelSelectController() {
         LevelSelectController.levelSelectController = this;
     }

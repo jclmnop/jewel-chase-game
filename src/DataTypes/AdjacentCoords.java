@@ -7,10 +7,10 @@ import Game.Tile;
  * coordinate has no adjacent tiles in that direction.
  * @author Jonny
  * @version 1.2
- * @param up
- * @param down
- * @param left
- * @param right
+ * @param up Coords above
+ * @param down Coords below
+ * @param left Coords to the left
+ * @param right Coords to the right
  */
 public record AdjacentCoords(Coords up, Coords down, Coords left, Coords right) {
 

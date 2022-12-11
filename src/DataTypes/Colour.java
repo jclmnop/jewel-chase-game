@@ -10,13 +10,20 @@ import javafx.scene.image.Image;
  * @version 1.3
  */
 public enum Colour implements Renderable {
+    /** Red */
     RED,
+    /** Green */
     GREEN,
+    /** Blue */
     BLUE,
+    /** Yellow */
     YELLOW,
+    /** Cyan */
     CYAN,
+    /** Magenta */
     MAGENTA;
 
+    /** Path to directory containing image files for each colour. */
     public static final String IMAGE_PATH = "App/resources/tiles/";
     private Image image = null;
 

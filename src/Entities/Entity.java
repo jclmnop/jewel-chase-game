@@ -55,17 +55,29 @@ public abstract class Entity implements Serialisable, Renderable {
      * Used to compute the outcome of a collision between two Entity objects.
      */
     public enum CollisionType {
+        /** An explosion caused by a bomb */
         EXPLOSION,
+        /** A bomb */
         BOMB,
+        /** A loot item */
         LOOT,
+        /** A clock */
         CLOCK,
+        /** A key */
         KEY,
+        /** A mirror */
         MIRROR,
+        /** A coffee */
         COFFEE,
+        /** A gate */
         GATE,
+        /** A door */
         DOOR,
+        /** A flying assassin */
         ASSASSIN,
+        /** Any type of thief */
         THIEF,
+        /** A player */
         PLAYER,
     }
 
@@ -252,8 +264,6 @@ public abstract class Entity implements Serialisable, Renderable {
                 case DOUBLE_ASSASSINATION -> {
                     FlyingAssassin entityOne = (FlyingAssassin) collision.getEntityOne();
                     FlyingAssassin entityTwo = (FlyingAssassin) collision.getEntityTwo();
-                    System.out.println(entityOne.isTemporarilyInvincible());
-                    System.out.println(entityTwo.isTemporarilyInvincible());
                     if (!entityOne.isTemporarilyInvincible() && !entityTwo.isTemporarilyInvincible()) {
                         System.out.println("DOUBLE KILL");
                         entityOne.kill();

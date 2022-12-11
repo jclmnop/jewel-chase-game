@@ -15,6 +15,7 @@ import java.util.ArrayList;
  * @see Entities.Entity
  */
 public abstract class Item extends Entity {
+    /** Path to image files for items. */
     public static final String RESOURCES_PATH = Entity.RESOURCES_PATH + "items/";
 
     /**

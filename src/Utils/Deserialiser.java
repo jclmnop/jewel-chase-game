@@ -26,8 +26,8 @@ import java.util.Iterator;
  * @version 1.3
  */
 public class Deserialiser {
-    public static final int DEFAULT_NPC_TICKS_PER_MOVE = 5;
-    public static final int DEFAULT_PLAYER_TICKS_PER_MOVE = 1;
+    private static final int DEFAULT_NPC_TICKS_PER_MOVE = 5;
+    private static final int DEFAULT_PLAYER_TICKS_PER_MOVE = 1;
 
     /**
      * Deserialise a Tile or Entity object from its string representation and

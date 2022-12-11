@@ -7,9 +7,9 @@ package DataTypes.Exception;
  * @version 1.0
  */
 public class ParseBoardException extends IllegalArgumentException {
-    public static final String INCORRECT_HEIGHT =
+    private static final String INCORRECT_HEIGHT =
         "Expected height: %s, actual height is %s";
-    public static final String INCORRECT_WIDTH =
+    private static final String INCORRECT_WIDTH =
         "Expected width: %s, actual width is %s on row %s";
 
     /**
