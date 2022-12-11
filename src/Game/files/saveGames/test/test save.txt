@@ -27,3 +27,5 @@ Loot 2 0 TIER_1
 Loot 3 0 TIER_2
 Loot 4 0 TIER_3
 Loot 5 0 TIER_4
+FlyingAssassin 6 5 RIGHT 5 0
+Mirror 8 5

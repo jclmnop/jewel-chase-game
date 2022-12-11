@@ -23,6 +23,7 @@ public record GameParams(int startTime, int startScore, boolean isHeadless, int 
      * starting score. Intended for loading from saved games.
      * @param startTime Start time for timer.
      * @param startScore Start score, usually retrieved from save game file.
+     * @param levelNumber Number of level to be loaded.
      */
     public GameParams(int startTime, int startScore, int levelNumber) {
         this(startTime, startScore, false, levelNumber);

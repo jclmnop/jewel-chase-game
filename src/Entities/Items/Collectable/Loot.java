@@ -6,8 +6,11 @@ import Entities.Items.Item;
 /**
  * Represents a loot item which can be collected by the player to increase score.
  *
- * @author TODO: author
+ * @author Will
  * @version 1.0
+ * @see Interfaces.Renderable
+ * @see Interfaces.Serialisable
+ * @see Entities.Items.Collectable.Collectable
  */
 public class Loot extends Collectable {
     private static final String IMAGE_PATH = Item.RESOURCES_PATH + "loot_";
@@ -38,9 +41,13 @@ public class Loot extends Collectable {
      * awarded upon collection. Also affects the image displayed for a loot item.
      */
     public enum LootTier {
+        /** Lowest tier of loot */
         TIER_1,
+        /** Second-lowest tier of loot */
         TIER_2,
+        /** Second-highest tier of loot */
         TIER_3,
+        /** Highest tier of loot */
         TIER_4;
 
         /**

@@ -8,28 +8,48 @@ import Game.Tile;
 
 /**
  * Flies around the map and kills anything it touches. For some reason it
- * looks a lot like Stewart Powell.
+ * looks a lot like Stewart Powell if he had wings.
  *
  * @author Aleksandra
  * @version 1.1
+ * @see Entities.Characters.Npc.Npc
  */
 public class FlyingAssassin extends Npc {
     private static final String IMAGE_PATH = Character.RESOURCES_PATH + "stuart_bat.gif";
     private boolean temporarilyInvincible;
 
-    public FlyingAssassin(Coords coords, int speed, Direction dir) {
-        super(CollisionType.ASSASSIN, false, coords, speed);
+    /**
+     * Spawn a flying assassin with the given parameters.
+     * @param coords Coordinates of assassin.
+     * @param ticksPerMove Ticks between each movement.
+     * @param dir Initial direction.
+     */
+    public FlyingAssassin(Coords coords, int ticksPerMove, Direction dir) {
+        super(CollisionType.ASSASSIN, false, coords, ticksPerMove);
         this.currentDirection = dir;
         this.imagePath = IMAGE_PATH;
     }
 
-    public FlyingAssassin(Coords coords, int speed, Direction dir, int ticksSinceLastMove) {
-        this(coords, speed, dir);
+    /**
+     * Spawn a flying assassin with the given parameters.
+     * @param coords Coordinates of assassin.
+     * @param ticksPerMove Ticks between each movement.
+     * @param dir Initial direction.
+     * @param ticksSinceLastMove Ticks passed since the last movement.
+     */
+    public FlyingAssassin(Coords coords, int ticksPerMove, Direction dir, int ticksSinceLastMove) {
+        this(coords, ticksPerMove, dir);
         this.ticksSinceLastMove = ticksSinceLastMove;
     }
 
-    public FlyingAssassin(Coords coords, int speed) {
-        this(coords, speed, Direction.UP);
+    /**
+     * Spawn a flying assassin with the given parameters. Direction defaults
+     * to UP.
+     * @param coords Coordinates of assassin.
+     * @param ticksPerMove Ticks between each movement.
+     */
+    public FlyingAssassin(Coords coords, int ticksPerMove) {
+        this(coords, ticksPerMove, Direction.UP);
     }
 
     /**
@@ -37,7 +57,7 @@ public class FlyingAssassin extends Npc {
      * If it reaches an edge, FlyingAssassin will be rotated 180 degrees
      */
     @Override
-    public void tryMove() {
+    protected void tryMove() {
         if (this.edgeReached()) {
             this.currentDirection = Direction.turnAround(this.currentDirection);
         }
@@ -56,18 +76,18 @@ public class FlyingAssassin extends Npc {
     }
 
     /**
-     * Used after cloning a flying assassin, so they don't kill each other.
-     */
-    public void makeTemporarilyInvincible() {
-        this.temporarilyInvincible = true;
-    }
-
-    /**
-     * Used after cloning a flying assassin to make it fly perpendicular to
+     * Used before cloning a flying assassin to make it fly perpendicular to
      * the original.
      */
     public void turnRight() {
         this.currentDirection = Direction.turnRight(this.currentDirection);
+    }
+
+    /**
+     * Used after cloning a flying assassin, so they don't kill each other.
+     */
+    public void makeTemporarilyInvincible() {
+        this.temporarilyInvincible = true;
     }
 
     /**
@@ -79,16 +99,6 @@ public class FlyingAssassin extends Npc {
     }
 
     /**
-     * Checks whether the Assassin has reached the edge of the board
-     */
-    private boolean edgeReached() {
-        AdjacentCoords adjacentCoords =
-            Tile.getAdjacentCoords(this.coords);
-        return adjacentCoords.getCoordsInDirection(this.currentDirection) == null;
-    }
-
-
-    /**
      * Serialises the Object into a String.
      *
      * @return Serialised string for `this` Object.
@@ -96,15 +106,23 @@ public class FlyingAssassin extends Npc {
     @Override
     public String serialise() {
         return String.format(
-                "%s %s %s %s %s",
-                this.getClass().getSimpleName(),
-                this.coords.serialise(),
-                this.currentDirection,
-                this.ticksPerMove,
-                this.ticksSinceLastMove
+            "%s %s %s %s %s",
+            this.getClass().getSimpleName(),
+            this.coords.serialise(),
+            this.currentDirection,
+            this.ticksPerMove,
+            this.ticksSinceLastMove
         );
     }
 
+    /**
+     * Checks whether the Assassin has reached the edge of the board
+     */
+    private boolean edgeReached() {
+        AdjacentCoords adjacentCoords =
+            Tile.getAdjacentCoords(this.coords);
+        return adjacentCoords.getCoordsInDirection(this.currentDirection) == null;
+    }
 }
 
 

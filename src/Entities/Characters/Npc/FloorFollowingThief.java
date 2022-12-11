@@ -7,12 +7,26 @@ import DataTypes.Coords;
 import DataTypes.Direction;
 import Entities.Characters.Character;
 import Game.Tile;
-import Interfaces.Handleable;
 
-public class FloorFollowingThief extends Npc implements Handleable {
+/**
+ * Thief which stays on tiles of a certain colour and follows the left-most
+ * boundary in a circular path.
+ *
+ * @author Dillon
+ * @version 1.2
+ * @see Entities.Characters.Npc.Npc
+ */
+public class FloorFollowingThief extends Npc {
     private static final String IMAGE_PATH = Character.RESOURCES_PATH + "oliver_snail.png";
     private final Colour colour;
 
+    /**
+     * Construct a floor following thief with given parameters.
+     * @param coords Coordinates to spawn the thief on.
+     * @param ticksPerMove How many ticks the thief must wait between moves.
+     * @param colour The colour of tile this thief will stick to.
+     * @param direction The initial direction this thief will face.
+     */
     public FloorFollowingThief(Coords coords, int ticksPerMove, Colour colour, Direction direction) {
         super(CollisionType.THIEF, true, coords, ticksPerMove);
         this.colour = colour;
@@ -20,9 +34,28 @@ public class FloorFollowingThief extends Npc implements Handleable {
         this.imagePath = IMAGE_PATH;
     }
 
+    /**
+     * Construct a floor following thief with given parameters. Defaults to
+     * colour BLUE facing UP.
+     * @param coords Coordinates to spawn the thief on.
+     * @param ticksPerMove How many ticks the thief must wait between moves.
+     */
     public FloorFollowingThief(Coords coords, int ticksPerMove) {
         this(coords, ticksPerMove, Colour.BLUE, Direction.UP);
     }
+
+    /**
+     * Construct a floor following thief with given parameters.
+     *
+     * Used to deserialise a floor following thief from a save file string.
+     *
+     * @param coords Coordinates to spawn the thief on.
+     * @param ticksPerMove How many ticks the thief must wait between moves.
+     * @param colour The colour of tile this thief will stick to.
+     * @param direction The initial direction this thief will face.
+     * @param ticksSinceLastMove Number of ticks which have passed since last
+     *                           move.
+     */
     public FloorFollowingThief(
         Coords coords,
         int ticksPerMove,
@@ -35,7 +68,27 @@ public class FloorFollowingThief extends Npc implements Handleable {
     }
 
     /**
-     * Trys to move to tile with assigned colour that is left most to FFT's current direction.
+     * Serialises the Object into a String.
+     *
+     * @return Serialised string for `this` Object.
+     */
+    @Override
+    public String serialise() {
+        // TODO
+        return String.format(
+            "%s %s %s %s %s %s",
+            this.getClass().getSimpleName(),
+            this.coords.serialise(),
+            this.ticksPerMove,
+            this.colour,
+            this.currentDirection,
+            this.ticksSinceLastMove
+        );
+    }
+
+    /**
+     * Trys to move to tile with assigned colour that is left most to its
+     * current direction.
      */
     @Override
     protected void tryMove() {
@@ -58,24 +111,5 @@ public class FloorFollowingThief extends Npc implements Handleable {
                 i++;
             }
         }
-    }
-
-    /**
-     * Serialises the Object into a String.
-     *
-     * @return Serialised string for `this` Object.
-     */
-    @Override
-    public String serialise() {
-        // TODO
-        return String.format(
-            "%s %s %s %s %s %s",
-            this.getClass().getSimpleName(),
-            this.coords.serialise(),
-            this.ticksPerMove,
-            this.colour,
-            this.currentDirection,
-            this.ticksSinceLastMove
-        );
     }
 }

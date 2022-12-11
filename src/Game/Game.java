@@ -31,8 +31,11 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
  * @version 1.6
  */
 public class Game {
+    /** Milliseconds per game tick. */
     public static final long MILLI_PER_TICK = 100; //TODO: figure out reasonable value
+    /** Milliseconds in a second. */
     public static final long MILLI_PER_SECOND = 1000;
+    /** Maximum number of concurrent players that can be in the game. */
     public static final int MAX_PLAYERS = 2;
     private static final HashMap<KeyCode, Direction> PLAYER1_MOVEMENT_KEYS = new HashMap<>();
     private static final HashMap<KeyCode, Direction> PLAYER2_MOVEMENT_KEYS = new HashMap<>();

@@ -19,6 +19,12 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 
+/**
+ * Represents any object that can exist at a certain coordinate on the board.
+ *
+ * @author Jonny
+ * @version 1.4
+ */
 public abstract class Entity implements Serialisable, Renderable {
     private static ArrayDeque<Collision> collisions = new ArrayDeque<>();
     private static ArrayList<Entity> entities = new ArrayList<>();
@@ -28,6 +34,14 @@ public abstract class Entity implements Serialisable, Renderable {
     protected Coords coords;
     protected Image image = null;
 
+    /**
+     * Construct an entity object with the given parameters.
+     * @param collisionType The enum type to be used when calculating the outcome
+     *                      of a collision between this entity and another..
+     * @param blocking Whether this entity stops other entities from occupying
+     *                 the same coordinate.
+     * @param coords Coordinates of the tile to spawn this entity on.
+     */
     protected Entity(CollisionType collisionType, boolean blocking, Coords coords) {
         this.collisionType = collisionType;
         this.blocking = blocking;
@@ -41,40 +55,76 @@ public abstract class Entity implements Serialisable, Renderable {
      * Used to compute the outcome of a collision between two Entity objects.
      */
     public enum CollisionType {
+        /** An explosion caused by a bomb */
         EXPLOSION,
+        /** A bomb */
         BOMB,
+        /** A loot item */
         LOOT,
+        /** A clock */
         CLOCK,
+        /** A key */
         KEY,
+        /** A mirror */
         MIRROR,
+        /** A coffee */
         COFFEE,
+        /** A gate */
         GATE,
+        /** A door */
         DOOR,
+        /** A flying assassin */
         ASSASSIN,
+        /** Any type of thief */
         THIEF,
+        /** A player */
         PLAYER,
     }
 
+    /**
+     * Add a collision to the back of the collision queue, so it can be processed.
+     * @param coords Coordinates of tile where collision took place.
+     * @param entityOne First entity involved in collision.
+     * @param entityTwo Seconds entity involved in collision.
+     */
     public static void enqueCollision(Coords coords, Entity entityOne, Entity entityTwo) {
         Entity.collisions.addLast(new Collision(coords, entityOne, entityTwo));
     }
 
+    /**
+     * Remove and return a collision from the front of the queue.
+     * @return The collision at the front of the queue.
+     */
     public static Collision dequeCollision() {
         return collisions.removeFirst();
     }
 
-    public static Collision peekCollision() {
-        return collisions.peekFirst();
-    }
-
+    /**
+     * @return All entities which currently exist on the board.
+     */
     public static ArrayList<Entity> getEntities() {
         return entities;
     }
 
+    /**
+     * Get all entities on the board which are instances of a specific class. .
+     * @param c Class to filter by, must extend Entity.
+     * @param <T> Type to be returned.
+     * @return All entities which are instances of the class.
+     */
     public static <T extends Entity> ArrayList<T> getEntitiesOfType(Class<T> c) {
         return Entity.filterEntitiesByType(c, Entity.entities);
     }
 
+    /**
+     * Filter a given list of entities for those that are instances of the
+     * specified class.
+     * @param c Class to filter by, must extend Entity.
+     * @param entityArrayList Entities to be filtered.
+     * @param <T> Type to be returned.
+     * @return All entities from the given array list which are instances
+     *         of the class.
+     */
     public static <T extends Entity> ArrayList<T> filterEntitiesByType(
         Class<T> c,
         ArrayList<Entity> entityArrayList
@@ -89,12 +139,19 @@ public abstract class Entity implements Serialisable, Renderable {
             .collect(Collectors.toCollection(ArrayList::new));
     }
 
+    /**
+     * Process all collisions currently in the queue.
+     */
     public static void processCollisions() {
         while (!Entity.collisions.isEmpty()) {
             Entity.processCollision();
         }
     }
 
+    /**
+     * Remove an entity from the game entirely.
+     * @param entity Entity to be removed.
+     */
     public static void removeEntity(Entity entity) {
         Tile.removeEntityFromBoard(entity);
         entities.remove(entity);
@@ -104,11 +161,73 @@ public abstract class Entity implements Serialisable, Renderable {
         }
     }
 
+    /**
+     * Reset the entities currently in the game.
+     */
     public static void clearEntities() {
         Entity.entities = new ArrayList<>();
         Entity.collisions = new ArrayDeque<>();
     }
 
+    /**
+     * @return Collision type of this entity.
+     */
+    public CollisionType getCollisionType() {
+        return this.collisionType;
+    }
+
+    /**
+     * @return Current coordinates of this entity.
+     */
+    public Coords getCoords() {
+        return this.coords;
+    }
+
+    /**
+     * Set current coordinates of this entity.
+     * @param coords New coordinates.
+     */
+    public void setCoords(Coords coords) {
+        this.coords = coords;
+    }
+
+    /**
+     * @return Whether this entity blocks other entities from moving to the
+     *         same tile.
+     */
+    public boolean isBlocking() {
+        return this.blocking;
+    }
+
+    /**
+     * @return The JavaFx image associated with this entity.
+     * @see Interfaces.Renderable
+     */
+    public Image toImage() {
+        // Only load image if it hasn't already been loaded to prevent
+        // memory issues.
+        if (this.image == null) {
+            this.image = new Image(this.imagePath);
+        }
+        return this.image;
+    }
+
+    /**
+     * Serialise object into a string that can be deserialised.
+     *
+     * @return Serialised string representation of this object.
+     * @see Interfaces.Serialisable
+     */
+    @Override
+    public String serialise() {
+        return String.format(
+            "%s %s",
+            this.getClass().getSimpleName(),
+            this.coords.serialise()
+        );
+    }
+
+    //TODO: maybe move all to CollisionEvent and extract into separate methods?
     private static void processCollision() {
         Collision collision = Entity.dequeCollision();
         if (collision.isValid()) {
@@ -116,13 +235,11 @@ public abstract class Entity implements Serialisable, Renderable {
                 collision
             );
             System.out.println("COLLISION: " + collisionEvent);
-            //TODO: extract into own methods (and maybe move all to CollisionEvent)
             switch (collisionEvent) {
                 case NOTHING -> {}
                 case LOOT_STOLEN -> {
-                    Loot loot = (Loot) collision.getEntityOne();
-                    int lootValue = loot.getScore();
-                    Game.adjustScore(-lootValue);
+                    // Spec says loot just disappears when stolen, doesn't
+                    // decrease score.
                     Entity.removeEntity(collision.getEntityOne());
                 }
                 case LOOT_COLLECTED -> {
@@ -132,14 +249,10 @@ public abstract class Entity implements Serialisable, Renderable {
                     Entity.removeEntity(collision.getEntityOne());
                 }
                 case CLOCK_STOLEN -> {
-                    //TODO: decide seconds per clock
-                    int timeAdjustment = 10;
                     Game.adjustTime(-Clock.SECONDS);
                     Entity.removeEntity(collision.getEntityOne());
                 }
                 case CLOCK_COLLECTED -> {
-                    //TODO: decide seconds per clock
-                    int timeAdjustment = 10;
                     Game.adjustTime(+Clock.SECONDS);
                     Entity.removeEntity(collision.getEntityOne());
                 }
@@ -151,8 +264,6 @@ public abstract class Entity implements Serialisable, Renderable {
                 case DOUBLE_ASSASSINATION -> {
                     FlyingAssassin entityOne = (FlyingAssassin) collision.getEntityOne();
                     FlyingAssassin entityTwo = (FlyingAssassin) collision.getEntityTwo();
-                    System.out.println(entityOne.isTemporarilyInvincible());
-                    System.out.println(entityTwo.isTemporarilyInvincible());
                     if (!entityOne.isTemporarilyInvincible() && !entityTwo.isTemporarilyInvincible()) {
                         System.out.println("DOUBLE KILL");
                         entityOne.kill();
@@ -169,7 +280,6 @@ public abstract class Entity implements Serialisable, Renderable {
                     }
                 }
                 case WIN -> {
-                    //TODO: finish implementing Game.win()
                     if (Entity.getEntitiesOfType(Collectable.class).isEmpty()) {
                         Game.win();
                     }
@@ -202,11 +312,8 @@ public abstract class Entity implements Serialisable, Renderable {
                 case SPEED_UP -> {
                     Character character = (Character) collision.getEntityTwo();
                     boolean maxSpeedAlreadyReached = character.speedUp();
-                    if (maxSpeedAlreadyReached) {
-                        int scoreAdjustment =
-                            character instanceof Player
-                                ? +Coffee.POINTS_IF_MAX_SPEED_REACHED
-                                : -Coffee.POINTS_IF_MAX_SPEED_REACHED;
+                    if (maxSpeedAlreadyReached && character instanceof Player) {
+                        int scoreAdjustment = +Coffee.POINTS_IF_MAX_SPEED_REACHED;
                         Game.adjustScore(scoreAdjustment);
                     }
                     Entity.removeEntity(collision.getEntityOne());
@@ -220,28 +327,5 @@ public abstract class Entity implements Serialisable, Renderable {
                 }
             }
         }
-    }
-
-    public CollisionType getCollisionType() {
-        return this.collisionType;
-    }
-
-    public Coords getCoords() {
-        return this.coords;
-    }
-
-    public void setCoords(Coords coords) {
-        this.coords = coords;
-    }
-
-    public boolean isBlocking() {
-        return this.blocking;
-    }
-
-    public Image toImage() {
-        if (this.image == null) {
-            this.image = new Image(this.imagePath);
-        }
-        return this.image;
     }
 }

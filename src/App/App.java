@@ -14,6 +14,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextInputDialog;
+import javafx.scene.input.KeyCode;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Popup;
@@ -32,21 +33,35 @@ import java.util.Objects;
  *
  * @author Jonny
  * @version 1.3
+ * @see javafx.application.Application 
+ * @see GameRenderer
+ * @see HighScoreTableController
+ * @see LevelSelectController
+ * @see LoadGameMenuController
  */
 public class App extends Application {
+    /** Height of application window */
     public static final int WINDOW_WIDTH = 1000;
+    /** Width of application window */
     public static final int WINDOW_HEIGHT = 800;
+    /** Path to main menu FXML file */
     public static final String MENU_FXML_PATH = "fxml/menu.fxml";
+    /** Path to game renderer FXML file */
     public static final String GAME_FXML_PATH = "fxml/game.fxml";
+    /** Path to LoadGameMenuController FXML file */
     public static final String LOAD_SAVE_FILE_FXML_PATH = "fxml/loadGameMenu.fxml";
+    /** Path to LevelSelectController FXML file */
     public static final String LEVEL_SELECT_FXML_PATH = "fxml/levelSelect.fxml";
+    /** Path to PlayerProfileController FXML file */
     public static final String PLAYER_PROFILES_FXML_PATH = "fxml/playerProfiles.fxml";
+    /** Path toe HighScoreTableController FXML file */
     public static final String HIGH_SCORE_FXML_PATH = "fxml/highScoreTable.fxml";
+    /** Path to resources used by application */
     public static final String RESOURCES_PATH = "src/App/resources/";
-    public static final String BRODYQUEST_MP3_PATH = RESOURCES_PATH + "brodyquest.mp3";
-    public static final String ANACONDA_MP3_PATH = RESOURCES_PATH + "anaconda.mp3";
-    public static final String[] TRACKS = {BRODYQUEST_MP3_PATH, ANACONDA_MP3_PATH};
-    public static final double DEFAULT_VOLUME = 0.3; // 30%
+    private static final String BRODYQUEST_MP3_PATH = RESOURCES_PATH + "brodyquest.mp3";
+    private static final String ANACONDA_MP3_PATH = RESOURCES_PATH + "anaconda.mp3";
+    private static final String[] TRACKS = {BRODYQUEST_MP3_PATH, ANACONDA_MP3_PATH};
+    private static final double DEFAULT_VOLUME = 0.3; // 30%
     private static int currentAudioTrack = 0;
     private static Stage stage;
     private static MediaPlayer musicPlayer;
@@ -58,6 +73,9 @@ public class App extends Application {
     @FXML
     private Text currentPlayerProfile;
 
+    /**
+     * Construct a new App object.
+     */
     public App() {
         App.app = this;
     }
@@ -113,7 +131,10 @@ public class App extends Application {
 
     /**
      * Set whether the level select menu is being used for high scores
-     * instead of for loading a new game.
+     * instead of for loading a new game
+     *
+     * @param highScoreMenu Whether level select menu is being used for
+     *                      high score table.
      */
     public static void setHighScoreMenu(boolean highScoreMenu) {
         App.highScoreMenu = highScoreMenu;
@@ -129,6 +150,7 @@ public class App extends Application {
      * @param promptText Text to display to user.
      * @param characterLimit Character limit for input string.
      * @return The input string, or null if user cancels the action.
+     * @see Game#registerNewMovementInput(KeyCode) 
      */
     public static String getUserInput(String promptText, int characterLimit) {
         TextInputDialog inputDialog = new TextInputDialog();
@@ -239,6 +261,7 @@ public class App extends Application {
      * @throws ParseBoardException If there are any errors deserialising the board.
      * @throws ParseTileColourException If there are any errors deserialising a tile.
      * @throws InterruptedException If the thread is interrupted during the game.
+     * @see Game#startGame(GameParams)
      */
     public void newGame(
         GameParams gameParams

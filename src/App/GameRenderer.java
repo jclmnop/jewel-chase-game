@@ -22,10 +22,11 @@ import java.util.ArrayList;
  *
  * @author Jonny
  * @version 1.4
+ * @see Game
  */
 public class GameRenderer {
-    public static final double BOARD_WIDTH = 1000;
-    public static final double BOARD_HEIGHT = 734;
+    private static final double BOARD_WIDTH = 1000;
+    private static final double BOARD_HEIGHT = 734;
     private static GameRenderer gameRenderer;
     @FXML
     private Text score;
@@ -41,6 +42,9 @@ public class GameRenderer {
     private GridPane entityGridPane;
     private boolean isBoardRendered;
 
+    /**
+     * Construct new game renderer object.
+     */
     public GameRenderer() {
         GameRenderer.gameRenderer = this;
     }

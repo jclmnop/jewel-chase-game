@@ -18,6 +18,8 @@ import java.util.ArrayList;
  *
  * @author Jonny
  * @version 1.0
+ * @see App
+ * @see GameFileHandler
  */
 public class LoadGameMenuController {
     private static LoadGameMenuController loadGameMenuController;
@@ -25,6 +27,9 @@ public class LoadGameMenuController {
     @FXML
     private VBox saveGameMenu;
 
+    /**
+     * Construct new load game menu controller.
+     */
     public LoadGameMenuController() {
         LoadGameMenuController.loadGameMenuController = this;
     }

@@ -29,6 +29,7 @@ public record Coords(int x, int y) implements Serialisable {
     /**
      * Deserialise strings to coords object.
      * @param xStr String for x to be deserialised.
+     * @param yStr String for x to be deserialised.
      * @return Deserialised coords object.
      * @throws IllegalArgumentException if string cannot be parsed.
      */

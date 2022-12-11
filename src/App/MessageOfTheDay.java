@@ -13,9 +13,9 @@ import java.net.http.HttpResponse;
  * @version 1.0
  */
 public class MessageOfTheDay {
-    public static final String BASE_API = "http://cswebcat.swan.ac.uk/";
-    public static final URI PUZZLE_API = URI.create(BASE_API + "puzzle");
-    public static final String MESSAGE_API = BASE_API + "message?solution=";
+    private static final String BASE_API = "http://cswebcat.swan.ac.uk/";
+    private static final URI PUZZLE_API = URI.create(BASE_API + "puzzle");
+    private static final String MESSAGE_API = BASE_API + "message?solution=";
     private static final HttpClient client = HttpClient.newBuilder().build();
 
     private MessageOfTheDay() {};
@@ -23,6 +23,8 @@ public class MessageOfTheDay {
     /**
      * Retrieves the current message of the day from API.
      * @return String containing message of the day.
+     * @throws IOException If there's an I/O error during http request.
+     * @throws InterruptedException If http requests are interrupted.
      */
     public static String getMessageOfTheDay() throws IOException, InterruptedException {
         String puzzle = MessageOfTheDay.fetchPuzzleString();

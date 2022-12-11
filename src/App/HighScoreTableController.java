@@ -11,16 +11,29 @@ import javafx.scene.text.TextAlignment;
 
 import java.io.IOException;
 
+/**
+ * Controller class for the high score table.
+ *
+ * @author Jonny
+ * @version 1.0
+ * @see App
+ * @see LevelSelectController
+ * @see HighScoreTable
+ */
 public class HighScoreTableController {
     @FXML
     private VBox highScores;
     @FXML
     private Text selectedLevelText;
 
+    /**
+     * Construct new high score table controller.
+     */
     public HighScoreTableController() {}
 
     /**
      * Load the high score table.
+     * @throws IOException if there's an I/O error while loading high score table.
      */
     public void initialize() throws IOException {
         this.loadHighScoreTable();
