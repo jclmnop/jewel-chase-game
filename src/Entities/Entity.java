@@ -4,6 +4,7 @@ import DataTypes.Collision;
 import DataTypes.CollisionEvent;
 import DataTypes.Coords;
 import Entities.Characters.Character;
+import Entities.Characters.Npc.FlyingAssassin;
 import Entities.Characters.Player;
 import Entities.Items.Bomb;
 import Entities.Items.Collectable.*;
@@ -148,11 +149,15 @@ public abstract class Entity implements Serialisable, Renderable {
                     Entity.removeEntity(triggeredKey);
                 }
                 case DOUBLE_ASSASSINATION -> {
-                    //TODO: this means two assassins collided, kill them both
-                    Character entityOne = (Character) collision.getEntityOne();
-                    Character entityTwo = (Character) collision.getEntityOne();
-                    entityOne.kill();
-                    entityTwo.kill();
+                    FlyingAssassin entityOne = (FlyingAssassin) collision.getEntityOne();
+                    FlyingAssassin entityTwo = (FlyingAssassin) collision.getEntityTwo();
+                    System.out.println(entityOne.isTemporarilyInvincible());
+                    System.out.println(entityTwo.isTemporarilyInvincible());
+                    if (!entityOne.isTemporarilyInvincible() && !entityTwo.isTemporarilyInvincible()) {
+                        System.out.println("DOUBLE KILL");
+                        entityOne.kill();
+                        entityTwo.kill();
+                    }
                 }
                 case ASSASSINATION -> {
                     Character entityTwo = (Character) collision.getEntityTwo();
@@ -180,12 +185,17 @@ public abstract class Entity implements Serialisable, Renderable {
                         // will give extra points instead.
                         Game.adjustScore(+Mirror.POINTS_IF_MAX_PLAYERS_REACHED);
                     } else {
+                        if (entityToBeCloned instanceof FlyingAssassin flyingAssassin) {
+                            flyingAssassin.makeTemporarilyInvincible();
+                        }
                         Object deserialised =
                             Deserialiser.deserialiseObject(entityToBeCloned.serialise());
                         if (deserialised instanceof Character deserialisedCharacter) {
                             deserialisedCharacter.decrementTicksSinceLastMove();
                         }
-                        //TODO: if flying assassin, turn left
+                        if (deserialised instanceof FlyingAssassin flyingAssassin) {
+                            flyingAssassin.turnRight();
+                        }
                     }
                     Entity.removeEntity(collision.getEntityOne());
                 }

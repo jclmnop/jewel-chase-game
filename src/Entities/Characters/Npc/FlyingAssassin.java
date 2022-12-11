@@ -15,6 +15,7 @@ import Game.Tile;
  */
 public class FlyingAssassin extends Npc {
     private static final String IMAGE_PATH = Character.RESOURCES_PATH + "stuart_bat.gif";
+    private boolean temporarilyInvincible;
 
     public FlyingAssassin(Coords coords, int speed, Direction dir) {
         super(CollisionType.ASSASSIN, false, coords, speed);
@@ -45,7 +46,37 @@ public class FlyingAssassin extends Npc {
                 this.currentDirection
             );
 
-        this.move(nextCoords);
+        boolean moved = this.move(nextCoords);
+
+        // Assassin was cloned recently, but has now moved and it's safe to allow
+        // double assassinations again.
+        if (moved && this.temporarilyInvincible) {
+            System.out.println(("poop"));
+            this.temporarilyInvincible = false;
+        }
+    }
+
+    /**
+     * Used after cloning a flying assassin, so they don't kill each other.
+     */
+    public void makeTemporarilyInvincible() {
+        this.temporarilyInvincible = true;
+    }
+
+    /**
+     * Used after cloning a flying assassin to make it fly perpendicular to
+     * the original.
+     */
+    public void turnRight() {
+        this.currentDirection = Direction.turnRight(this.currentDirection);
+    }
+
+    /**
+     * @return Whether this assassin is temporarily invincible
+     *         due to being recently cloned
+     */
+    public boolean isTemporarilyInvincible() {
+        return this.temporarilyInvincible;
     }
 
     /**
