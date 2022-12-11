@@ -88,6 +88,7 @@ public class SmartThief extends Npc {
      *
      * If a new path cannot be calculated, moves in a random direction.
      */
+    @Override
     protected void tryMove() {
         if (this.needNewPath()) {
             // If no collectables are available, smart thief will move to the nearest door.

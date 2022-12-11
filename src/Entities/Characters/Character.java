@@ -109,6 +109,12 @@ public abstract class Character extends Entity {
         return imageView.snapshot(params, null);
     }
 
+    /**
+     * Move to new coordinates if enough ticks have passed.
+     * @see Tile#move(Entity, Coords, Coords)
+     * @param nextCoords Coordinates to move to.
+     * @return true if move was successful, false otherwise.
+     */
     protected boolean move(Coords nextCoords) {
         this.ticksSinceLastMove++;
         if (this.ticksSinceLastMove >= this.ticksPerMove) {

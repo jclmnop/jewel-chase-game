@@ -87,7 +87,8 @@ public class FloorFollowingThief extends Npc {
     }
 
     /**
-     * Trys to move to tile with assigned colour that is left most to FFT's current direction.
+     * Trys to move to tile with assigned colour that is left most to its
+     * current direction.
      */
     @Override
     protected void tryMove() {

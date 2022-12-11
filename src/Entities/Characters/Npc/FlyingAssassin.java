@@ -57,7 +57,7 @@ public class FlyingAssassin extends Npc {
      * If it reaches an edge, FlyingAssassin will be rotated 180 degrees
      */
     @Override
-    public void tryMove() {
+    protected void tryMove() {
         if (this.edgeReached()) {
             this.currentDirection = Direction.turnAround(this.currentDirection);
         }

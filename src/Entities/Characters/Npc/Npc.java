@@ -44,5 +44,8 @@ public abstract class Npc extends Character implements Handleable {
         this.tryMove();
     }
 
+    /**
+     * Attempt to move. Behaviour is different for each subclass.
+     */
     protected abstract void tryMove();
 }
