@@ -9,8 +9,17 @@ import java.util.stream.Collectors;
  *
  * @author Jonny
  * @version 1.0
+ * @see Entities.Items.Bomb
+ * @see Entities.Characters.Npc.Npc
+ * @see Entities.Explosion
  */
 public interface Handleable {
+    /**
+     * Return all handleable objects contained within a given array list.
+     * @param objects Array list of any type that might implement handleable.
+     * @param <T> Type of objects in given arraylist.
+     * @return All objects which implement handleable.
+     */
     static <T> ArrayList<Handleable> getHandleable(ArrayList<T> objects) {
         return objects.stream()
             .filter(e -> e instanceof Handleable)
