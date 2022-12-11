@@ -1,0 +1,8 @@
+3 100000
+
+2 2
+YYYY YYYY
+YYYY YYYY
+
+Player 0 0
+Door 1 1
