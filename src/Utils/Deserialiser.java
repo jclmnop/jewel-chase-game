@@ -234,7 +234,6 @@ public class Deserialiser {
         stringIterator.next(); // Skip type name
         Coords coords = Coords.fromString(stringIterator.next(), stringIterator.next());
         Colour colour = Colour.fromChar(stringIterator.next().charAt(0));
-        //TODO colour
         return new Gate(coords, colour);
     }
 
@@ -290,8 +289,6 @@ public class Deserialiser {
     }
 
     private static Tile deserialiseTile(String arg) throws ParseTileColourException {
-        // TODO: can either throw exception in fromChar(), or check length
-        //       of result from map and check for nulls then throw exception if either
         ArrayList<Colour> colours = new ArrayList<>();
         var chars = arg.toCharArray();
 

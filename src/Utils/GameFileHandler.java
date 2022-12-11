@@ -18,8 +18,6 @@ import java.util.Iterator;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-//TODO: loadHighScoreTable(levelName)
-//TODO: updateHighScoreTable(levelName, newHighScoreTable)
 /**
  * Utility class for handling game files such as saves, levels, profiles, etc.
  * @author Jonny
@@ -218,7 +216,6 @@ public class GameFileHandler {
      * @throws IOException If an I/O error occurs reading from the file.
      */
     public static void saveGame(String saveFileName, PlayerProfile playerProfile) throws IOException {
-        // TODO build string: gameParams, blank line, board, blank line, entities
         StringBuilder saveGameStringBuilder = new StringBuilder();
         GameParams gameParams = new GameParams(
             Game.getTimeRemaining(),

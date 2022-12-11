@@ -74,7 +74,6 @@ public class FloorFollowingThief extends Npc {
      */
     @Override
     public String serialise() {
-        // TODO
         return String.format(
             "%s %s %s %s %s %s",
             this.getClass().getSimpleName(),
