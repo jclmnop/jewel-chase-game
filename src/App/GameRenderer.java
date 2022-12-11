@@ -22,6 +22,7 @@ import java.util.ArrayList;
  *
  * @author Jonny
  * @version 1.4
+ * @see Game
  */
 public class GameRenderer {
     public static final double BOARD_WIDTH = 1000;

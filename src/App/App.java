@@ -14,6 +14,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextInputDialog;
+import javafx.scene.input.KeyCode;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Popup;
@@ -32,6 +33,11 @@ import java.util.Objects;
  *
  * @author Jonny
  * @version 1.3
+ * @see javafx.application.Application 
+ * @see GameRenderer
+ * @see HighScoreTableController
+ * @see LevelSelectController
+ * @see LoadGameMenuController
  */
 public class App extends Application {
     public static final int WINDOW_WIDTH = 1000;
@@ -129,6 +135,7 @@ public class App extends Application {
      * @param promptText Text to display to user.
      * @param characterLimit Character limit for input string.
      * @return The input string, or null if user cancels the action.
+     * @see Game#registerNewMovementInput(KeyCode) 
      */
     public static String getUserInput(String promptText, int characterLimit) {
         TextInputDialog inputDialog = new TextInputDialog();
@@ -239,6 +246,7 @@ public class App extends Application {
      * @throws ParseBoardException If there are any errors deserialising the board.
      * @throws ParseTileColourException If there are any errors deserialising a tile.
      * @throws InterruptedException If the thread is interrupted during the game.
+     * @see Game#startGame(GameParams) 
      */
     public void newGame(
         GameParams gameParams

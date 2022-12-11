@@ -18,6 +18,8 @@ import java.util.ArrayList;
  *
  * @author Jonny
  * @version 1.0
+ * @see App
+ * @see GameFileHandler
  */
 public class LoadGameMenuController {
     private static LoadGameMenuController loadGameMenuController;

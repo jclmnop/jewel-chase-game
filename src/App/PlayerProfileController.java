@@ -16,6 +16,8 @@ import java.util.ArrayList;
  * Controller for the player profile menu.
  * @author Jonny
  * @version 1.1
+ * @see Game.PlayerProfile
+ * @see GameFileHandler
  */
 public class PlayerProfileController {
     public static final int PLAYER_NAME_CHAR_LIMIT = 20;
