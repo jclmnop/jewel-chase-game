@@ -37,7 +37,7 @@ public class GameFileHandlerTest {
 
         Assertions.assertEquals(
             Game.getPlayerProfile().getMaxLevel(),
-            Integer.parseInt(levels.get(levels.size()-1))
+            10
         );
 
         try {
