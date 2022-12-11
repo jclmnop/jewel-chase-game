@@ -30,3 +30,4 @@ Loot 4 0 TIER_3
 Loot 5 0 TIER_4
 // Direction is mandatory for flying assassin
 FlyingAssassin 6 5 RIGHT
+Mirror 8 5
