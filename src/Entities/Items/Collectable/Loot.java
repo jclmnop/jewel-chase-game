@@ -6,8 +6,11 @@ import Entities.Items.Item;
 /**
  * Represents a loot item which can be collected by the player to increase score.
  *
- * @author TODO: author
+ * @author Will
  * @version 1.0
+ * @see Interfaces.Renderable
+ * @see Interfaces.Serialisable
+ * @see Entities.Items.Collectable.Collectable
  */
 public class Loot extends Collectable {
     private static final String IMAGE_PATH = Item.RESOURCES_PATH + "loot_";
