@@ -120,9 +120,8 @@ public abstract class Entity implements Serialisable, Renderable {
             switch (collisionEvent) {
                 case NOTHING -> {}
                 case LOOT_STOLEN -> {
-                    Loot loot = (Loot) collision.getEntityOne();
-                    int lootValue = loot.getScore();
-                    Game.adjustScore(-lootValue);
+                    // Spec says loot just disappears when stolen, doesn't
+                    // decrease score.
                     Entity.removeEntity(collision.getEntityOne());
                 }
                 case LOOT_COLLECTED -> {
@@ -132,8 +131,6 @@ public abstract class Entity implements Serialisable, Renderable {
                     Entity.removeEntity(collision.getEntityOne());
                 }
                 case CLOCK_STOLEN -> {
-                    //TODO: decide seconds per clock
-                    int timeAdjustment = 10;
                     Game.adjustTime(-Clock.SECONDS);
                     Entity.removeEntity(collision.getEntityOne());
                 }
@@ -202,11 +199,8 @@ public abstract class Entity implements Serialisable, Renderable {
                 case SPEED_UP -> {
                     Character character = (Character) collision.getEntityTwo();
                     boolean maxSpeedAlreadyReached = character.speedUp();
-                    if (maxSpeedAlreadyReached) {
-                        int scoreAdjustment =
-                            character instanceof Player
-                                ? +Coffee.POINTS_IF_MAX_SPEED_REACHED
-                                : -Coffee.POINTS_IF_MAX_SPEED_REACHED;
+                    if (maxSpeedAlreadyReached && character instanceof Player) {
+                        int scoreAdjustment = +Coffee.POINTS_IF_MAX_SPEED_REACHED;
                         Game.adjustScore(scoreAdjustment);
                     }
                     Entity.removeEntity(collision.getEntityOne());
