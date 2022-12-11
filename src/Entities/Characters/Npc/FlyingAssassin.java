@@ -51,7 +51,6 @@ public class FlyingAssassin extends Npc {
         // Assassin was cloned recently, but has now moved and it's safe to allow
         // double assassinations again.
         if (moved && this.temporarilyInvincible) {
-            System.out.println(("poop"));
             this.temporarilyInvincible = false;
         }
     }
