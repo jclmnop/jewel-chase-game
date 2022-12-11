@@ -64,15 +64,15 @@ public class CollisionEventTest {
             simulateCollision(flyingAss, clock)
         );
         Assertions.assertEquals(
-            CollisionEvent.LEVER_TRIGGERED,
+            CollisionEvent.OPEN_GATES,
             simulateCollision(player, lever)
         );
         Assertions.assertEquals(
-            CollisionEvent.LEVER_TRIGGERED,
+            CollisionEvent.OPEN_GATES,
             simulateCollision(smartThief, lever)
         );
         Assertions.assertEquals(
-            CollisionEvent.LEVER_TRIGGERED,
+            CollisionEvent.OPEN_GATES,
             simulateCollision(floorThief, lever)
         );
         Assertions.assertEquals(

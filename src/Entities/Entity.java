@@ -144,7 +144,11 @@ public abstract class Entity implements Serialisable, Renderable {
      */
     public static void processCollisions() {
         while (!Entity.collisions.isEmpty()) {
-            Entity.processCollision();
+            Collision collision = Entity.dequeCollision();
+            CollisionEvent collisionEvent = CollisionEvent.calculateCollisionEvent(
+                collision
+            );
+            collisionEvent.processCollisionEvent(collision);
         }
     }
 
@@ -225,107 +229,5 @@ public abstract class Entity implements Serialisable, Renderable {
             this.getClass().getSimpleName(),
             this.coords.serialise()
         );
-    }
-
-    //TODO: maybe move all to CollisionEvent and extract into separate methods?
-    private static void processCollision() {
-        Collision collision = Entity.dequeCollision();
-        if (collision.isValid()) {
-            CollisionEvent collisionEvent = CollisionEvent.calculateCollisionEvent(
-                collision
-            );
-            System.out.println("COLLISION: " + collisionEvent);
-            switch (collisionEvent) {
-                case NOTHING -> {}
-                case LOOT_STOLEN -> {
-                    // Spec says loot just disappears when stolen, doesn't
-                    // decrease score.
-                    Entity.removeEntity(collision.getEntityOne());
-                }
-                case LOOT_COLLECTED -> {
-                    Loot loot = (Loot) collision.getEntityOne();
-                    int lootValue = loot.getScore();
-                    Game.adjustScore(lootValue);
-                    Entity.removeEntity(collision.getEntityOne());
-                }
-                case CLOCK_STOLEN -> {
-                    Game.adjustTime(-Clock.SECONDS);
-                    Entity.removeEntity(collision.getEntityOne());
-                }
-                case CLOCK_COLLECTED -> {
-                    Game.adjustTime(+Clock.SECONDS);
-                    Entity.removeEntity(collision.getEntityOne());
-                }
-                case LEVER_TRIGGERED -> {
-                    Key triggeredKey = (Key) collision.getEntityOne();
-                    triggeredKey.openGates();
-                    Entity.removeEntity(triggeredKey);
-                }
-                case DOUBLE_ASSASSINATION -> {
-                    FlyingAssassin entityOne = (FlyingAssassin) collision.getEntityOne();
-                    FlyingAssassin entityTwo = (FlyingAssassin) collision.getEntityTwo();
-                    if (!entityOne.isTemporarilyInvincible() && !entityTwo.isTemporarilyInvincible()) {
-                        System.out.println("DOUBLE KILL");
-                        entityOne.kill();
-                        entityTwo.kill();
-                    }
-                }
-                case ASSASSINATION -> {
-                    Character entityTwo = (Character) collision.getEntityTwo();
-                    entityTwo.kill();
-                }
-                case LOSE -> {
-                    if (Entity.getEntitiesOfType(Collectable.class).isEmpty()) {
-                        Game.lose();
-                    }
-                }
-                case WIN -> {
-                    if (Entity.getEntitiesOfType(Collectable.class).isEmpty()) {
-                        Game.win();
-                    }
-                }
-                case CLONE -> {
-                    Entity entityToBeCloned = collision.getEntityTwo();
-                    int playerCount = Entity.getEntitiesOfType(Player.class).size();
-                    if (
-                        entityToBeCloned instanceof Player
-                            && playerCount >= Game.MAX_PLAYERS
-                    ) {
-                        // If max players has already been reached, the item
-                        // will give extra points instead.
-                        Game.adjustScore(+Mirror.POINTS_IF_MAX_PLAYERS_REACHED);
-                    } else {
-                        if (entityToBeCloned instanceof FlyingAssassin flyingAssassin) {
-                            flyingAssassin.makeTemporarilyInvincible();
-                        }
-                        Object deserialised =
-                            Deserialiser.deserialiseObject(entityToBeCloned.serialise());
-                        if (deserialised instanceof Character deserialisedCharacter) {
-                            deserialisedCharacter.decrementTicksSinceLastMove();
-                        }
-                        if (deserialised instanceof FlyingAssassin flyingAssassin) {
-                            flyingAssassin.turnRight();
-                        }
-                    }
-                    Entity.removeEntity(collision.getEntityOne());
-                }
-                case SPEED_UP -> {
-                    Character character = (Character) collision.getEntityTwo();
-                    boolean maxSpeedAlreadyReached = character.speedUp();
-                    if (maxSpeedAlreadyReached && character instanceof Player) {
-                        int scoreAdjustment = +Coffee.POINTS_IF_MAX_SPEED_REACHED;
-                        Game.adjustScore(scoreAdjustment);
-                    }
-                    Entity.removeEntity(collision.getEntityOne());
-                }
-                case DETONATE -> {
-                    Bomb bomb = (Bomb) collision.getEntityTwo();
-                    bomb.chainReaction();
-                }
-                case DESTROY -> {
-                    Entity.removeEntity(collision.getEntityTwo());
-                }
-            }
-        }
     }
 }
