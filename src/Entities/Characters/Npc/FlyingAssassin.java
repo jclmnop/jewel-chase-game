@@ -12,6 +12,7 @@ import Game.Tile;
  *
  * @author Aleksandra
  * @version 1.1
+ * @see Entities.Characters.Npc.Npc
  */
 public class FlyingAssassin extends Npc {
     private static final String IMAGE_PATH = Character.RESOURCES_PATH + "stuart_bat.gif";

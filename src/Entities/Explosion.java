@@ -13,6 +13,10 @@ import Interfaces.Handleable;
  *
  * @author Dillon
  * @version 1.1
+ * @see Interfaces.Handleable
+ * @see Interfaces.Renderable
+ * @see Interfaces.Serialisable
+ * @see Entities.Entity
  */
 public class Explosion extends Entity implements Handleable {
     private static final String IMAGE_PATH = Item.RESOURCES_PATH + "explosion.png";

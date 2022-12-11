@@ -7,10 +7,14 @@ import Game.Game;
 import Game.Tile;
 
 /**
- * Represents the Player. Game will end with a loss if there are no Player
+ * Represents the Player (Liam). Game will end with a loss if there are no Player
  * objects in the game.
+ *
  * @author Jonny
  * @version 1.1
+ * @see Interfaces.Renderable
+ * @see Interfaces.Serialisable
+ * @see Character
  */
 public class Player extends Character {
     private static final String IMAGE_PATH = Character.RESOURCES_PATH + "liam_stick.gif";

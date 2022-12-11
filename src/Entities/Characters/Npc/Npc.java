@@ -9,6 +9,10 @@ import Interfaces.Handleable;
  *
  * @author Jonny
  * @version 1.1
+ * @see Interfaces.Handleable
+ * @see Interfaces.Renderable
+ * @see Interfaces.Serialisable
+ * @see Character
  */
 public abstract class Npc extends Character implements Handleable {
 

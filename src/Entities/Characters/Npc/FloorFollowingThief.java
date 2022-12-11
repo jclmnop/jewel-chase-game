@@ -7,7 +7,6 @@ import DataTypes.Coords;
 import DataTypes.Direction;
 import Entities.Characters.Character;
 import Game.Tile;
-import Interfaces.Handleable;
 
 /**
  * Thief which stays on tiles of a certain colour and follows the left-most
@@ -15,8 +14,9 @@ import Interfaces.Handleable;
  *
  * @author Dillon
  * @version 1.2
+ * @see Entities.Characters.Npc.Npc
  */
-public class FloorFollowingThief extends Npc implements Handleable {
+public class FloorFollowingThief extends Npc {
     private static final String IMAGE_PATH = Character.RESOURCES_PATH + "oliver_snail.png";
     private final Colour colour;
 

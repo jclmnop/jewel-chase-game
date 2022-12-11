@@ -16,6 +16,9 @@ import javafx.scene.transform.Translate;
  *
  * @author Jonny
  * @version 1.1
+ * @see Interfaces.Serialisable
+ * @see Interfaces.Renderable
+ * @see Entities.Entity
  */
 public abstract class Character extends Entity {
     public static final String RESOURCES_PATH = Entity.RESOURCES_PATH + "characters/";

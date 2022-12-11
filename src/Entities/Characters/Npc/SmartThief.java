@@ -9,6 +9,7 @@ import Entities.Items.*;
 import Entities.Items.Collectable.Collectable;
 import Game.Tile;
 
+
 public class SmartThief extends Npc {
     private static final String IMAGE_PATH = Character.RESOURCES_PATH + "faron_fancy.png";
     // Current desired item.
