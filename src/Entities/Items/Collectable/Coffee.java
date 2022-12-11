@@ -23,19 +23,4 @@ public class Coffee extends Collectable {
         super(CollisionType.COFFEE, false, coords);
         this.imagePath = IMAGE_PATH;
     }
-
-    /**
-     * Serialises the Object into a String.
-     *
-     * @return Serialised string for `this` Object.
-     */
-    @Override
-    public String serialise() {
-        return String.format(
-            "%s %s",
-            this.getClass().getSimpleName(),
-            this.coords.serialise()
-        );
-    }
-
 }
