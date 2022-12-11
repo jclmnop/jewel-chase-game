@@ -9,10 +9,23 @@ import Entities.Items.Item;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 
+/**
+ * Opens all Gates with the same colour.
+ *
+ * @author Luke
+ * @version 1.0
+ * @see Entities.Items.Collectable.Collectable
+ */
 public class Key extends Collectable {
     private static final String IMAGE_PATH = Item.RESOURCES_PATH + "key";
     private final Colour colour;
 
+    /**
+     * Construct a key with the given parameters.
+     * @param coords Coordinates of key.
+     * @param colour Colour associated with key. This key will open all gates
+     *               that are also associated with this colour.
+     */
     public Key(Coords coords, Colour colour) {
         super(CollisionType.KEY, false, coords);
         if (colour == Colour.CYAN || colour == Colour.MAGENTA) {
@@ -22,6 +35,10 @@ public class Key extends Collectable {
         this.imagePath = String.format("%s_%s.gif", IMAGE_PATH, colour);
     }
 
+    /**
+     * Construct a key with the given parameters.
+     * @param coords Coordinates of key.
+     */
     public Key(Coords coords) {
         this(coords, Colour.YELLOW);
     }
