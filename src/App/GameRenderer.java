@@ -71,7 +71,7 @@ public class GameRenderer {
             BOARD_HEIGHT / Tile.getHeight()
         );
         if (!gameRenderer.isBoardRendered) {
-            gameRenderer.renderBoard(tileDimensions); //TODO: only need to render board once
+            gameRenderer.renderBoard(tileDimensions);
         }
         gameRenderer.renderEntityGrid(tileDimensions);
         gameRenderer.updateText();

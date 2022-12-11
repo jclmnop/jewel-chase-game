@@ -32,7 +32,7 @@ public class SmartThief extends Npc {
      * @param ticksPerMove How many ticks need to pass between each movement.
      * @param direction Direction the thief is facing.
      */
-    public SmartThief(Coords coords, int ticksPerMove, Direction direction) { //TODO: edit Character contructor to take direction
+    public SmartThief(Coords coords, int ticksPerMove, Direction direction) {
         super(CollisionType.THIEF, true, coords, ticksPerMove);
         this.currentDirection = direction;
         this.path = new LinkedList<>();
@@ -69,7 +69,6 @@ public class SmartThief extends Npc {
      */
     @Override
     public String serialise() {
-        // TODO
         return String.format(
             "%s %s %s %s %s",
             this.getClass().getSimpleName(),

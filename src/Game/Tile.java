@@ -278,7 +278,6 @@ public class Tile implements Serialisable {
      * @param entity Entity to be removed.
      */
     public void removeEntity(Entity entity) {
-        // TODO: test that this works in the way I expect it to
         this.entities.remove(entity);
     }
 

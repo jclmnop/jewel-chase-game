@@ -21,7 +21,6 @@ public class PlayerProfile implements Serialisable {
     public PlayerProfile(String playerName) {
         this.playerName = playerName;
         this.maxLevel = 0;
-        //TODO: GameFileHandler.savePlayerProfile(this)
     }
 
     /**

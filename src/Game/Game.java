@@ -32,7 +32,7 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
  */
 public class Game {
     /** Milliseconds per game tick. */
-    public static final long MILLI_PER_TICK = 100; //TODO: figure out reasonable value
+    public static final long MILLI_PER_TICK = 100;
     /** Milliseconds in a second. */
     public static final long MILLI_PER_SECOND = 1000;
     /** Maximum number of concurrent players that can be in the game. */
@@ -359,7 +359,6 @@ public class Game {
     }
 
     private static void movePlayer(Player player, Direction direction) {
-        //TODO: implement .tryMove() for player
         player.tryMove(direction);
     }
 
