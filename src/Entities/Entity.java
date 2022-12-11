@@ -37,7 +37,7 @@ public abstract class Entity implements Serialisable, Renderable {
     /**
      * Construct an entity object with the given parameters.
      * @param collisionType The enum type to be used when calculating the outcome
-     *                      of a collision.
+     *                      of a collision between this entity and another..
      * @param blocking Whether this entity stops other entities from occupying
      *                 the same coordinate.
      * @param coords Coordinates of the tile to spawn this entity on.
