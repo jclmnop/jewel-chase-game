@@ -189,6 +189,7 @@ public abstract class Entity implements Serialisable, Renderable {
 
     /**
      * @return The JavaFx image associated with this entity.
+     * @see Interfaces.Renderable
      */
     public Image toImage() {
         // Only load image if it hasn't already been loaded to prevent
@@ -197,6 +198,21 @@ public abstract class Entity implements Serialisable, Renderable {
             this.image = new Image(this.imagePath);
         }
         return this.image;
+    }
+
+    /**
+     * Serialise object into a string that can be deserialised.
+     *
+     * @return Serialised string representation of this object.
+     * @see Interfaces.Serialisable
+     */
+    @Override
+    public String serialise() {
+        return String.format(
+            "%s %s",
+            this.getClass().getSimpleName(),
+            this.coords.serialise()
+        );
     }
 
     //TODO: maybe move all to CollisionEvent and extract into separate methods?

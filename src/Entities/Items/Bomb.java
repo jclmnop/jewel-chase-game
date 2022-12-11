@@ -9,40 +9,64 @@ import Game.Game;
 import Interfaces.Handleable;
 import javafx.scene.image.Image;
 
+/**
+ * Bomb which begins to count down and explode if a character occupies any of
+ * its adjacent tiles.
+ * @author Dillon
+ * @version 1.1
+ * @see Interfaces.Handleable
+ * @see Entities.Items.Item
+ */
 public class Bomb extends Item implements Handleable {
     public static final int INITIAL_STATE = 4000;
     private static final String IMAGE_PATH = Item.RESOURCES_PATH + "bomb/";
     private static final int FRAME_LENGTH_MILLI = 1000;
     private final Coords[] trigZones;
-    private int state;
+    private int timeLeftMilli;
     private boolean triggered = false;
     private Image imageFrameOne;
     private Image imageFrameTwo;
     private Image imageFrameThree;
     private Image imageFrameFour;
 
+    /**
+     * Create bomb at specified coordinates.
+     * @param coords Coordinates of bomb.
+     */
     public Bomb(Coords coords) {
         super(CollisionType.BOMB, true, coords);
         this.imagePath = IMAGE_PATH;
         this.trigZones = Tile.getAdjacentCoords(this.coords).toArray();
-        this.state = INITIAL_STATE;
+        this.timeLeftMilli = INITIAL_STATE;
     }
 
-    public Bomb(Coords coords, boolean triggered, int state) {
+    /**
+     * Create bomb with specified parameters.
+     *
+     * Used to load from a deserialised save game string.
+     *
+     * @param coords Coordinates of bomb.
+     * @param triggered Whether the bomb has been triggered and is currently
+     *                  counting down.
+     * @param timeLeftMilli Time left on the bomb's counter in milliseconds.
+     */
+    public Bomb(Coords coords, boolean triggered, int timeLeftMilli) {
         this(coords);
-        this.state = state;
+        this.timeLeftMilli = timeLeftMilli;
         this.triggered = triggered;
     }
+
     /**
-     * Checks whether bomb is waiting to be triggered or is in the process of exploding.
+     * Checks whether bomb is waiting to be triggered or is in the process
+     * of exploding and handles accordingly. .
      */
     @Override
     public void handle() {
         if (!triggered) {
             detect();
         } else {
-            state -= Game.MILLI_PER_TICK;
-            if (state <= 0) {
+            timeLeftMilli -= Game.MILLI_PER_TICK;
+            if (timeLeftMilli <= 0) {
                 explode();
             }
         }
@@ -52,6 +76,7 @@ public class Bomb extends Item implements Handleable {
      * Serialises the Object into a String.
      *
      * @return Serialised string for `this` Object.
+     * @see Interfaces.Serialisable
      */
     @Override
     public String serialise() {
@@ -60,13 +85,15 @@ public class Bomb extends Item implements Handleable {
             this.getClass().getSimpleName(),
             this.coords.serialise(),
             this.triggered,
-            this.state
+            this.timeLeftMilli
         ) ;
     }
 
     /**
-     * Load the image(s) and compute the correct image for the current frame.
+     * Load the image(s) and compute the correct image for the current state
+     * of the bomb.
      * @return The current image.
+     * @see Interfaces.Renderable
      */
     @Override
     public Image toImage() {
@@ -80,11 +107,11 @@ public class Bomb extends Item implements Handleable {
         // Only god can judge me.
         if (!this.triggered) {
             return this.image;
-        } else if (this.state >= INITIAL_STATE - FRAME_LENGTH_MILLI) {
+        } else if (this.timeLeftMilli >= INITIAL_STATE - FRAME_LENGTH_MILLI) {
             return this.imageFrameOne;
-        } else if (this.state >= INITIAL_STATE - 2 * FRAME_LENGTH_MILLI) {
+        } else if (this.timeLeftMilli >= INITIAL_STATE - 2 * FRAME_LENGTH_MILLI) {
             return this.imageFrameTwo;
-        } else if (this.state >= INITIAL_STATE - 3 * FRAME_LENGTH_MILLI) {
+        } else if (this.timeLeftMilli >= INITIAL_STATE - 3 * FRAME_LENGTH_MILLI) {
             return this.imageFrameThree;
         } else {
             return this.imageFrameFour;
@@ -124,7 +151,7 @@ public class Bomb extends Item implements Handleable {
      * Used to trigger chain reaction from another bomb's explosion
      */
     public void chainReaction() {
-        this.state = (int) (Game.MILLI_PER_TICK - 1);
+        this.timeLeftMilli = (int) (Game.MILLI_PER_TICK - 1);
         this.triggered = true;
     }
 
