@@ -9,15 +9,29 @@ import Entities.Items.*;
 import Entities.Items.Collectable.Collectable;
 import Game.Tile;
 
-
+/**
+ * Finds the shortest path to nearest collectable items and steals them. If no
+ * items are left it will attempt to find the shortest path to the door instead.
+ *
+ * In the absence of a valid path, the smart thief moves randomly.
+ *
+ * @author Dillon
+ * @version 1.2
+ * @see Entities.Characters.Npc.Npc
+ */
 public class SmartThief extends Npc {
     private static final String IMAGE_PATH = Character.RESOURCES_PATH + "faron_fancy.png";
     // Current desired item.
     private Item item;
-
     // Current path to item
     private LinkedList<Coords> path;
 
+    /**
+     * Spawn smart thief with given parameters.
+     * @param coords Coordinates of smart thief.
+     * @param ticksPerMove How many ticks need to pass between each movement.
+     * @param direction Direction the thief is facing.
+     */
     public SmartThief(Coords coords, int ticksPerMove, Direction direction) { //TODO: edit Character contructor to take direction
         super(CollisionType.THIEF, true, coords, ticksPerMove);
         this.currentDirection = direction;
@@ -25,15 +39,47 @@ public class SmartThief extends Npc {
         this.imagePath = IMAGE_PATH;
     }
 
+    /**
+     * Spawn smart thief with given parameters.
+     * @param coords Coordinates of smart thief.
+     * @param ticksPerMove How many ticks need to pass between each movement.
+     */
     public SmartThief(Coords coords, int ticksPerMove) {
         this(coords, ticksPerMove, Direction.UP);
     }
 
+    /**
+     * Spawn smart thief with given parameters. Used to load smart thief from
+     * a serialised string.
+     * @param coords Coordinates of smart thief.
+     * @param ticksPerMove How many ticks need to pass between each movement.
+     * @param direction Direction the thief is facing.
+     * @param ticksSinceLastMove Number of ticks that have passed since the
+     *                           last movement.
+     */
     public SmartThief(Coords coords, int ticksPerMove, Direction direction, int ticksSinceLastMove) {
         this(coords, ticksPerMove, direction);
         this.ticksSinceLastMove = ticksSinceLastMove;
     }
-    
+
+    /**
+     * Serialises the Object into a String.
+     *
+     * @return Serialised string for `this` Object.
+     */
+    @Override
+    public String serialise() {
+        // TODO
+        return String.format(
+            "%s %s %s %s %s",
+            this.getClass().getSimpleName(),
+            this.coords.serialise(),
+            this.ticksPerMove,
+            this.currentDirection,
+            this.ticksSinceLastMove
+        );
+    }
+
     /**
      * Tries to move SmartThief to next tile in its path.
      *
@@ -61,24 +107,6 @@ public class SmartThief extends Npc {
             // A new path could not be calculated
             this.moveRandomly();
         }
-    }
-
-    /**
-     * Serialises the Object into a String.
-     *
-     * @return Serialised string for `this` Object.
-     */
-    @Override
-    public String serialise() {
-        // TODO
-        return String.format(
-            "%s %s %s %s %s",
-            this.getClass().getSimpleName(),
-            this.coords.serialise(),
-            this.ticksPerMove,
-            this.currentDirection,
-            this.ticksSinceLastMove
-        );
     }
 
     private void moveRandomly() {
