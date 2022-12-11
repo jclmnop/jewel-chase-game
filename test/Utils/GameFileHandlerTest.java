@@ -42,7 +42,7 @@ public class GameFileHandlerTest {
 
         try {
             GameParams gameParams = GameFileHandler.loadLevelFile(
-                Integer.parseInt(levels.get(0)),
+                Integer.parseInt(levels.get(6)),
                 Game.getPlayerProfile()
             );
             Assertions.assertEquals(0, gameParams.levelNumber());
